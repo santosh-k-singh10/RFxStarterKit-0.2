@@ -1,0 +1,89 @@
+{
+  "@context": "https://ibm.com/context-studio/historical/context.jsonld",
+  "@type": "hist:HistoricalRFP",
+  "@id": "hist:rfp-2024-healthcare-portal-001",
+  "hist:rfpId": "RFP-2024-HEALTHCARE-PORTAL-001",
+  "hist:title": "Patient Portal and EHR Integration System",
+  "hist:clientName": "Metropolitan Healthcare System",
+  "hist:industry": "Healthcare",
+  "hist:submissionDate": "2024-06-15",
+  "hist:outcome": "won",
+  "hist:projectValue": 2500000,
+  "hist:currency": "USD",
+  "hist:projectDuration": 9,
+  "hist:teamSize": 12,
+  "hist:summary": "Development of a comprehensive patient portal with EHR integration, enabling patients to access medical records, schedule appointments, communicate with providers, and manage prescriptions. The system required HIPAA compliance, HL7 FHIR integration, and support for 500,000+ patients.",
+  "hist:technologies": [
+    "React",
+    "TypeScript",
+    "Python",
+    "FastAPI",
+    "PostgreSQL",
+    "AWS",
+    "HL7 FHIR",
+    "OAuth 2.0",
+    "Docker",
+    "Kubernetes"
+  ],
+  "hist:keyRequirements": [
+    "HIPAA compliance and security",
+    "HL7 FHIR R4 integration with Epic EHR",
+    "Patient authentication via SSO",
+    "Appointment scheduling with provider availability",
+    "Secure messaging between patients and providers",
+    "Prescription refill requests",
+    "Lab results viewing with explanations",
+    "Medical records download (PDF/CCD format)",
+    "Mobile-responsive design",
+    "Multi-language support (English, Spanish)",
+    "99.9% uptime SLA",
+    "Sub-2-second page load times"
+  ],
+  "hist:challenges": [
+    "Complex EHR integration with legacy Epic system",
+    "Strict HIPAA compliance requirements",
+    "High performance requirements for large patient base",
+    "Real-time appointment availability synchronization",
+    "Secure document storage and retrieval",
+    "Multi-factor authentication implementation"
+  ],
+  "hist:lessonsLearned": [
+    "Early engagement with Epic integration team was critical",
+    "FHIR R4 implementation required more time than estimated",
+    "Performance testing with realistic data volumes essential",
+    "HIPAA audit logging requirements more extensive than anticipated",
+    "User acceptance testing with actual patients provided valuable feedback",
+    "Mobile-first design approach paid off in user adoption"
+  ],
+  "hist:successFactors": [
+    "Strong healthcare domain expertise on team",
+    "Prior experience with HL7 FHIR integrations",
+    "Demonstrated HIPAA compliance track record",
+    "Competitive pricing with clear value proposition",
+    "Detailed security architecture in proposal",
+    "Reference from similar healthcare client",
+    "Agile methodology with bi-weekly demos",
+    "Dedicated HIPAA compliance officer on team"
+  ],
+  "hist:analysis": {
+    "@type": "hist:Analysis",
+    "hist:functionalRequirements": 45,
+    "hist:nonFunctionalRequirements": 18,
+    "hist:complianceRequirements": 12,
+    "hist:ambiguities": 8,
+    "hist:risks": 6,
+    "hist:complexityScore": 0.82
+  },
+  "hist:tags": [
+    "healthcare",
+    "patient-portal",
+    "ehr-integration",
+    "fhir",
+    "hipaa",
+    "epic",
+    "aws",
+    "react",
+    "python"
+  ],
+  "hist:content": "# RFP: Patient Portal and EHR Integration System\n\n## Project Overview\n\nMetropolitan Healthcare System is seeking a qualified vendor to design, develop, and implement a comprehensive patient portal that integrates with our existing Epic EHR system. The portal will serve over 500,000 patients across our network of hospitals and clinics.\n\n## Background\n\nMetropolitan Healthcare System is a leading healthcare provider serving the greater metropolitan area with 5 hospitals, 30 clinics, and over 2,000 healthcare providers. We currently use Epic as our EHR system but lack a modern, user-friendly patient portal.\n\n## Objectives\n\n1. Improve patient engagement and satisfaction\n2. Reduce administrative burden on staff\n3. Enable patients to manage their healthcare digitally\n4. Comply with federal meaningful use requirements\n5. Reduce phone call volume to scheduling and records departments\n\n## Scope of Work\n\n### 1. Patient Portal Features\n\n#### 1.1 Authentication & Security\n- Multi-factor authentication (MFA)\n- Single Sign-On (SSO) integration with existing identity provider\n- Password reset and account recovery\n- Session management and timeout\n- HIPAA-compliant audit logging\n\n#### 1.2 Medical Records Access\n- View complete medical history\n- Download records in PDF and CCD format\n- View lab results with reference ranges\n- View imaging reports\n- View immunization records\n- View allergy information\n- View medication list\n\n#### 1.3 Appointment Management\n- View upcoming appointments\n- Schedule new appointments based on provider availability\n- Cancel or reschedule appointments\n- Receive appointment reminders via email/SMS\n- Virtual visit check-in\n- Pre-visit questionnaires\n\n#### 1.4 Secure Messaging\n- Send messages to care team\n- Receive responses within 48 hours\n- Attach documents to messages\n- Message threading and history\n- Notification of new messages\n\n#### 1.5 Prescription Management\n- View current medications\n- Request prescription refills\n- View prescription history\n- Pharmacy information management\n\n#### 1.6 Billing & Payments\n- View statements and bills\n- Make online payments\n- Set up payment plans\n- View insurance information\n- Download receipts\n\n### 2. EHR Integration Requirements\n\n#### 2.1 Epic Integration\n- HL7 FHIR R4 API integration\n- Real-time data synchronization\n- Support for Epic's MyChart data model\n- Bi-directional data flow where appropriate\n\n#### 2.2 Data Elements\n- Patient demographics\n- Appointments\n- Medications\n- Allergies\n- Problems/diagnoses\n- Lab results\n- Imaging reports\n- Immunizations\n- Clinical notes (where appropriate)\n\n### 3. Technical Requirements\n\n#### 3.1 Performance\n- Page load time < 2 seconds\n- Support 10,000 concurrent users\n- 99.9% uptime SLA\n- Automatic failover and disaster recovery\n\n#### 3.2 Security\n- HIPAA compliance\n- Data encryption at rest (AES-256)\n- Data encryption in transit (TLS 1.3)\n- Regular security audits and penetration testing\n- Vulnerability scanning and patching\n- DDoS protection\n\n#### 3.3 Accessibility\n- WCAG 2.1 Level AA compliance\n- Screen reader compatibility\n- Keyboard navigation support\n- High contrast mode\n\n#### 3.4 Mobile Support\n- Responsive design for all screen sizes\n- Native mobile app (iOS and Android) - Phase 2\n- Touch-optimized interface\n\n#### 3.5 Localization\n- English and Spanish language support\n- Right-to-left language support (future)\n- Timezone handling\n- Date/time format localization\n\n### 4. Compliance Requirements\n\n- HIPAA Privacy Rule compliance\n- HIPAA Security Rule compliance\n- HITECH Act compliance\n- 21st Century Cures Act compliance\n- State privacy laws compliance\n- SOC 2 Type II certification\n\n### 5. Infrastructure\n\n- Cloud-based deployment (AWS preferred)\n- Scalable architecture\n- Load balancing\n- Content delivery network (CDN)\n- Database replication and backup\n- Monitoring and alerting\n\n## Project Timeline\n\n- RFP Response Due: July 15, 2024\n- Vendor Selection: August 1, 2024\n- Project Kickoff: September 1, 2024\n- Design Phase: September - October 2024\n- Development Phase: November 2024 - March 2025\n- Testing Phase: April - May 2025\n- Go-Live: June 1, 2025\n\n## Budget\n\nEstimated budget: $2.0M - $3.0M for initial development\nOngoing support and maintenance: $300K - $500K annually\n\n## Proposal Requirements\n\n### 1. Company Information\n- Company background and experience\n- Healthcare project portfolio\n- Epic integration experience\n- HIPAA compliance certifications\n- Financial stability\n\n### 2. Technical Approach\n- Solution architecture\n- Technology stack\n- Integration approach\n- Security measures\n- Scalability plan\n\n### 3. Project Plan\n- Detailed timeline\n- Milestones and deliverables\n- Resource allocation\n- Risk management plan\n- Quality assurance approach\n\n### 4. Team\n- Project team structure\n- Key personnel resumes\n- Relevant certifications\n- Subcontractor information (if any)\n\n### 5. Pricing\n- Detailed cost breakdown\n- Payment schedule\n- Ongoing support costs\n- Change order process\n\n### 6. References\n- Minimum 3 references from similar projects\n- Healthcare client references preferred\n- Epic integration references required\n\n## Evaluation Criteria\n\n- Technical approach and solution (30%)\n- Healthcare and Epic experience (25%)\n- Team qualifications (20%)\n- Pricing (15%)\n- References (10%)\n\n## Questions and Clarifications\n\nQuestions must be submitted by June 30, 2024 to rfp@metrohealthcare.org\nAnswers will be posted by July 7, 2024\n\n## Submission Instructions\n\nProposals must be submitted electronically to rfp@metrohealthcare.org by 5:00 PM EST on July 15, 2024.\n\nFormat: PDF, maximum 50 pages (excluding appendices)\n\n---\n\n**Contact Information:**\nJohn Smith, CIO\nMetropolitan Healthcare System\njsmith@metrohealthcare.org\n(555) 123-4567"
+}

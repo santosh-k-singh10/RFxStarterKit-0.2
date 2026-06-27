@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}RFP Analyzer{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/app.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="container">
+        <nav class="navbar">
+            <h1>
+                <span>🤖</span>
+                <span>RFP Analyzer</span>
+            </h1>
+            
+            <div class="navbar-page-hint">
+                <span>Upload and analyze your RFP from the main page form.</span>
+            </div>
+            
+            <div class="navbar-actions">
+                <a href="/" class="nav-link">
+                    <span>🏠</span>
+                    <span>Home</span>
+                </a>
+                <a href="/review" target="_blank" class="nav-link" id="viewRequirementsLink" style="display: none;">
+                    <span>📋</span>
+                    <span>View Requirements</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Unsaved Changes Banner -->
+        <div id="unsavedBanner" class="unsaved-banner">
+            <strong>⚠️ Unsaved Changes</strong> - Don't forget to export your reviewed requirements!
+        </div>
+
+        <!-- Main Content -->
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const viewReqLink = document.getElementById('viewRequirementsLink');
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionParam = urlParams.get('session');
+            
+            if (sessionParam && viewReqLink) {
+                viewReqLink.style.display = 'inline-flex';
+                console.log('Session detected, showing View Requirements link');
+                showToast('Analysis complete! Click "View Requirements" to see results.', 'success');
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

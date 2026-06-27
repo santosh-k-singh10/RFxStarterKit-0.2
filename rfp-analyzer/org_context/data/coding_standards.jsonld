@@ -1,0 +1,131 @@
+{
+  "@context": "https://ibm.com/context-studio/standards/context.jsonld",
+  "@type": "std:StandardDocument",
+  "@id": "std:coding-standards",
+  "std:title": "IBM Consulting Coding Standards",
+  "std:standardType": "coding",
+  "std:version": "2.0",
+  "std:status": "active",
+  "std:lastUpdated": "2026-04-01",
+  "std:classification": "internal",
+  "std:summary": "Comprehensive coding standards for all software development projects at IBM Consulting, covering Python, Java, TypeScript, and general best practices",
+  "std:applicableLanguages": [
+    "Python",
+    "Java",
+    "TypeScript",
+    "JavaScript"
+  ],
+  "std:applicableTechnologies": [
+    "FastAPI",
+    "Django",
+    "React",
+    "Spring Boot"
+  ],
+  "std:sections": [
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Python Standards",
+      "std:sectionOrder": 1,
+      "std:sectionContent": "Follow PEP 8 style guide. Use 4 spaces for indentation (no tabs). Maximum line length: 100 characters. Use type hints for all function signatures. Use docstrings for all public functions and classes."
+    },
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Naming Conventions",
+      "std:sectionOrder": 2,
+      "std:sectionContent": "Classes: PascalCase (e.g., UserAccount). Functions and variables: snake_case (e.g., calculate_total_cost). Constants: UPPER_SNAKE_CASE (e.g., MAX_RETRY_ATTEMPTS). Private methods: _leading_underscore (e.g., _internal_helper)."
+    },
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Required Tools",
+      "std:sectionOrder": 3,
+      "std:sectionContent": "Linter: Ruff or Pylint. Formatter: Black. Type Checker: MyPy. Testing: Pytest with minimum 80% coverage."
+    },
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Java Standards",
+      "std:sectionOrder": 4,
+      "std:sectionContent": "Follow Google Java Style Guide. Use 2 spaces for indentation. Maximum line length: 100 characters. Use meaningful variable names. Always use braces for control structures."
+    },
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "TypeScript Standards",
+      "std:sectionOrder": 5,
+      "std:sectionContent": "Use strict mode. Enable all strict type-checking options. Use interfaces for object shapes. Prefer const over let. Use async/await over promises. Maximum line length: 100 characters."
+    },
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Code Review Requirements",
+      "std:sectionOrder": 6,
+      "std:sectionContent": "All code must be reviewed by at least one other developer. PRs must pass all automated tests. Code coverage must not decrease. Security vulnerabilities must be addressed before merge."
+    },
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Documentation Requirements",
+      "std:sectionOrder": 7,
+      "std:sectionContent": "All public APIs must have documentation. Complex algorithms must include explanatory comments. README files required for all projects. API documentation must be generated automatically."
+    }
+  ],
+  "std:rules": [
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "CS-001",
+      "std:ruleDescription": "All functions must have type hints",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "def calculate_total(items: List[float]) -> float:"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "CS-002",
+      "std:ruleDescription": "Maximum line length is 100 characters",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "# Lines exceeding 100 characters must be split"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "CS-003",
+      "std:ruleDescription": "Use meaningful variable names",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "user_count = 10  # Good\nn = 10  # Bad"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "CS-004",
+      "std:ruleDescription": "All public functions must have docstrings",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "def process_data(data: dict) -> dict:\n    \"\"\"Process input data and return results.\"\"\""
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "CS-005",
+      "std:ruleDescription": "Test coverage must be at least 80%",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "pytest --cov=src --cov-report=term-missing --cov-fail-under=80"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "CS-006",
+      "std:ruleDescription": "Use logging instead of print statements",
+      "std:ruleSeverity": "should",
+      "std:ruleExample": "logger.info('Processing started')  # Good\nprint('Processing started')  # Bad"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "CS-007",
+      "std:ruleDescription": "Handle exceptions appropriately",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "try:\n    process()\nexcept SpecificError as e:\n    logger.error(f'Error: {e}')"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "CS-008",
+      "std:ruleDescription": "Use environment variables for configuration",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "API_KEY = os.getenv('API_KEY')  # Good\nAPI_KEY = 'hardcoded'  # Bad"
+    }
+  ],
+  "std:complianceFrameworks": [
+    "OWASP Top 10",
+    "ISO 27001"
+  ],
+  "std:content": "# IBM Consulting Coding Standards\n\n## Version: 2.0\n## Last Updated: 2026-04-01\n## Status: Active\n\n---\n\n## Overview\n\nThis document defines the coding standards and best practices for all software development at IBM Consulting. All developers must adhere to these standards to ensure code quality, maintainability, and consistency across projects.\n\n## Language-Specific Standards\n\n### Python Standards\n\n#### Code Style\n- Follow PEP 8 style guide\n- Use 4 spaces for indentation (no tabs)\n- Maximum line length: 100 characters\n- Use type hints for all function signatures\n- Use docstrings for all public functions and classes\n\n#### Naming Conventions\n```python\n# Classes: PascalCase\nclass UserAccount:\n    pass\n\n# Functions and variables: snake_case\ndef calculate_total_cost():\n    user_count = 10\n    \n# Constants: UPPER_SNAKE_CASE\nMAX_RETRY_ATTEMPTS = 3\n\n# Private methods: _leading_underscore\ndef _internal_helper():\n    pass\n```\n\n#### Required Tools\n- **Linter**: Ruff or Pylint\n- **Formatter**: Black\n- **Type Checker**: MyPy\n- **Testing**: Pytest (minimum 80% coverage)\n\n### Java Standards\n\n#### Code Style\n- Follow Google Java Style Guide\n- Use 2 spaces for indentation\n- Maximum line length: 100 characters\n- Use meaningful variable names\n- Always use braces for control structures\n\n### TypeScript Standards\n\n#### Code Style\n- Use strict mode\n- Enable all strict type-checking options\n- Use interfaces for object shapes\n- Prefer const over let\n- Use async/await over promises\n\n## General Best Practices\n\n### Code Review\n- All code must be reviewed by at least one other developer\n- PRs must pass all automated tests\n- Code coverage must not decrease\n- Security vulnerabilities must be addressed before merge\n\n### Documentation\n- All public APIs must have documentation\n- Complex algorithms must include explanatory comments\n- README files required for all projects\n- API documentation must be generated automatically\n\n### Testing\n- Unit tests for all business logic\n- Integration tests for API endpoints\n- End-to-end tests for critical user flows\n- Minimum 80% code coverage\n\n### Security\n- Never commit secrets or credentials\n- Use environment variables for configuration\n- Validate all user inputs\n- Follow OWASP Top 10 guidelines\n- Regular security audits required\n\n---\n\n## Enforcement\n\nThese standards are enforced through:\n- Automated linting in CI/CD pipeline\n- Code review process\n- Regular code quality audits\n- Developer training and onboarding"
+}

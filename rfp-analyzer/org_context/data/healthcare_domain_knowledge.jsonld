@@ -1,0 +1,188 @@
+{
+  "@context": "https://ibm.com/context-studio/domain/context.jsonld",
+  "@type": "domain:DomainKnowledge",
+  "@id": "domain:healthcare-it",
+  "domain:industryDomain": "Healthcare IT",
+  "domain:version": "1.0",
+  "domain:lastUpdated": "2026-04-01",
+  "domain:terms": [
+    {
+      "@type": "domain:Term",
+      "@id": "domain:term-hl7",
+      "domain:term": "HL7",
+      "domain:definition": "Health Level 7 - Electronic data exchange standard in healthcare",
+      "domain:category": "Healthcare IT Standards",
+      "domain:aliases": ["Health Level Seven"]
+    },
+    {
+      "@type": "domain:Term",
+      "@id": "domain:term-fhir",
+      "domain:term": "FHIR",
+      "domain:definition": "Fast Healthcare Interoperability Resources - Modern healthcare data exchange standard using REST APIs",
+      "domain:category": "Healthcare IT Standards",
+      "domain:aliases": ["HL7 FHIR"]
+    },
+    {
+      "@type": "domain:Term",
+      "@id": "domain:term-dicom",
+      "domain:term": "DICOM",
+      "domain:definition": "Digital Imaging and Communications in Medicine - Medical imaging data standard",
+      "domain:category": "Medical Imaging",
+      "domain:aliases": []
+    },
+    {
+      "@type": "domain:Term",
+      "@id": "domain:term-ehr",
+      "domain:term": "EHR",
+      "domain:definition": "Electronic Health Record - Digital version of patient medical history",
+      "domain:category": "Healthcare Systems",
+      "domain:aliases": ["Electronic Medical Record", "EMR"]
+    },
+    {
+      "@type": "domain:Term",
+      "@id": "domain:term-pacs",
+      "domain:term": "PACS",
+      "domain:definition": "Picture Archiving and Communication System - Medical imaging storage and retrieval system",
+      "domain:category": "Medical Imaging",
+      "domain:aliases": []
+    },
+    {
+      "@type": "domain:Term",
+      "@id": "domain:term-sla",
+      "domain:term": "SLA",
+      "domain:definition": "Service Level Agreement - Commitment between service provider and client",
+      "domain:category": "General IT",
+      "domain:aliases": []
+    },
+    {
+      "@type": "domain:Term",
+      "@id": "domain:term-api",
+      "domain:term": "API",
+      "domain:definition": "Application Programming Interface - Set of protocols for building software applications",
+      "domain:category": "General IT",
+      "domain:aliases": []
+    }
+  ],
+  "domain:acronyms": [
+    {
+      "@type": "domain:Acronym",
+      "@id": "domain:acronym-hl7",
+      "domain:acronym": "HL7",
+      "domain:expansion": "Health Level 7",
+      "domain:context": "Healthcare data exchange standard"
+    },
+    {
+      "@type": "domain:Acronym",
+      "@id": "domain:acronym-fhir",
+      "domain:acronym": "FHIR",
+      "domain:expansion": "Fast Healthcare Interoperability Resources",
+      "domain:context": "Modern healthcare API standard"
+    },
+    {
+      "@type": "domain:Acronym",
+      "@id": "domain:acronym-dicom",
+      "domain:acronym": "DICOM",
+      "domain:expansion": "Digital Imaging and Communications in Medicine",
+      "domain:context": "Medical imaging standard"
+    },
+    {
+      "@type": "domain:Acronym",
+      "@id": "domain:acronym-icd",
+      "domain:acronym": "ICD-10",
+      "domain:expansion": "International Classification of Diseases, 10th Revision",
+      "domain:context": "Diagnosis coding system"
+    },
+    {
+      "@type": "domain:Acronym",
+      "@id": "domain:acronym-cpt",
+      "domain:acronym": "CPT",
+      "domain:expansion": "Current Procedural Terminology",
+      "domain:context": "Medical procedure coding"
+    },
+    {
+      "@type": "domain:Acronym",
+      "@id": "domain:acronym-hipaa",
+      "domain:acronym": "HIPAA",
+      "domain:expansion": "Health Insurance Portability and Accountability Act",
+      "domain:context": "Healthcare data privacy regulation"
+    },
+    {
+      "@type": "domain:Acronym",
+      "@id": "domain:acronym-cicd",
+      "domain:acronym": "CI/CD",
+      "domain:expansion": "Continuous Integration/Continuous Deployment",
+      "domain:context": "Software development practice"
+    },
+    {
+      "@type": "domain:Acronym",
+      "@id": "domain:acronym-sso",
+      "domain:acronym": "SSO",
+      "domain:expansion": "Single Sign-On",
+      "domain:context": "Authentication method"
+    }
+  ],
+  "domain:technologyGlossary": [
+    {
+      "@type": "domain:TechnologyGlossary",
+      "@id": "domain:tech-kubernetes",
+      "domain:technology": "Kubernetes",
+      "domain:explanation": "Container orchestration platform for automating deployment, scaling, and management of containerized applications",
+      "domain:usageContext": "Cloud infrastructure, microservices deployment",
+      "domain:preferredVersion": "1.28+"
+    },
+    {
+      "@type": "domain:TechnologyGlossary",
+      "@id": "domain:tech-docker",
+      "domain:technology": "Docker",
+      "domain:explanation": "Containerization platform that packages applications and dependencies into portable containers",
+      "domain:usageContext": "Application deployment, development environments",
+      "domain:preferredVersion": "24.0+"
+    },
+    {
+      "@type": "domain:TechnologyGlossary",
+      "@id": "domain:tech-postgresql",
+      "domain:technology": "PostgreSQL",
+      "domain:explanation": "Open-source relational database management system with strong ACID compliance",
+      "domain:usageContext": "Transactional data, structured data storage",
+      "domain:preferredVersion": "15+"
+    },
+    {
+      "@type": "domain:TechnologyGlossary",
+      "@id": "domain:tech-mongodb",
+      "domain:technology": "MongoDB",
+      "domain:explanation": "NoSQL document database for flexible, JSON-like data storage",
+      "domain:usageContext": "Unstructured data, rapid development",
+      "domain:preferredVersion": "7.0+"
+    }
+  ],
+  "domain:vendorPreferences": [
+    {
+      "@type": "domain:VendorPreference",
+      "@id": "domain:vendor-aws",
+      "domain:vendorName": "AWS",
+      "domain:vendorCategory": "Cloud Provider",
+      "domain:preferenceLevel": "preferred"
+    },
+    {
+      "@type": "domain:VendorPreference",
+      "@id": "domain:vendor-azure",
+      "domain:vendorName": "Azure",
+      "domain:vendorCategory": "Cloud Provider",
+      "domain:preferenceLevel": "preferred"
+    },
+    {
+      "@type": "domain:VendorPreference",
+      "@id": "domain:vendor-epic",
+      "domain:vendorName": "Epic Systems",
+      "domain:vendorCategory": "EHR Vendor",
+      "domain:preferenceLevel": "approved"
+    },
+    {
+      "@type": "domain:VendorPreference",
+      "@id": "domain:vendor-cerner",
+      "domain:vendorName": "Oracle Cerner",
+      "domain:vendorCategory": "EHR Vendor",
+      "domain:preferenceLevel": "approved"
+    }
+  ]
+}

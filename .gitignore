@@ -1,0 +1,69 @@
+﻿# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# ── Virtual environments ───────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+.env.backup
+
+# ── Secrets / credentials (never commit) ──────────────────────────────────────
+.env
+.env.*
+!.env.example
+!.env.template
+!common/.env.template
+
+# ── Runtime outputs ───────────────────────────────────────────────────────────
+rfp-analyzer/outputs/web/
+rfp-analyzer/outputs/*.xlsx
+rfp-analyzer/outputs/*.html
+rfp-analyzer/outputs/*.json
+rfp-analyzer/outputs/*.md
+rfp-analyzer/app/outputs/
+rfp-analyzer/uploads/
+scoping-architect/outputs/
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+rfp-analyzer/app/logs/
+!rfp-analyzer/logs/.gitkeep
+
+# ── Databases / checkpoints ───────────────────────────────────────────────────
+*.sqlite
+*.sqlite3
+*.db
+
+# ── Large binary / data files ─────────────────────────────────────────────────
+*.xlsx
+*.xls
+!rfp-analyzer/SAP_Analysis_Test.xlsx
+*.pdf
+!sample-rfps/
+
+# ── OS / editor ───────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ── Scoping-architect nested git ──────────────────────────────────────────────
+scoping-architect/.git/

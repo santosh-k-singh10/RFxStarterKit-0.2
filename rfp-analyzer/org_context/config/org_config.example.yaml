@@ -1,0 +1,215 @@
+# Organization Context Configuration
+# ==================================
+# This file defines your organization's context for RFP analysis.
+# Copy this file to org_config.yaml and customize for your organization.
+
+# Basic Organization Information
+# -------------------------------
+name: "Your Organization Name"
+industry: "Technology"  # e.g., Healthcare, Finance, Technology, Manufacturing
+description: "Brief description of your organization and its focus areas"
+
+# Technology Stack Preferences
+# -----------------------------
+tech_stack:
+  preferred_languages:
+    - Python
+    - Java
+    - TypeScript
+    - Go
+  
+  cloud_providers:
+    - AWS
+    - Azure
+    - GCP
+  
+  databases:
+    - PostgreSQL
+    - MongoDB
+    - Redis
+    - Elasticsearch
+  
+  frameworks:
+    - Django
+    - FastAPI
+    - React
+    - Spring Boot
+    - Node.js
+  
+  architecture_patterns:
+    - Microservices
+    - Event-Driven
+    - RESTful APIs
+    - Serverless
+    - Container-based (Docker/Kubernetes)
+
+# Compliance and Regulatory Requirements
+# ---------------------------------------
+compliance:
+  frameworks:
+    - GDPR          # General Data Protection Regulation
+    - HIPAA         # Health Insurance Portability and Accountability Act
+    - SOC2          # Service Organization Control 2
+    - ISO27001      # Information Security Management
+    - PCI-DSS       # Payment Card Industry Data Security Standard
+  
+  certifications:
+    - "ISO 9001"
+    - "ISO 27001"
+    - "SOC 2 Type II"
+  
+  standards:
+    - "NIST Cybersecurity Framework"
+    - "OWASP Top 10"
+    - "CIS Controls"
+
+# Naming Conventions for Requirements
+# ------------------------------------
+naming_conventions:
+  requirement_prefix: "REQ"
+  functional_prefix: "FR"
+  non_functional_prefix: "NFR"
+  compliance_prefix: "CR"
+  ambiguity_prefix: "AMB"
+  risk_prefix: "RISK"
+  separator: "-"
+  padding: 3  # Number of digits (e.g., 3 = 001, 002, 003)
+
+# Priority Detection Keywords
+# ----------------------------
+priority_mapping:
+  must_keywords:
+    - "shall"
+    - "must"
+    - "required"
+    - "mandatory"
+    - "critical"
+  
+  should_keywords:
+    - "should"
+    - "recommended"
+    - "preferred"
+    - "desired"
+  
+  could_keywords:
+    - "may"
+    - "could"
+    - "optional"
+    - "nice to have"
+    - "if possible"
+  
+  wont_keywords:
+    - "will not"
+    - "won't"
+    - "excluded"
+    - "out of scope"
+
+# Risk Assessment Thresholds
+# ---------------------------
+risk_thresholds:
+  high_complexity_indicators:
+    - "AI/ML"
+    - "machine learning"
+    - "artificial intelligence"
+    - "blockchain"
+    - "real-time processing"
+    - "distributed system"
+    - "high availability"
+    - "99.99% uptime"
+    - "scalability"
+    - "big data"
+    - "data analytics"
+  
+  timeline_red_flags:
+    - "< 3 months"
+    - "less than 3 months"
+    - "immediate"
+    - "urgent"
+    - "ASAP"
+    - "tight deadline"
+    - "aggressive timeline"
+    - "fast-track"
+  
+  resource_constraints:
+    - "limited budget"
+    - "small team"
+    - "part-time"
+    - "shared resources"
+    - "constrained"
+    - "minimal resources"
+  
+  high_risk_score_threshold: 0.7  # 0.0 to 1.0
+
+# Output Preferences
+# ------------------
+output_preferences:
+  include_cost_estimates: true
+  include_timeline_estimates: true
+  include_team_sizing: true
+  
+  custom_sections:
+    - "Executive Summary"
+    - "Technical Approach"
+    - "Team Composition"
+    - "Risk Mitigation Strategy"
+    - "Implementation Timeline"
+    - "Cost Breakdown"
+    - "Success Criteria"
+  
+  # Optional: Paths to custom templates (relative to context_root)
+  excel_template: null  # e.g., "templates/custom_excel_template.xlsx"
+  markdown_template: null  # e.g., "templates/custom_markdown_template.md"
+  
+  # Branding elements
+  branding:
+    logo_path: ""  # Path to company logo
+    primary_color: "#0066CC"  # Hex color code
+    secondary_color: "#FF6600"  # Hex color code
+    font_family: "Arial"
+
+# Domain Knowledge
+# ----------------
+domain_knowledge:
+  # Industry-specific terms and their definitions
+  industry_terms:
+    "SLA": "Service Level Agreement"
+    "RPO": "Recovery Point Objective"
+    "RTO": "Recovery Time Objective"
+    "MTTR": "Mean Time To Recovery"
+    "MTBF": "Mean Time Between Failures"
+  
+  # Acronym expansions
+  acronyms:
+    "API": "Application Programming Interface"
+    "CI/CD": "Continuous Integration/Continuous Deployment"
+    "IAM": "Identity and Access Management"
+    "SSO": "Single Sign-On"
+    "MFA": "Multi-Factor Authentication"
+    "RBAC": "Role-Based Access Control"
+    "VPN": "Virtual Private Network"
+    "CDN": "Content Delivery Network"
+  
+  # Preferred vendors and partners
+  vendor_preferences:
+    - "AWS"
+    - "Microsoft Azure"
+    - "Google Cloud"
+    - "Okta"
+    - "Datadog"
+    - "PagerDuty"
+  
+  # Technology glossary
+  technology_glossary:
+    "Kubernetes": "Container orchestration platform for automating deployment, scaling, and management"
+    "Docker": "Platform for developing, shipping, and running applications in containers"
+    "Terraform": "Infrastructure as Code tool for building, changing, and versioning infrastructure"
+    "GraphQL": "Query language for APIs and runtime for executing queries"
+
+# Directory Paths (optional - will use defaults if not specified)
+# -----------------------------------------------------------------
+# context_root: "./org_context"  # Root directory for all context files
+# templates_dir: "./org_context/templates"
+# standards_dir: "./org_context/standards"
+# examples_dir: "./org_context/examples"
+
+# Made with Bob

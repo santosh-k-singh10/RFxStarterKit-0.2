@@ -1,0 +1,213 @@
+# IBM ICA Context Studio Configuration
+# =====================================
+# This file configures the integration between RFP Analyzer and IBM ICA Context Studio
+
+# Context Studio API Configuration
+context_studio:
+  # Base URL for Context Studio API
+  # Example: https://context-studio.ibm.com/api/v1
+  base_url: "https://your-context-studio-url.ibm.com/api/v1"
+  
+  # Authentication token for Context Studio
+  # Get this from IBM ICA Platform Settings
+  auth_token: "${CONTEXT_STUDIO_TOKEN}"
+  
+  # Workspace ID (for multi-tenant environments)
+  # Leave empty if using single-tenant setup
+  workspace_id: ""
+  
+  # Enable/disable Context Studio integration
+  enabled: true
+
+# Table Template Configuration
+table_templates:
+  # Load templates from Context Studio
+  load_from_studio: true
+  
+  # Fallback to local templates if Context Studio unavailable
+  use_local_fallback: true
+  
+  # Validate extracted tables against templates
+  validate_tables: true
+  
+  # Enrich tables with organizational context
+  enrich_tables: true
+  
+  # Store extracted tables back to Context Studio
+  store_results: true
+
+# Resource Standards
+resource_standards:
+  # Standard resource rates (loaded from Context Studio)
+  # These are examples - actual values come from Context Studio
+  rates:
+    - role: "Senior SAP Consultant"
+      rate: 250
+      currency: "USD"
+      unit: "hour"
+    
+    - role: "SAP Developer"
+      rate: 180
+      currency: "USD"
+      unit: "hour"
+    
+    - role: "Solution Architect"
+      rate: 275
+      currency: "USD"
+      unit: "hour"
+  
+  # Role definitions with required skills
+  role_definitions:
+    - role: "Senior SAP Consultant"
+      required_skills:
+        - "SAP S/4HANA"
+        - "SAP Retail"
+        - "ABAP"
+      preferred_skills:
+        - "Fiori"
+        - "BTP"
+      min_experience: 5
+      certifications:
+        - "SAP Certified Application Associate"
+    
+    - role: "Solution Architect"
+      required_skills:
+        - "Enterprise Architecture"
+        - "Cloud Architecture"
+        - "SAP"
+      preferred_skills:
+        - "AWS"
+        - "Azure"
+      min_experience: 8
+
+# SLA Standards
+sla_standards:
+  standards:
+    - type: "uptime"
+      standard_value: 99.9
+      unit: "percent"
+      comparison: ">="
+      description: "Minimum uptime requirement"
+    
+    - type: "response_time"
+      standard_value: 2
+      unit: "seconds"
+      comparison: "<="
+      description: "Maximum API response time at p95"
+    
+    - type: "resolution_time"
+      standard_value: 4
+      unit: "hours"
+      comparison: "<="
+      description: "Maximum time to resolve P1 incidents"
+
+# Technology Stack Standards
+tech_stack:
+  # Approved technologies
+  approved_technologies:
+    - "Python"
+    - "Java"
+    - "Node.js"
+    - "React"
+    - "Angular"
+    - "SAP S/4HANA"
+    - "PostgreSQL"
+    - "MongoDB"
+    - "AWS"
+    - "Azure"
+  
+  # Technology versions
+  technology_versions:
+    - name: "Python"
+      version: "3.11+"
+      status: "preferred"
+    
+    - name: "Java"
+      version: "17 LTS"
+      status: "preferred"
+    
+    - name: "Node.js"
+      version: "20 LTS"
+      status: "preferred"
+    
+    - name: "SAP S/4HANA"
+      version: "2023"
+      status: "required"
+  
+  # Cloud providers
+  cloud_providers:
+    - name: "AWS"
+      status: "preferred"
+      regions: ["us-east-1", "us-west-2", "eu-west-1"]
+    
+    - name: "Azure"
+      status: "approved"
+      regions: ["eastus", "westus2", "westeurope"]
+
+# Historical RFP Data
+historical_rfps:
+  # Enable historical data enrichment
+  enabled: true
+  
+  # Number of similar RFPs to retrieve for context
+  similarity_limit: 5
+  
+  # Filters for historical data
+  filters:
+    # Only include RFPs from specific industries
+    industries:
+      - "Retail"
+      - "Healthcare"
+      - "Financial Services"
+    
+    # Only include RFPs with specific technologies
+    technologies:
+      - "SAP"
+      - "Cloud"
+    
+    # Only include RFPs from last N years
+    years_back: 3
+    
+    # Minimum success score (0-1)
+    min_success_score: 0.7
+
+# Validation Rules
+validation:
+  # Fail analysis if critical tables fail validation
+  fail_on_validation_error: false
+  
+  # Log validation warnings
+  log_warnings: true
+  
+  # Minimum confidence score for enrichment (0-1)
+  min_enrichment_confidence: 0.6
+
+# Storage Configuration
+storage:
+  # Store extracted tables to Context Studio
+  store_tables: true
+  
+  # Store generated requirements to Context Studio
+  store_requirements: true
+  
+  # Store analysis results to Context Studio
+  store_analysis: true
+  
+  # Retention period for stored data (days)
+  retention_days: 365
+
+# Logging
+logging:
+  # Log Context Studio API calls
+  log_api_calls: true
+  
+  # Log table processing details
+  log_table_processing: true
+  
+  # Log enrichment operations
+  log_enrichment: true
+  
+  # Log level for Context Studio operations
+  level: "INFO"
+
+# Made with Bob

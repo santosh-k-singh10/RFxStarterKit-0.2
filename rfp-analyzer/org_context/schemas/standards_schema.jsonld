@@ -1,0 +1,192 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "rfp": "https://ibm.com/context-studio/rfp-analyzer/",
+    "std": "https://ibm.com/context-studio/standards/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/"
+  },
+  "@graph": [
+    {
+      "@id": "std:StandardDocument",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Standard Document",
+      "rdfs:comment": "Organizational standard or guideline document",
+      "rdfs:subClassOf": "schema:CreativeWork"
+    },
+    {
+      "@id": "std:title",
+      "@type": "rdf:Property",
+      "rdfs:label": "Title",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "xsd:string",
+      "schema:required": true
+    },
+    {
+      "@id": "std:standardType",
+      "@type": "rdf:Property",
+      "rdfs:label": "Standard Type",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "xsd:string",
+      "schema:enumValues": ["coding", "security", "architecture", "testing", "deployment", "documentation"]
+    },
+    {
+      "@id": "std:version",
+      "@type": "rdf:Property",
+      "rdfs:label": "Version",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "xsd:string",
+      "schema:required": true
+    },
+    {
+      "@id": "std:status",
+      "@type": "rdf:Property",
+      "rdfs:label": "Status",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "xsd:string",
+      "schema:enumValues": ["draft", "active", "deprecated", "archived"]
+    },
+    {
+      "@id": "std:lastUpdated",
+      "@type": "rdf:Property",
+      "rdfs:label": "Last Updated",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "xsd:date"
+    },
+    {
+      "@id": "std:classification",
+      "@type": "rdf:Property",
+      "rdfs:label": "Classification",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "xsd:string",
+      "schema:enumValues": ["public", "internal", "confidential", "restricted"]
+    },
+    {
+      "@id": "std:content",
+      "@type": "rdf:Property",
+      "rdfs:label": "Content",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "xsd:string",
+      "schema:description": "Full content of the standard document in Markdown format"
+    },
+    {
+      "@id": "std:summary",
+      "@type": "rdf:Property",
+      "rdfs:label": "Summary",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "std:applicableLanguages",
+      "@type": "rdf:Property",
+      "rdfs:label": "Applicable Languages",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true,
+      "schema:description": "Programming languages this standard applies to"
+    },
+    {
+      "@id": "std:applicableTechnologies",
+      "@type": "rdf:Property",
+      "rdfs:label": "Applicable Technologies",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "std:Section",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Standard Section",
+      "rdfs:comment": "A section within a standard document"
+    },
+    {
+      "@id": "std:sections",
+      "@type": "rdf:Property",
+      "rdfs:label": "Sections",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "std:Section",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "std:sectionTitle",
+      "@type": "rdf:Property",
+      "rdfs:label": "Section Title",
+      "rdfs:domain": "std:Section",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "std:sectionContent",
+      "@type": "rdf:Property",
+      "rdfs:label": "Section Content",
+      "rdfs:domain": "std:Section",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "std:sectionOrder",
+      "@type": "rdf:Property",
+      "rdfs:label": "Section Order",
+      "rdfs:domain": "std:Section",
+      "rdfs:range": "xsd:integer"
+    },
+    {
+      "@id": "std:Rule",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Standard Rule",
+      "rdfs:comment": "A specific rule or requirement within a standard"
+    },
+    {
+      "@id": "std:rules",
+      "@type": "rdf:Property",
+      "rdfs:label": "Rules",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "std:Rule",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "std:ruleId",
+      "@type": "rdf:Property",
+      "rdfs:label": "Rule ID",
+      "rdfs:domain": "std:Rule",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "std:ruleDescription",
+      "@type": "rdf:Property",
+      "rdfs:label": "Rule Description",
+      "rdfs:domain": "std:Rule",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "std:ruleSeverity",
+      "@type": "rdf:Property",
+      "rdfs:label": "Rule Severity",
+      "rdfs:domain": "std:Rule",
+      "rdfs:range": "xsd:string",
+      "schema:enumValues": ["must", "should", "may"]
+    },
+    {
+      "@id": "std:ruleExample",
+      "@type": "rdf:Property",
+      "rdfs:label": "Rule Example",
+      "rdfs:domain": "std:Rule",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "std:relatedStandards",
+      "@type": "rdf:Property",
+      "rdfs:label": "Related Standards",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "std:StandardDocument",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "std:complianceFrameworks",
+      "@type": "rdf:Property",
+      "rdfs:label": "Compliance Frameworks",
+      "rdfs:domain": "std:StandardDocument",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true,
+      "schema:description": "External compliance frameworks this standard helps satisfy"
+    }
+  ]
+}

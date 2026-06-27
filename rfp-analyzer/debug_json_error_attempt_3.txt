@@ -1,0 +1,23 @@
+=== MALFORMED JSON ===
+Error: Extra data: line 2 column 1 (char 3)
+Line: 2, Column: 1, Position: 3
+
+=== FULL RAW RESPONSE ===
+[]
+```
+
+---
+
+**Reasoning:**  
+This section describes **governance structure, escalation procedures, change management, and communication cadences**—all of which are *operational and project management requirements*, not compliance, regulatory, or certification obligations.
+
+There are no mentions of:
+- Data privacy laws (GDPR, CCPA, etc.)
+- Security standards or certifications (ISO 27001, SOC 2, etc.)
+- Healthcare, payment, or accessibility regulations
+- Industry-specific regulatory frameworks
+- Data residency mandates
+- Audit/logging compliance requirements
+- Vendor certification obligations
+
+Therefore, no compliance requirements are extracted from this chunk.

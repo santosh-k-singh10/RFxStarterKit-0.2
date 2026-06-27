@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "knowledge-base": {
+      "command": "python",
+      "args": [
+        "-m",
+        "mcp_servers.knowledge_base_server.server"
+      ],
+      "env": {
+        "CONTEXT_ROOT": "./org_context",
+        "PYTHONPATH": "."
+      },
+      "description": "Knowledge Base MCP Server for organizational context and semantic search"
+    }
+  }
+}

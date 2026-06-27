@@ -1,0 +1,8 @@
+# RFP Analyzer — Architecture Module Dependencies
+# Install: pip install -r ../common/requirements-base.txt -r requirements.txt
+
+# Base dependencies are in ../common/requirements-base.txt
+# This file contains only Architecture-specific dependencies
+
+# Currently, Architecture module uses only base dependencies
+# Add any Architecture-specific packages below as needed

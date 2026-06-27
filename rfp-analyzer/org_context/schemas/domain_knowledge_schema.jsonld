@@ -1,0 +1,181 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "rfp": "https://ibm.com/context-studio/rfp-analyzer/",
+    "domain": "https://ibm.com/context-studio/domain/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "skos": "http://www.w3.org/2004/02/skos/core#"
+  },
+  "@graph": [
+    {
+      "@id": "domain:DomainKnowledge",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Domain Knowledge",
+      "rdfs:comment": "Industry-specific knowledge and terminology",
+      "rdfs:subClassOf": "skos:ConceptScheme"
+    },
+    {
+      "@id": "domain:industryDomain",
+      "@type": "rdf:Property",
+      "rdfs:label": "Industry Domain",
+      "rdfs:domain": "domain:DomainKnowledge",
+      "rdfs:range": "xsd:string",
+      "schema:description": "Industry sector (Healthcare, Finance, Retail, etc.)"
+    },
+    {
+      "@id": "domain:version",
+      "@type": "rdf:Property",
+      "rdfs:label": "Version",
+      "rdfs:domain": "domain:DomainKnowledge",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "domain:lastUpdated",
+      "@type": "rdf:Property",
+      "rdfs:label": "Last Updated",
+      "rdfs:domain": "domain:DomainKnowledge",
+      "rdfs:range": "xsd:date"
+    },
+    {
+      "@id": "domain:Term",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Industry Term",
+      "rdfs:comment": "Industry-specific term with definition",
+      "rdfs:subClassOf": "skos:Concept"
+    },
+    {
+      "@id": "domain:term",
+      "@type": "rdf:Property",
+      "rdfs:label": "Term",
+      "rdfs:domain": "domain:Term",
+      "rdfs:range": "xsd:string",
+      "schema:required": true
+    },
+    {
+      "@id": "domain:definition",
+      "@type": "rdf:Property",
+      "rdfs:label": "Definition",
+      "rdfs:domain": "domain:Term",
+      "rdfs:range": "xsd:string",
+      "schema:required": true
+    },
+    {
+      "@id": "domain:category",
+      "@type": "rdf:Property",
+      "rdfs:label": "Category",
+      "rdfs:domain": "domain:Term",
+      "rdfs:range": "xsd:string",
+      "schema:description": "Category or domain area (e.g., Healthcare IT, Security, Cloud)"
+    },
+    {
+      "@id": "domain:aliases",
+      "@type": "rdf:Property",
+      "rdfs:label": "Aliases",
+      "rdfs:domain": "domain:Term",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "domain:relatedTerms",
+      "@type": "rdf:Property",
+      "rdfs:label": "Related Terms",
+      "rdfs:domain": "domain:Term",
+      "rdfs:range": "domain:Term",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "domain:Acronym",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Acronym",
+      "rdfs:comment": "Acronym with expansion and context"
+    },
+    {
+      "@id": "domain:acronym",
+      "@type": "rdf:Property",
+      "rdfs:label": "Acronym",
+      "rdfs:domain": "domain:Acronym",
+      "rdfs:range": "xsd:string",
+      "schema:required": true
+    },
+    {
+      "@id": "domain:expansion",
+      "@type": "rdf:Property",
+      "rdfs:label": "Expansion",
+      "rdfs:domain": "domain:Acronym",
+      "rdfs:range": "xsd:string",
+      "schema:required": true
+    },
+    {
+      "@id": "domain:context",
+      "@type": "rdf:Property",
+      "rdfs:label": "Context",
+      "rdfs:domain": "domain:Acronym",
+      "rdfs:range": "xsd:string",
+      "schema:description": "Context where acronym is used"
+    },
+    {
+      "@id": "domain:TechnologyGlossary",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Technology Glossary Entry",
+      "rdfs:comment": "Technology term with explanation and usage"
+    },
+    {
+      "@id": "domain:technology",
+      "@type": "rdf:Property",
+      "rdfs:label": "Technology Name",
+      "rdfs:domain": "domain:TechnologyGlossary",
+      "rdfs:range": "xsd:string",
+      "schema:required": true
+    },
+    {
+      "@id": "domain:explanation",
+      "@type": "rdf:Property",
+      "rdfs:label": "Explanation",
+      "rdfs:domain": "domain:TechnologyGlossary",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "domain:usageContext",
+      "@type": "rdf:Property",
+      "rdfs:label": "Usage Context",
+      "rdfs:domain": "domain:TechnologyGlossary",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "domain:preferredVersion",
+      "@type": "rdf:Property",
+      "rdfs:label": "Preferred Version",
+      "rdfs:domain": "domain:TechnologyGlossary",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "domain:VendorPreference",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Vendor Preference",
+      "rdfs:comment": "Preferred vendor or partner"
+    },
+    {
+      "@id": "domain:vendorName",
+      "@type": "rdf:Property",
+      "rdfs:label": "Vendor Name",
+      "rdfs:domain": "domain:VendorPreference",
+      "rdfs:range": "xsd:string",
+      "schema:required": true
+    },
+    {
+      "@id": "domain:vendorCategory",
+      "@type": "rdf:Property",
+      "rdfs:label": "Vendor Category",
+      "rdfs:domain": "domain:VendorPreference",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "domain:preferenceLevel",
+      "@type": "rdf:Property",
+      "rdfs:label": "Preference Level",
+      "rdfs:domain": "domain:VendorPreference",
+      "rdfs:range": "xsd:string",
+      "schema:enumValues": ["preferred", "approved", "acceptable"]
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "rfp": "https://ibm.com/context-studio/rfp-analyzer/",
+    "tmpl": "https://ibm.com/context-studio/template/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "tmpl:Template",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Document Template",
+      "rdfs:comment": "Reusable template for proposals and documents",
+      "rdfs:subClassOf": "schema:CreativeWork"
+    },
+    {
+      "@id": "tmpl:templateName",
+      "@type": "rdf:Property",
+      "rdfs:label": "Template Name",
+      "rdfs:domain": "tmpl:Template",
+      "rdfs:range": "xsd:string",
+      "schema:required": true
+    },
+    {
+      "@id": "tmpl:templateType",
+      "@type": "rdf:Property",
+      "rdfs:label": "Template Type",
+      "rdfs:domain": "tmpl:Template",
+      "rdfs:range": "xsd:string",
+      "schema:enumValues": ["proposal_response", "technical_approach", "executive_summary", "cost_breakdown", "timeline", "team_composition"]
+    },
+    {
+      "@id": "tmpl:version",
+      "@type": "rdf:Property",
+      "rdfs:label": "Version",
+      "rdfs:domain": "tmpl:Template",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "tmpl:status",
+      "@type": "rdf:Property",
+      "rdfs:label": "Status",
+      "rdfs:domain": "tmpl:Template",
+      "rdfs:range": "xsd:string",
+      "schema:enumValues": ["draft", "active", "archived"]
+    },
+    {
+      "@id": "tmpl:content",
+      "@type": "rdf:Property",
+      "rdfs:label": "Template Content",
+      "rdfs:domain": "tmpl:Template",
+      "rdfs:range": "xsd:string",
+      "schema:description": "Template content in Markdown format with placeholders"
+    },
+    {
+      "@id": "tmpl:description",
+      "@type": "rdf:Property",
+      "rdfs:label": "Description",
+      "rdfs:domain": "tmpl:Template",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "tmpl:applicableIndustries",
+      "@type": "rdf:Property",
+      "rdfs:label": "Applicable Industries",
+      "rdfs:domain": "tmpl:Template",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "tmpl:Section",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Template Section",
+      "rdfs:comment": "A section within a template"
+    },
+    {
+      "@id": "tmpl:sections",
+      "@type": "rdf:Property",
+      "rdfs:label": "Sections",
+      "rdfs:domain": "tmpl:Template",
+      "rdfs:range": "tmpl:Section",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "tmpl:sectionTitle",
+      "@type": "rdf:Property",
+      "rdfs:label": "Section Title",
+      "rdfs:domain": "tmpl:Section",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "tmpl:sectionContent",
+      "@type": "rdf:Property",
+      "rdfs:label": "Section Content",
+      "rdfs:domain": "tmpl:Section",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "tmpl:sectionOrder",
+      "@type": "rdf:Property",
+      "rdfs:label": "Section Order",
+      "rdfs:domain": "tmpl:Section",
+      "rdfs:range": "xsd:integer"
+    },
+    {
+      "@id": "tmpl:isRequired",
+      "@type": "rdf:Property",
+      "rdfs:label": "Is Required",
+      "rdfs:domain": "tmpl:Section",
+      "rdfs:range": "xsd:boolean"
+    },
+    {
+      "@id": "tmpl:Placeholder",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Template Placeholder",
+      "rdfs:comment": "A placeholder variable in the template"
+    },
+    {
+      "@id": "tmpl:placeholders",
+      "@type": "rdf:Property",
+      "rdfs:label": "Placeholders",
+      "rdfs:domain": "tmpl:Template",
+      "rdfs:range": "tmpl:Placeholder",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "tmpl:placeholderName",
+      "@type": "rdf:Property",
+      "rdfs:label": "Placeholder Name",
+      "rdfs:domain": "tmpl:Placeholder",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "tmpl:placeholderDescription",
+      "@type": "rdf:Property",
+      "rdfs:label": "Placeholder Description",
+      "rdfs:domain": "tmpl:Placeholder",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "tmpl:placeholderType",
+      "@type": "rdf:Property",
+      "rdfs:label": "Placeholder Type",
+      "rdfs:domain": "tmpl:Placeholder",
+      "rdfs:range": "xsd:string",
+      "schema:enumValues": ["text", "number", "date", "list", "table"]
+    },
+    {
+      "@id": "tmpl:defaultValue",
+      "@type": "rdf:Property",
+      "rdfs:label": "Default Value",
+      "rdfs:domain": "tmpl:Placeholder",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "tmpl:lastUpdated",
+      "@type": "rdf:Property",
+      "rdfs:label": "Last Updated",
+      "rdfs:domain": "tmpl:Template",
+      "rdfs:range": "xsd:date"
+    },
+    {
+      "@id": "tmpl:createdBy",
+      "@type": "rdf:Property",
+      "rdfs:label": "Created By",
+      "rdfs:domain": "tmpl:Template",
+      "rdfs:range": "xsd:string"
+    }
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "@context": "https://ibm.com/context-studio/template/context.jsonld",
+  "@type": "tmpl:Template",
+  "@id": "tmpl:proposal-response-template",
+  "tmpl:templateName": "RFP Proposal Response Template",
+  "tmpl:templateType": "proposal_response",
+  "tmpl:version": "1.0",
+  "tmpl:status": "active",
+  "tmpl:description": "Standard template for responding to RFPs. Includes executive summary, company profile, technical approach, team composition, timeline, and pricing sections.",
+  "tmpl:applicableIndustries": [
+    "Technology",
+    "Consulting",
+    "Healthcare",
+    "Finance"
+  ],
+  "tmpl:sections": [
+    {
+      "@type": "tmpl:Section",
+      "tmpl:sectionTitle": "Document Control",
+      "tmpl:sectionOrder": 1,
+      "tmpl:isRequired": true,
+      "tmpl:sectionContent": "**RFP Number**: [RFP-YYYY-NNN]\n**Client**: [Client Organization Name]\n**Prepared By**: IBM Consulting\n**Date**: [YYYY-MM-DD]\n**Version**: [1.0]\n**Status**: [Draft/Final]"
+    },
+    {
+      "@type": "tmpl:Section",
+      "tmpl:sectionTitle": "Executive Summary",
+      "tmpl:sectionOrder": 2,
+      "tmpl:isRequired": true,
+      "tmpl:sectionContent": "### Overview\n[Provide a compelling 2-3 paragraph executive summary that highlights:\n- Understanding of client's needs\n- Your unique value proposition\n- Key differentiators\n- Expected outcomes and benefits]\n\n### Key Highlights\n- **Experience**: [X years in industry, Y similar projects completed]\n- **Team**: [Size and expertise of proposed team]\n- **Timeline**: [Proposed delivery timeline]\n- **Investment**: [Total project cost range]\n\n### Why IBM Consulting?\n1. **Proven Track Record**: [Brief description of relevant experience]\n2. **Technical Excellence**: [Key technical capabilities]\n3. **Client Focus**: [Commitment to client success]\n4. **Innovation**: [Unique approaches or technologies]"
+    },
+    {
+      "@type": "tmpl:Section",
+      "tmpl:sectionTitle": "Company Profile",
+      "tmpl:sectionOrder": 3,
+      "tmpl:isRequired": true,
+      "tmpl:sectionContent": "### About IBM Consulting\n[Company description - 2-3 paragraphs covering:\n- Company history and mission\n- Core competencies\n- Industry recognition\n- Client base and market position]\n\n### Relevant Experience\n| Project | Client | Year | Scope | Outcome |\n|---------|--------|------|-------|---------|  \n| [Project 1] | [Client A] | [2025] | [Brief description] | [Key results] |\n| [Project 2] | [Client B] | [2024] | [Brief description] | [Key results] |\n| [Project 3] | [Client C] | [2024] | [Brief description] | [Key results] |"
+    },
+    {
+      "@type": "tmpl:Section",
+      "tmpl:sectionTitle": "Understanding of Requirements",
+      "tmpl:sectionOrder": 4,
+      "tmpl:isRequired": true,
+      "tmpl:sectionContent": "### Client Needs Analysis\n[Demonstrate deep understanding of:\n- Business objectives\n- Technical requirements\n- Constraints and challenges\n- Success criteria]\n\n### Our Interpretation\n[Explain how you interpret the requirements and what you plan to deliver]\n\n### Assumptions\n[List any assumptions made in preparing this proposal]"
+    },
+    {
+      "@type": "tmpl:Section",
+      "tmpl:sectionTitle": "Technical Approach",
+      "tmpl:sectionOrder": 5,
+      "tmpl:isRequired": true,
+      "tmpl:sectionContent": "### Solution Architecture\n[High-level architecture diagram and description]\n\n### Technology Stack\n- **Frontend**: [Technologies]\n- **Backend**: [Technologies]\n- **Database**: [Technologies]\n- **Cloud**: [Platform and services]\n- **DevOps**: [CI/CD tools]\n\n### Key Features\n1. [Feature 1]: [Description]\n2. [Feature 2]: [Description]\n3. [Feature 3]: [Description]\n\n### Integration Points\n[Describe how solution integrates with existing systems]\n\n### Security & Compliance\n[Security measures and compliance certifications]"
+    },
+    {
+      "@type": "tmpl:Section",
+      "tmpl:sectionTitle": "Implementation Methodology",
+      "tmpl:sectionOrder": 6,
+      "tmpl:isRequired": true,
+      "tmpl:sectionContent": "### Development Approach\n[Agile, Waterfall, or Hybrid methodology]\n\n### Project Phases\n1. **Discovery & Planning** ([X weeks])\n2. **Design** ([X weeks])\n3. **Development** ([X weeks])\n4. **Testing & QA** ([X weeks])\n5. **Deployment** ([X weeks])\n6. **Training & Handover** ([X weeks])\n\n### Quality Assurance\n[Testing strategy, code reviews, quality gates]\n\n### Risk Management\n[Risk identification, mitigation strategies]"
+    },
+    {
+      "@type": "tmpl:Section",
+      "tmpl:sectionTitle": "Team Composition",
+      "tmpl:sectionOrder": 7,
+      "tmpl:isRequired": true,
+      "tmpl:sectionContent": "### Proposed Team\n| Role | Name | Experience | Allocation |\n|------|------|------------|------------|\n| Project Manager | [Name] | [X years] | [%] |\n| Solution Architect | [Name] | [X years] | [%] |\n| Lead Developer | [Name] | [X years] | [%] |\n| Developers | [Names] | [X years] | [%] |\n| QA Engineer | [Name] | [X years] | [%] |\n| DevOps Engineer | [Name] | [X years] | [%] |\n\n### Team Qualifications\n[Relevant certifications, experience, and expertise]\n\n### Communication Plan\n[How team will communicate with client]"
+    },
+    {
+      "@type": "tmpl:Section",
+      "tmpl:sectionTitle": "Project Timeline",
+      "tmpl:sectionOrder": 8,
+      "tmpl:isRequired": true,
+      "tmpl:sectionContent": "### Delivery Schedule\n| Phase | Duration | Start Date | End Date | Deliverables |\n|-------|----------|------------|----------|-------------|\n| Discovery | [X weeks] | [Date] | [Date] | [List] |\n| Design | [X weeks] | [Date] | [Date] | [List] |\n| Development | [X weeks] | [Date] | [Date] | [List] |\n| Testing | [X weeks] | [Date] | [Date] | [List] |\n| Deployment | [X weeks] | [Date] | [Date] | [List] |\n\n### Key Milestones\n- [Milestone 1]: [Date]\n- [Milestone 2]: [Date]\n- [Milestone 3]: [Date]\n\n### Dependencies\n[List any dependencies on client or third parties]"
+    },
+    {
+      "@type": "tmpl:Section",
+      "tmpl:sectionTitle": "Pricing",
+      "tmpl:sectionOrder": 9,
+      "tmpl:isRequired": true,
+      "tmpl:sectionContent": "### Cost Breakdown\n| Item | Description | Cost |\n|------|-------------|------|\n| Professional Services | [Hours × Rate] | $[Amount] |\n| Infrastructure | [Cloud, licenses] | $[Amount] |\n| Third-party Tools | [Software, APIs] | $[Amount] |\n| Training | [Sessions, materials] | $[Amount] |\n| Support (Year 1) | [Maintenance, updates] | $[Amount] |\n| **Total** | | **$[Total Amount]** |\n\n### Payment Terms\n[Payment schedule and terms]\n\n### Assumptions\n[Cost assumptions and exclusions]"
+    },
+    {
+      "@type": "tmpl:Section",
+      "tmpl:sectionTitle": "Support & Maintenance",
+      "tmpl:sectionOrder": 10,
+      "tmpl:isRequired": false,
+      "tmpl:sectionContent": "### Post-Launch Support\n- **Warranty Period**: [X months]\n- **Support Hours**: [24/7 or business hours]\n- **Response Times**: [SLA commitments]\n- **Maintenance**: [Update schedule]\n\n### Long-term Partnership\n[Ongoing support options and pricing]"
+    },
+    {
+      "@type": "tmpl:Section",
+      "tmpl:sectionTitle": "Terms & Conditions",
+      "tmpl:sectionOrder": 11,
+      "tmpl:isRequired": true,
+      "tmpl:sectionContent": "### Proposal Validity\nThis proposal is valid for [X days] from the date of submission.\n\n### Acceptance\n[How to accept the proposal]\n\n### Confidentiality\n[Confidentiality terms]\n\n### Intellectual Property\n[IP ownership terms]"
+    },
+    {
+      "@type": "tmpl:Section",
+      "tmpl:sectionTitle": "Appendices",
+      "tmpl:sectionOrder": 12,
+      "tmpl:isRequired": false,
+      "tmpl:sectionContent": "### Appendix A: Team Resumes\n[Detailed resumes of key team members]\n\n### Appendix B: Case Studies\n[Detailed case studies of similar projects]\n\n### Appendix C: Technical Documentation\n[Architecture diagrams, technical specifications]\n\n### Appendix D: References\n[Client references and testimonials]"
+    }
+  ],
+  "tmpl:placeholders": [
+    {
+      "@type": "tmpl:Placeholder",
+      "tmpl:placeholderName": "RFP-YYYY-NNN",
+      "tmpl:placeholderDescription": "RFP identification number",
+      "tmpl:placeholderType": "text"
+    },
+    {
+      "@type": "tmpl:Placeholder",
+      "tmpl:placeholderName": "Client Organization Name",
+      "tmpl:placeholderDescription": "Name of the client organization",
+      "tmpl:placeholderType": "text"
+    },
+    {
+      "@type": "tmpl:Placeholder",
+      "tmpl:placeholderName": "YYYY-MM-DD",
+      "tmpl:placeholderDescription": "Date in ISO format",
+      "tmpl:placeholderType": "date"
+    },
+    {
+      "@type": "tmpl:Placeholder",
+      "tmpl:placeholderName": "Project Name",
+      "tmpl:placeholderDescription": "Name of the proposed project",
+      "tmpl:placeholderType": "text"
+    },
+    {
+      "@type": "tmpl:Placeholder",
+      "tmpl:placeholderName": "X years",
+      "tmpl:placeholderDescription": "Number of years of experience",
+      "tmpl:placeholderType": "number"
+    },
+    {
+      "@type": "tmpl:Placeholder",
+      "tmpl:placeholderName": "X weeks",
+      "tmpl:placeholderDescription": "Duration in weeks",
+      "tmpl:placeholderType": "number"
+    },
+    {
+      "@type": "tmpl:Placeholder",
+      "tmpl:placeholderName": "$[Amount]",
+      "tmpl:placeholderDescription": "Cost amount in dollars",
+      "tmpl:placeholderType": "number"
+    },
+    {
+      "@type": "tmpl:Placeholder",
+      "tmpl:placeholderName": "[Name]",
+      "tmpl:placeholderDescription": "Team member name",
+      "tmpl:placeholderType": "text"
+    },
+    {
+      "@type": "tmpl:Placeholder",
+      "tmpl:placeholderName": "[Technologies]",
+      "tmpl:placeholderDescription": "List of technologies",
+      "tmpl:placeholderType": "list"
+    },
+    {
+      "@type": "tmpl:Placeholder",
+      "tmpl:placeholderName": "[Date]",
+      "tmpl:placeholderDescription": "Milestone or phase date",
+      "tmpl:placeholderType": "date"
+    }
+  ],
+  "tmpl:lastUpdated": "2026-04-01",
+  "tmpl:createdBy": "IBM Consulting Templates Team",
+  "tmpl:content": "# [Project Name] - RFP Response Template\n\n## Document Control\n- **RFP Number**: [RFP-YYYY-NNN]\n- **Client**: [Client Organization Name]\n- **Prepared By**: IBM Consulting\n- **Date**: [YYYY-MM-DD]\n- **Version**: [1.0]\n- **Status**: [Draft/Final]\n\n---\n\n## Executive Summary\n\n### Overview\n[Provide a compelling 2-3 paragraph executive summary that highlights:\n- Understanding of client's needs\n- Your unique value proposition\n- Key differentiators\n- Expected outcomes and benefits]\n\n### Key Highlights\n- **Experience**: [X years in industry, Y similar projects completed]\n- **Team**: [Size and expertise of proposed team]\n- **Timeline**: [Proposed delivery timeline]\n- **Investment**: [Total project cost range]\n\n### Why IBM Consulting?\n1. **Proven Track Record**: [Brief description of relevant experience]\n2. **Technical Excellence**: [Key technical capabilities]\n3. **Client Focus**: [Commitment to client success]\n4. **Innovation**: [Unique approaches or technologies]\n\n---\n\n## Company Profile\n\n### About IBM Consulting\n[Company description - 2-3 paragraphs covering:\n- Company history and mission\n- Core competencies\n- Industry recognition\n- Client base and market position]\n\n### Relevant Experience\n| Project | Client | Year | Scope | Outcome |\n|---------|--------|------|-------|---------|  \n| [Project 1] | [Client A] | [2025] | [Brief description] | [Key results] |\n| [Project 2] | [Client B] | [2024] | [Brief description] | [Key results] |\n| [Project 3] | [Client C] | [2024] | [Brief description] | [Key results] |\n\n---\n\n## Understanding of Requirements\n\n### Client Needs Analysis\n[Demonstrate deep understanding of:\n- Business objectives\n- Technical requirements\n- Constraints and challenges\n- Success criteria]\n\n### Our Interpretation\n[Explain how you interpret the requirements and what you plan to deliver]\n\n### Assumptions\n[List any assumptions made in preparing this proposal]\n\n---\n\n## Technical Approach\n\n### Solution Architecture\n[High-level architecture diagram and description]\n\n### Technology Stack\n- **Frontend**: [Technologies]\n- **Backend**: [Technologies]\n- **Database**: [Technologies]\n- **Cloud**: [Platform and services]\n- **DevOps**: [CI/CD tools]\n\n### Key Features\n1. [Feature 1]: [Description]\n2. [Feature 2]: [Description]\n3. [Feature 3]: [Description]\n\n### Integration Points\n[Describe how solution integrates with existing systems]\n\n### Security & Compliance\n[Security measures and compliance certifications]\n\n---\n\n## Implementation Methodology\n\n### Development Approach\n[Agile, Waterfall, or Hybrid methodology]\n\n### Project Phases\n1. **Discovery & Planning** ([X weeks])\n2. **Design** ([X weeks])\n3. **Development** ([X weeks])\n4. **Testing & QA** ([X weeks])\n5. **Deployment** ([X weeks])\n6. **Training & Handover** ([X weeks])\n\n### Quality Assurance\n[Testing strategy, code reviews, quality gates]\n\n### Risk Management\n[Risk identification, mitigation strategies]\n\n---\n\n## Team Composition\n\n### Proposed Team\n| Role | Name | Experience | Allocation |\n|------|------|------------|------------|\n| Project Manager | [Name] | [X years] | [%] |\n| Solution Architect | [Name] | [X years] | [%] |\n| Lead Developer | [Name] | [X years] | [%] |\n| Developers | [Names] | [X years] | [%] |\n| QA Engineer | [Name] | [X years] | [%] |\n| DevOps Engineer | [Name] | [X years] | [%] |\n\n### Team Qualifications\n[Relevant certifications, experience, and expertise]\n\n### Communication Plan\n[How team will communicate with client]\n\n---\n\n## Project Timeline\n\n### Delivery Schedule\n| Phase | Duration | Start Date | End Date | Deliverables |\n|-------|----------|------------|----------|-------------|\n| Discovery | [X weeks] | [Date] | [Date] | [List] |\n| Design | [X weeks] | [Date] | [Date] | [List] |\n| Development | [X weeks] | [Date] | [Date] | [List] |\n| Testing | [X weeks] | [Date] | [Date] | [List] |\n| Deployment | [X weeks] | [Date] | [Date] | [List] |\n\n### Key Milestones\n- [Milestone 1]: [Date]\n- [Milestone 2]: [Date]\n- [Milestone 3]: [Date]\n\n### Dependencies\n[List any dependencies on client or third parties]\n\n---\n\n## Pricing\n\n### Cost Breakdown\n| Item | Description | Cost |\n|------|-------------|------|\n| Professional Services | [Hours × Rate] | $[Amount] |\n| Infrastructure | [Cloud, licenses] | $[Amount] |\n| Third-party Tools | [Software, APIs] | $[Amount] |\n| Training | [Sessions, materials] | $[Amount] |\n| Support (Year 1) | [Maintenance, updates] | $[Amount] |\n| **Total** | | **$[Total Amount]** |\n\n### Payment Terms\n[Payment schedule and terms]\n\n### Assumptions\n[Cost assumptions and exclusions]\n\n---\n\n## Support & Maintenance\n\n### Post-Launch Support\n- **Warranty Period**: [X months]\n- **Support Hours**: [24/7 or business hours]\n- **Response Times**: [SLA commitments]\n- **Maintenance**: [Update schedule]\n\n### Long-term Partnership\n[Ongoing support options and pricing]\n\n---\n\n## Terms & Conditions\n\n### Proposal Validity\nThis proposal is valid for [X days] from the date of submission.\n\n### Acceptance\n[How to accept the proposal]\n\n### Confidentiality\n[Confidentiality terms]\n\n### Intellectual Property\n[IP ownership terms]\n\n---\n\n## Appendices\n\n### Appendix A: Team Resumes\n[Detailed resumes of key team members]\n\n### Appendix B: Case Studies\n[Detailed case studies of similar projects]\n\n### Appendix C: Technical Documentation\n[Architecture diagrams, technical specifications]\n\n### Appendix D: References\n[Client references and testimonials]\n\n---\n\n**For questions or clarifications, contact:**\n[Your Name]\n[Your Title]\n[Email]\n[Phone]"
+}

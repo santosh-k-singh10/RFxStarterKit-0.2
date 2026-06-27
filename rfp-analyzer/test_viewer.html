@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test HTML Viewer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #667eea; margin-bottom: 20px; }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        /* HTML Output Viewer - Fixed at Bottom */
+        .html-output-viewer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 3px solid #667eea;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            transition: max-height 0.3s ease;
+            max-height: 60vh;
+        }
+        .html-output-viewer.collapsed {
+            max-height: 50px;
+        }
+        .html-output-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        .html-output-header:hover {
+            opacity: 0.9;
+        }
+        .html-output-title {
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toggle-icon {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+        .html-output-viewer.collapsed .toggle-icon {
+            transform: rotate(180deg);
+        }
+        .html-output-content {
+            padding: 20px;
+            overflow-y: auto;
+            max-height: calc(60vh - 50px);
+            background: #f8f9fa;
+        }
+        .html-output-viewer.collapsed .html-output-content {
+            display: none;
+        }
+        .test-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 HTML Viewer Test</h1>
+        <p>This is a test page to verify the HTML viewer panel works correctly.</p>
+        <button onclick="toggleViewer()">Toggle Viewer</button>
+        <button onclick="showViewer()">Show Viewer</button>
+        <button onclick="hideViewer()">Hide Viewer</button>
+    </div>
+    
+    <!-- HTML Output Viewer (Fixed at Bottom) -->
+    <div class="html-output-viewer collapsed" id="htmlViewer">
+        <div class="html-output-header" onclick="toggleViewer()">
+            <div class="html-output-title">
+                <span>📄</span>
+                <span>HTML Output Preview</span>
+            </div>
+            <div class="toggle-icon">▼</div>
+        </div>
+        <div class="html-output-content" id="htmlViewerContent">
+            <div class="test-content">
+                <h2>✅ Viewer is Working!</h2>
+                <p>If you can see this, the HTML viewer panel is functioning correctly.</p>
+                <p style="margin-top: 10px;">The viewer should be fixed at the bottom of the screen and can be toggled by clicking the header.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleViewer() {
+            const viewer = document.getElementById('htmlViewer');
+            viewer.classList.toggle('collapsed');
+        }
+        
+        function showViewer() {
+            const viewer = document.getElementById('htmlViewer');
+            viewer.classList.remove('collapsed');
+        }
+        
+        function hideViewer() {
+            const viewer = document.getElementById('htmlViewer');
+            viewer.classList.add('collapsed');
+        }
+        
+        // Auto-show after 2 seconds for demo
+        setTimeout(() => {
+            showViewer();
+        }, 2000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}RFP Analyzer{% endblock %}
+
+{% block content %}
+<!-- Main Tabs at Top Level -->
+<div class="card">
+    <div class="tabs">
+        <button class="tab active" onclick="switchMainTab('home')">🏠 Home</button>
+        <button class="tab" onclick="switchMainTab('requirements')">📋 Requirements</button>
+        <button class="tab" onclick="switchMainTab('architecture')">🏗️ Architecture</button>
+        <button class="tab" onclick="switchMainTab('solutions')">🔍 Solution Mapping</button>
+        <button class="tab" onclick="switchMainTab('export')">📤 Export</button>
+        <button class="tab" onclick="switchMainTab('apidocs')">📚 API Docs</button>
+    </div>
+
+    <!-- Tab: Home (Upload) -->
+    <div id="tabHome" class="tab-content active">
+        <!-- Quick Navigation Info -->
+        <div style="background: #EEF2FF; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid var(--primary);">
+            <p style="margin: 0; color: #4F46E5;">
+                <strong>💡 Quick Guide:</strong> Upload your RFP below → Wait for analysis → Click "📋 Requirements" tab above to review
+            </p>
+        </div>
+
+        <h2>Upload RFP Document</h2>
+        <p style="color: #6B7280; margin-bottom: 2rem;">
+            Upload your RFP document (PDF, DOCX, or TXT) to extract and analyze requirements using AI.
+        </p>
+
+        <form id="uploadForm">
+            <div id="uploadArea" class="upload-area">
+                <div class="upload-icon">📄</div>
+                <p style="font-weight: 600; margin-bottom: 0.5rem;">Click to upload or drag and drop</p>
+                <p style="color: #6B7280; font-size: 0.9rem;">PDF, DOCX, or TXT files</p>
+                <input type="file" id="fileInput" accept=".pdf,.docx,.txt" required style="display: none;">
+            </div>
+
+            <div id="fileNameContainer" style="text-align: center; display: none; margin-top: 1rem;">
+                <span id="fileName" class="badge badge-accepted" style="font-size: 1rem; padding: 0.5rem 1rem;"></span>
+            </div>
+
+            <div class="form-group" style="margin-top: 2rem;">
+                <label for="title">Analysis Title</label>
+                <input type="text" id="title" class="form-control" value="RFP Analysis" required>
+            </div>
+
+            <div class="form-group">
+                <label for="domain">Domain/Industry (optional)</label>
+                <input type="text" id="domain" class="form-control" placeholder="e.g., Healthcare, Finance, Government">
+            </div>
+
+            <div class="form-group">
+                <label for="minConfidence">Minimum Confidence Threshold</label>
+                <input type="number" id="minConfidence" class="form-control" value="0.0" min="0" max="1" step="0.1">
+                <small style="color: #6B7280;">Requirements below this confidence will be filtered out (0.0 = show all)</small>
+            </div>
+
+            <button type="submit" id="analyzeBtn" class="btn btn-primary" style="width: 100%;">
+                <span>🚀</span>
+                <span>Analyze RFP</span>
+            </button>
+        </form>
+
+        <div id="progressContainer" class="progress-container">
+            <div id="progressText" class="progress-text">Starting analysis...</div>
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill" style="width: 0%">0%</div>
+            </div>
+            <div id="stepText" class="progress-text" style="font-size: 0.9rem; color: #6B7280;"></div>
+        </div>
+
+        <div id="resultsContainer" style="display: none; margin-top: 2rem; padding: 2rem; background: #F0FDF4; border-radius: 12px; border-left: 4px solid #10B981;">
+            <h3 style="color: #059669; margin-bottom: 1rem;">✅ Analysis Complete!</h3>
+            <p style="color: #065F46; margin-bottom: 1.5rem;">
+                Successfully extracted <strong id="reqCount">0</strong> requirements from your RFP document.
+            </p>
+            <button onclick="switchMainTab('requirements')" class="btn btn-success">
+                <span>📋</span>
+                <span>Review Requirements</span>
+            </button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+            <div style="background: #F8FAFC; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">📝 Smart Extraction</h3>
+                <p style="color: #6B7280; font-size: 0.9rem;">
+                    AI-powered extraction of functional, non-functional, compliance, ambiguity, and risk requirements.
+                </p>
+            </div>
+            <div style="background: #F8FAFC; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">✏️ Interactive Review</h3>
+                <p style="color: #6B7280; font-size: 0.9rem;">
+                    Edit, accept, or reject requirements with full CRUD operations and bulk actions.
+                </p>
+            </div>
+            <div style="background: #F8FAFC; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">🏗️ Architecture Generation</h3>
+                <p style="color: #6B7280; font-size: 0.9rem;">
+                    Generate system architecture diagrams and identify components using Claude AI.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab: Requirements -->
+    <div id="tabRequirements" class="tab-content" style="display: none;">
+        <h2>Review Requirements</h2>
+        <div class="filters">
+            <div class="filter-group">
+                <label>Category</label>
+                <select id="filterCategory" class="form-control" onchange="loadRequirements()">
+                    <option value="">All Categories</option>
+                    <option value="functional">Functional</option>
+                    <option value="non_functional">Non-Functional</option>
+                    <option value="compliance">Compliance</option>
+                    <option value="ambiguity">Ambiguity</option>
+                    <option value="risk">Risk</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Priority</label>
+                <select id="filterPriority" class="form-control" onchange="loadRequirements()">
+                    <option value="">All Priorities</option>
+                    <option value="must">Must</option>
+                    <option value="should">Should</option>
+                    <option value="could">Could</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Review Status</label>
+                <select id="filterStatus" class="form-control" onchange="loadRequirements()">
+                    <option value="">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="accepted">Accepted</option>
+                    <option value="modified">Modified</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Search</label>
+                <input type="text" id="filterSearch" class="form-control" placeholder="Search..." onkeyup="loadRequirements()">
+            </div>
+        </div>
+        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+            <button onclick="bulkAccept()" class="btn btn-success">✓ Accept Selected</button>
+            <button onclick="bulkReject()" class="btn btn-danger">✗ Reject Selected</button>
+            <span id="selectedCount" style="margin-left: auto; align-self: center; color: #6B7280;"></span>
+        </div>
+        <div id="requirementsContainer"><div class="spinner"></div></div>
+    </div>
+
+    <!-- Tab: Architecture -->
+    <div id="tabArchitecture" class="tab-content" style="display: none;">
+        <h2>System Architecture</h2>
+        <button onclick="generateArchitecture()" class="btn btn-primary">Generate Architecture Diagram</button>
+        <div id="architectureResult" style="margin-top: 2rem;"></div>
+    </div>
+
+    <!-- Tab: Solutions -->
+    <div id="tabSolutions" class="tab-content" style="display: none;">
+        <h2>Solution Mapping</h2>
+        <p style="color: #6B7280; margin-bottom: 1rem;">Map requirements to target solutions:</p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+            <label><input type="checkbox" value="SAP S/4HANA" checked> SAP S/4HANA</label>
+            <label><input type="checkbox" value="Oracle ERP Cloud"> Oracle ERP Cloud</label>
+            <label><input type="checkbox" value="Salesforce"> Salesforce</label>
+            <label><input type="checkbox" value="Microsoft Dynamics 365"> Microsoft Dynamics 365</label>
+            <label><input type="checkbox" value="Custom Build"> Custom Build</label>
+        </div>
+        <button onclick="mapSolutions()" class="btn btn-primary">Map to Solutions</button>
+        <div id="solutionResult" style="margin-top: 2rem;"></div>
+    </div>
+
+    <!-- Tab: Export -->
+    <div id="tabExport" class="tab-content" style="display: none;">
+        <h2>📤 Export Results</h2>
+        <p style="color: #6B7280; margin-bottom: 2rem;">
+            Export your reviewed requirements in multiple formats. Only accepted and modified requirements will be included.
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <div style="background: #F8FAFC; padding: 2rem; border-radius: 12px; border: 1px solid var(--border);">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Excel Spreadsheet</h3>
+                <p style="color: #6B7280; font-size: 0.9rem; margin-bottom: 1.5rem;">Color-coded requirements with summary sheets.</p>
+                <button onclick="api.exportExcel()" class="btn btn-primary" style="width: 100%;">📊 Download Excel</button>
+            </div>
+            <div style="background: #F8FAFC; padding: 2rem; border-radius: 12px; border: 1px solid var(--border);">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Markdown Report</h3>
+                <p style="color: #6B7280; font-size: 0.9rem; margin-bottom: 1.5rem;">Structured text report for documentation.</p>
+                <button onclick="api.exportMarkdown()" class="btn btn-primary" style="width: 100%;">📄 Download Markdown</button>
+            </div>
+            <div style="background: #F8FAFC; padding: 2rem; border-radius: 12px; border: 1px solid var(--border);">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🔧</div>
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">JSON Data</h3>
+                <p style="color: #6B7280; font-size: 0.9rem; margin-bottom: 1.5rem;">Machine-readable format for integration.</p>
+                <button onclick="api.exportJSON()" class="btn btn-primary" style="width: 100%;">🔧 Download JSON</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab: API Docs -->
+    <div id="tabApiDocs" class="tab-content" style="display: none;">
+        <h2>📚 API Documentation</h2>
+        <p style="color: #6B7280; margin-bottom: 2rem;">Interactive API documentation powered by Swagger UI.</p>
+        <div style="background: #F8FAFC; padding: 2rem; border-radius: 12px; border: 1px solid var(--border); text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">📚</div>
+            <h3 style="color: var(--primary); margin-bottom: 1rem;">Swagger UI</h3>
+            <p style="color: #6B7280; margin-bottom: 2rem;">Test all API endpoints directly from your browser</p>
+            <a href="/docs" target="_blank" class="btn btn-primary" style="display: inline-flex;">
+                <span>🚀</span>
+                <span>Open API Documentation</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/home.js"></script>
+<script src="/static/js/review.js"></script>
+<script>
+// Main tab switching
+function switchMainTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    
+    const tabMap = {
+        'home': 'tabHome',
+        'requirements': 'tabRequirements',
+        'architecture': 'tabArchitecture',
+        'solutions': 'tabSolutions',
+        'export': 'tabExport',
+        'apidocs': 'tabApiDocs'
+    };
+    
+    const tabId = tabMap[tabName];
+    if (tabId) {
+        document.getElementById(tabId).style.display = 'block';
+        event.target

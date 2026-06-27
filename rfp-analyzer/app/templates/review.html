@@ -1,0 +1,553 @@
+{% extends "base.html" %}
+
+{% block title %}Review Requirements - RFP Analyzer{% endblock %}
+
+{% block content %}
+<!-- Clean, Minimalist Review Container -->
+<div class="review-container">
+    
+    <!-- Section Title -->
+    <h2 class="section-title">Review Requirements</h2>
+    
+    <!-- Tab Navigation - Simple Inline Style -->
+    <div class="tab-navigation">
+        <button class="tab-btn active" onclick="switchTab('requirements')">
+            <span class="tab-icon">◆</span> Requirements
+        </button>
+        <button class="tab-btn" onclick="switchTab('architecture')">
+            <span class="tab-icon">🏗</span> Architecture
+        </button>
+        <button class="tab-btn" onclick="switchTab('solutions')">
+            <span class="tab-icon">🔍</span> Solution Mapping
+        </button>
+        <button class="tab-btn" onclick="switchTab('export')">
+            <span class="tab-icon">◆</span> Export
+        </button>
+    </div>
+
+    <!-- Tab: Requirements -->
+    <div id="tabRequirements" class="tab-content active">
+        
+        <!-- Filter Row - Single Line Layout -->
+        <div class="filter-row">
+            <div class="filter-item">
+                <label for="filterCategory">Category</label>
+                <select id="filterCategory" class="form-control" onchange="applyFiltersAndRender()">
+                    <option value="">All Categories</option>
+                    <option value="functional">Functional</option>
+                    <option value="non_functional">Non-Functional</option>
+                    <option value="compliance">Compliance</option>
+                    <option value="ambiguity">Ambiguity</option>
+                    <option value="risk">Risk</option>
+                </select>
+            </div>
+            
+            <div class="filter-item">
+                <label for="filterPriority">Priority</label>
+                <select id="filterPriority" class="form-control" onchange="applyFiltersAndRender()">
+                    <option value="">All Priorities</option>
+                    <option value="must">Must Have</option>
+                    <option value="should">Should Have</option>
+                    <option value="could">Could Have</option>
+                </select>
+            </div>
+            
+            <div class="filter-item">
+                <label for="filterStatus">Review Status</label>
+                <select id="filterStatus" class="form-control" onchange="applyFiltersAndRender()">
+                    <option value="">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="accepted">Accepted</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+            </div>
+            
+            <div class="filter-item">
+                <label for="filterSearch">Search</label>
+                <input type="text" id="filterSearch" class="form-control" placeholder="Search..." onkeyup="applyFiltersAndRender()">
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button onclick="bulkAccept()" class="btn btn-accept">
+                ✓ Accept Selected
+            </button>
+            <button onclick="bulkReject()" class="btn btn-reject">
+                ✗ Reject Selected
+            </button>
+        </div>
+
+        <!-- Requirements Container -->
+        <div id="requirementsContainer" class="requirements-container">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- HTML Preview Section -->
+        <div id="htmlPreviewSection" style="margin-top: 3rem; display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 600; color: #1a1a1a; margin: 0;">
+                    📊 Categorized Requirements View
+                </h3>
+                <button onclick="toggleHtmlPreview()" class="btn btn-primary" style="padding: 0.5rem 1rem;">
+                    <span id="previewToggleIcon">▼</span> <span id="previewToggleText">Hide Preview</span>
+                </button>
+            </div>
+            <div id="htmlPreviewContainer" style="border: 1px solid #e0e0e0; border-radius: 4px; overflow: auto; background: white; max-height: 800px;">
+                <!-- HTML content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab: Architecture -->
+    <div id="tabArchitecture" class="tab-content" style="display: none;">
+        <div class="tab-section">
+            <h3>System Architecture</h3>
+            <p>Generate and visualize system architecture based on requirements</p>
+            <button onclick="generateArchitecture()" class="btn btn-primary">
+                🎨 Generate Architecture Diagram
+            </button>
+            <div id="architectureResult" style="margin-top: 2rem;"></div>
+        </div>
+    </div>
+
+    <!-- Tab: Solution Mapping -->
+    <div id="tabSolutions" class="tab-content" style="display: none;">
+        <div class="tab-section">
+            <h3>Solution Mapping</h3>
+            <p>Map requirements to target enterprise solutions</p>
+            
+            <div class="solutions-grid">
+                <label class="solution-checkbox">
+                    <input type="checkbox" value="SAP S/4HANA" checked>
+                    <span class="checkbox-label">
+                        <span class="solution-name">SAP S/4HANA</span>
+                        <span class="solution-desc">Leading ERP solution</span>
+                    </span>
+                </label>
+                <label class="solution-checkbox">
+                    <input type="checkbox" value="Oracle ERP Cloud">
+                    <span class="checkbox-label">
+                        <span class="solution-name">Oracle ERP Cloud</span>
+                        <span class="solution-desc">Cloud-based ERP</span>
+                    </span>
+                </label>
+                <label class="solution-checkbox">
+                    <input type="checkbox" value="Salesforce">
+                    <span class="checkbox-label">
+                        <span class="solution-name">Salesforce</span>
+                        <span class="solution-desc">CRM & Commerce Cloud</span>
+                    </span>
+                </label>
+                <label class="solution-checkbox">
+                    <input type="checkbox" value="Microsoft Dynamics 365">
+                    <span class="checkbox-label">
+                        <span class="solution-name">Microsoft Dynamics 365</span>
+                        <span class="solution-desc">Microsoft cloud solution</span>
+                    </span>
+                </label>
+                <label class="solution-checkbox">
+                    <input type="checkbox" value="Custom Build">
+                    <span class="checkbox-label">
+                        <span class="solution-name">Custom Build</span>
+                        <span class="solution-desc">In-house development</span>
+                    </span>
+                </label>
+            </div>
+            
+            <button onclick="mapSolutions()" class="btn btn-primary">
+                🚀 Map to Solutions
+            </button>
+            <div id="solutionResult" style="margin-top: 2rem;"></div>
+        </div>
+    </div>
+
+    <!-- Tab: Export -->
+    <div id="tabExport" class="tab-content" style="display: none;">
+        <div class="tab-section">
+            <h3>Export Results</h3>
+            <p>Export your reviewed requirements in multiple formats</p>
+
+            <div class="export-options">
+                <div class="export-option">
+                    <div class="export-icon">📊</div>
+                    <h4>Excel Spreadsheet</h4>
+                    <p>Color-coded requirements with summary sheets and traceability</p>
+                    <button onclick="api.exportExcel()" class="btn btn-primary">
+                        Download Excel
+                    </button>
+                </div>
+
+                <div class="export-option">
+                    <div class="export-icon">📄</div>
+                    <h4>Markdown Report</h4>
+                    <p>Structured text report for documentation</p>
+                    <button onclick="api.exportMarkdown()" class="btn btn-primary">
+                        Download Markdown
+                    </button>
+                </div>
+
+                <div class="export-option">
+                    <div class="export-icon">🔧</div>
+                    <h4>JSON Data</h4>
+                    <p>Machine-readable format for integration</p>
+                    <button onclick="api.exportJSON()" class="btn btn-primary">
+                        Download JSON
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ═══════════════════════════════════════════════════════════
+       CLEAN, MINIMALIST REVIEW PAGE STYLING
+       ═══════════════════════════════════════════════════════════ */
+
+    .review-container {
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 0;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    /* Section Title */
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin: 0 0 2rem 0;
+        padding: 0;
+    }
+
+    /* Tab Navigation - Inline Style */
+    .tab-navigation {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 0;
+    }
+
+    .tab-btn {
+        padding: 0.75rem 1.25rem;
+        background: none;
+        border: none;
+        border-bottom: 3px solid transparent;
+        cursor: pointer;
+        color: #666;
+        font-weight: 500;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .tab-btn:hover {
+        color: #333;
+    }
+
+    .tab-btn.active {
+        color: #1a1a1a;
+        border-bottom-color: #1a1a1a;
+    }
+
+    .tab-icon {
+        font-size: 1rem;
+    }
+
+    /* Tab Content */
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .tab-section {
+        background: #fff;
+        padding: 1rem 0;
+    }
+
+    .tab-section h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .tab-section p {
+        color: #666;
+        margin: 0 0 1.5rem 0;
+        font-size: 0.95rem;
+    }
+
+    /* Filter Row - Single Line Layout */
+    .filter-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding: 1.5rem;
+        background: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+    }
+
+    .filter-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .filter-item label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #333;
+        text-transform: capitalize;
+    }
+
+    .filter-item .form-control {
+        padding: 0.6rem;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 0.9rem;
+        background: white;
+    }
+
+    .filter-item .form-control:focus {
+        outline: none;
+        border-color: #666;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn {
+        padding: 0.65rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-accept {
+        background: #28a745;
+        color: white;
+    }
+
+    .btn-accept:hover {
+        background: #218838;
+        transform: translateY(-1px);
+    }
+
+    .btn-reject {
+        background: #dc3545;
+        color: white;
+    }
+
+    .btn-reject:hover {
+        background: #c82333;
+        transform: translateY(-1px);
+    }
+
+    .btn-primary {
+        background: #1a73e8;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #1557b0;
+        transform: translateY(-1px);
+    }
+
+    /* Requirements Container */
+    .requirements-container {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .spinner {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #1a73e8;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Solutions Grid */
+    .solutions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+    }
+
+    .solution-checkbox {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .solution-checkbox:hover {
+        background: #f0f0f0;
+        border-color: #999;
+    }
+
+    .solution-checkbox input {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        margin-top: 2px;
+    }
+
+    .checkbox-label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .solution-name {
+        font-weight: 600;
+        color: #1a1a1a;
+        font-size: 0.95rem;
+    }
+
+    .solution-desc {
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    /* Export Options */
+    .export-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+    }
+
+    .export-option {
+        padding: 1.5rem;
+        background: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        text-align: center;
+        transition: all 0.2s ease;
+    }
+
+    .export-option:hover {
+        background: #f0f0f0;
+        border-color: #999;
+        transform: translateY(-2px);
+    }
+
+    .export-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .export-option h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin: 0.75rem 0;
+    }
+
+    .export-option p {
+        font-size: 0.85rem;
+        color: #666;
+        margin: 0.75rem 0;
+    }
+
+    .export-option .btn {
+        width: 100%;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .filter-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .review-container {
+            padding: 1rem;
+        }
+
+        .filter-row {
+            grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .solutions-grid,
+        .export-options {
+            grid-template-columns: 1fr;
+        }
+
+        .tab-navigation {
+            gap: 0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 1rem;
+        }
+
+        .tab-btn {
+            padding: 0.6rem 1rem;
+            white-space: nowrap;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/review.js"></script>
+{% endblock %}

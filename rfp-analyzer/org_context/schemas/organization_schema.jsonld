@@ -1,0 +1,274 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "rfp": "https://ibm.com/context-studio/rfp-analyzer/",
+    "org": "https://ibm.com/context-studio/organization/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "org:OrganizationContext",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Organization Context",
+      "rdfs:comment": "Complete organizational context for RFP analysis",
+      "rdfs:subClassOf": "schema:Organization"
+    },
+    {
+      "@id": "org:name",
+      "@type": "rdf:Property",
+      "rdfs:label": "Organization Name",
+      "rdfs:domain": "org:OrganizationContext",
+      "rdfs:range": "xsd:string",
+      "schema:required": true
+    },
+    {
+      "@id": "org:industry",
+      "@type": "rdf:Property",
+      "rdfs:label": "Industry Sector",
+      "rdfs:domain": "org:OrganizationContext",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "org:description",
+      "@type": "rdf:Property",
+      "rdfs:label": "Organization Description",
+      "rdfs:domain": "org:OrganizationContext",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "org:TechStack",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Technology Stack",
+      "rdfs:comment": "Organization's technology preferences and standards"
+    },
+    {
+      "@id": "org:techStack",
+      "@type": "rdf:Property",
+      "rdfs:label": "Technology Stack",
+      "rdfs:domain": "org:OrganizationContext",
+      "rdfs:range": "org:TechStack"
+    },
+    {
+      "@id": "org:preferredLanguages",
+      "@type": "rdf:Property",
+      "rdfs:label": "Preferred Programming Languages",
+      "rdfs:domain": "org:TechStack",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "org:cloudProviders",
+      "@type": "rdf:Property",
+      "rdfs:label": "Approved Cloud Providers",
+      "rdfs:domain": "org:TechStack",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "org:databases",
+      "@type": "rdf:Property",
+      "rdfs:label": "Preferred Database Systems",
+      "rdfs:domain": "org:TechStack",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "org:frameworks",
+      "@type": "rdf:Property",
+      "rdfs:label": "Preferred Frameworks",
+      "rdfs:domain": "org:TechStack",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "org:architecturePatterns",
+      "@type": "rdf:Property",
+      "rdfs:label": "Architecture Patterns",
+      "rdfs:domain": "org:TechStack",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "org:ComplianceRequirements",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Compliance Requirements",
+      "rdfs:comment": "Regulatory and compliance frameworks"
+    },
+    {
+      "@id": "org:compliance",
+      "@type": "rdf:Property",
+      "rdfs:label": "Compliance Requirements",
+      "rdfs:domain": "org:OrganizationContext",
+      "rdfs:range": "org:ComplianceRequirements"
+    },
+    {
+      "@id": "org:complianceFrameworks",
+      "@type": "rdf:Property",
+      "rdfs:label": "Compliance Frameworks",
+      "rdfs:domain": "org:ComplianceRequirements",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true,
+      "schema:description": "Required compliance frameworks (GDPR, HIPAA, SOC2, etc.)"
+    },
+    {
+      "@id": "org:certifications",
+      "@type": "rdf:Property",
+      "rdfs:label": "Required Certifications",
+      "rdfs:domain": "org:ComplianceRequirements",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "org:standards",
+      "@type": "rdf:Property",
+      "rdfs:label": "Industry Standards",
+      "rdfs:domain": "org:ComplianceRequirements",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "org:NamingConventions",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Naming Conventions",
+      "rdfs:comment": "Requirement ID naming conventions"
+    },
+    {
+      "@id": "org:namingConventions",
+      "@type": "rdf:Property",
+      "rdfs:label": "Naming Conventions",
+      "rdfs:domain": "org:OrganizationContext",
+      "rdfs:range": "org:NamingConventions"
+    },
+    {
+      "@id": "org:requirementPrefix",
+      "@type": "rdf:Property",
+      "rdfs:label": "Requirement Prefix",
+      "rdfs:domain": "org:NamingConventions",
+      "rdfs:range": "xsd:string",
+      "schema:defaultValue": "REQ"
+    },
+    {
+      "@id": "org:functionalPrefix",
+      "@type": "rdf:Property",
+      "rdfs:label": "Functional Requirement Prefix",
+      "rdfs:domain": "org:NamingConventions",
+      "rdfs:range": "xsd:string",
+      "schema:defaultValue": "FR"
+    },
+    {
+      "@id": "org:nonFunctionalPrefix",
+      "@type": "rdf:Property",
+      "rdfs:label": "Non-Functional Requirement Prefix",
+      "rdfs:domain": "org:NamingConventions",
+      "rdfs:range": "xsd:string",
+      "schema:defaultValue": "NFR"
+    },
+    {
+      "@id": "org:compliancePrefix",
+      "@type": "rdf:Property",
+      "rdfs:label": "Compliance Requirement Prefix",
+      "rdfs:domain": "org:NamingConventions",
+      "rdfs:range": "xsd:string",
+      "schema:defaultValue": "CR"
+    },
+    {
+      "@id": "org:separator",
+      "@type": "rdf:Property",
+      "rdfs:label": "ID Separator",
+      "rdfs:domain": "org:NamingConventions",
+      "rdfs:range": "xsd:string",
+      "schema:defaultValue": "-"
+    },
+    {
+      "@id": "org:padding",
+      "@type": "rdf:Property",
+      "rdfs:label": "Number Padding",
+      "rdfs:domain": "org:NamingConventions",
+      "rdfs:range": "xsd:integer",
+      "schema:defaultValue": 3
+    },
+    {
+      "@id": "org:PriorityMapping",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Priority Mapping",
+      "rdfs:comment": "Keywords for automatic priority detection"
+    },
+    {
+      "@id": "org:priorityMapping",
+      "@type": "rdf:Property",
+      "rdfs:label": "Priority Mapping",
+      "rdfs:domain": "org:OrganizationContext",
+      "rdfs:range": "org:PriorityMapping"
+    },
+    {
+      "@id": "org:mustKeywords",
+      "@type": "rdf:Property",
+      "rdfs:label": "MUST Priority Keywords",
+      "rdfs:domain": "org:PriorityMapping",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "org:shouldKeywords",
+      "@type": "rdf:Property",
+      "rdfs:label": "SHOULD Priority Keywords",
+      "rdfs:domain": "org:PriorityMapping",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "org:couldKeywords",
+      "@type": "rdf:Property",
+      "rdfs:label": "COULD Priority Keywords",
+      "rdfs:domain": "org:PriorityMapping",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "org:RiskThresholds",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Risk Thresholds",
+      "rdfs:comment": "Risk assessment thresholds and indicators"
+    },
+    {
+      "@id": "org:riskThresholds",
+      "@type": "rdf:Property",
+      "rdfs:label": "Risk Thresholds",
+      "rdfs:domain": "org:OrganizationContext",
+      "rdfs:range": "org:RiskThresholds"
+    },
+    {
+      "@id": "org:highComplexityIndicators",
+      "@type": "rdf:Property",
+      "rdfs:label": "High Complexity Indicators",
+      "rdfs:domain": "org:RiskThresholds",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "org:timelineRedFlags",
+      "@type": "rdf:Property",
+      "rdfs:label": "Timeline Red Flags",
+      "rdfs:domain": "org:RiskThresholds",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "org:resourceConstraints",
+      "@type": "rdf:Property",
+      "rdfs:label": "Resource Constraint Indicators",
+      "rdfs:domain": "org:RiskThresholds",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "org:highRiskScoreThreshold",
+      "@type": "rdf:Property",
+      "rdfs:label": "High Risk Score Threshold",
+      "rdfs:domain": "org:RiskThresholds",
+      "rdfs:range": "xsd:decimal",
+      "schema:minValue": 0.0,
+      "schema:maxValue": 1.0
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "@context": "https://ibm.com/context-studio/organization/context.jsonld",
+  "@type": "org:OrganizationContext",
+  "@id": "org:ibm-consulting",
+  "org:name": "IBM Consulting",
+  "org:industry": "Consulting",
+  "org:description": "IBM Consulting organizational context for RFP analysis - providing enterprise consulting services with focus on digital transformation, cloud migration, and AI implementation",
+  "org:techStack": {
+    "@type": "org:TechStack",
+    "org:preferredLanguages": [
+      "Python",
+      "TypeScript",
+      "Java"
+    ],
+    "org:cloudProviders": [
+      "AWS",
+      "Azure"
+    ],
+    "org:databases": [
+      "PostgreSQL",
+      "MongoDB"
+    ],
+    "org:frameworks": [
+      "FastAPI",
+      "React",
+      "Django"
+    ],
+    "org:architecturePatterns": [
+      "Microservices",
+      "RESTful APIs",
+      "Event-Driven"
+    ]
+  },
+  "org:compliance": {
+    "@type": "org:ComplianceRequirements",
+    "org:complianceFrameworks": [
+      "GDPR",
+      "SOC2"
+    ],
+    "org:certifications": [
+      "ISO 27001"
+    ],
+    "org:standards": [
+      "OWASP Top 10"
+    ]
+  },
+  "org:namingConventions": {
+    "@type": "org:NamingConventions",
+    "org:requirementPrefix": "REQ",
+    "org:functionalPrefix": "IBM-FR",
+    "org:nonFunctionalPrefix": "NFR",
+    "org:compliancePrefix": "CR",
+    "org:separator": "-",
+    "org:padding": 3
+  },
+  "org:priorityMapping": {
+    "@type": "org:PriorityMapping",
+    "org:mustKeywords": [
+      "shall",
+      "must",
+      "required",
+      "mandatory"
+    ],
+    "org:shouldKeywords": [
+      "should",
+      "recommended",
+      "preferred"
+    ],
+    "org:couldKeywords": [
+      "may",
+      "could",
+      "optional"
+    ]
+  },
+  "org:riskThresholds": {
+    "@type": "org:RiskThresholds",
+    "org:highComplexityIndicators": [
+      "AI/ML",
+      "machine learning",
+      "blockchain",
+      "real-time",
+      "distributed system"
+    ],
+    "org:timelineRedFlags": [
+      "< 3 months",
+      "immediate",
+      "urgent",
+      "ASAP"
+    ],
+    "org:resourceConstraints": [
+      "limited budget",
+      "small team"
+    ],
+    "org:highRiskScoreThreshold": 0.7
+  }
+}

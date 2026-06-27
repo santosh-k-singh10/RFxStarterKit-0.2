@@ -1,0 +1,741 @@
+{% extends "base.html" %}
+
+{% block title %}RFP Analyzer{% endblock %}
+
+{% block content %}
+<div class="card">
+    <!-- Secondary Navigation (Architecture, Solutions, Export, API Docs) -->
+    <div class="tabs secondary-tabs">
+        <button class="tab" onclick="scrollToSection('architecture')">🏗️ Architecture</button>
+        <button class="tab" onclick="scrollToSection('solutions')">🔍 Solution Mapping</button>
+        <button class="tab" onclick="scrollToSection('export')">📤 Export</button>
+        <button class="tab" onclick="scrollToSection('apidocs')">📚 API Docs</button>
+    </div>
+
+    <!-- ============================================
+         SECTION 1: Quick Guide
+         ============================================ -->
+    <div class="section-container">
+        <div style="background: linear-gradient(135deg, #EFF6FF 0%, #F0F9FF 100%); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border-left: 4px solid var(--color-primary);">
+            <p style="margin: 0; color: #1E40AF;">
+                <strong>💡 Quick Guide:</strong> Upload your RFP document below → Watch the analysis progress → Review requirements as they appear → No need to switch tabs!
+            </p>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SECTION 2: Upload Form (Progressive State)
+         ============================================ -->
+    <div id="uploadSection" class="section-container">
+        <div id="uploadFormWrapper" class="upload-form-wrapper">
+            <h2>📤 Upload RFP Document</h2>
+            <p style="color: #6B7280; margin-bottom: 2rem;">
+                Upload your RFP document (PDF, DOCX, or TXT) to extract and analyze requirements using AI.
+            </p>
+
+            <form id="uploadForm">
+                <div id="uploadArea" class="upload-area">
+                    <div class="upload-icon">📄</div>
+                    <p style="font-weight: 600; margin-bottom: 0.5rem;">Click to upload or drag and drop</p>
+                    <p style="color: #6B7280; font-size: 0.9rem;">PDF, DOCX, or TXT files</p>
+                    <input type="file" id="fileInput" accept=".pdf,.docx,.txt" required style="display: none;">
+                </div>
+
+                <div id="fileNameContainer" style="text-align: center; display: none; margin-top: 1rem;">
+                    <span id="fileName" class="badge badge-accepted" style="font-size: 1rem; padding: 0.5rem 1rem;"></span>
+                </div>
+
+                <div class="form-group" style="margin-top: 2rem;">
+                    <label for="title">Analysis Title</label>
+                    <input type="text" id="title" class="form-control" value="RFP Analysis" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="domain">Domain/Industry (optional)</label>
+                    <input type="text" id="domain" class="form-control" placeholder="e.g., Healthcare, Finance, Government">
+                </div>
+
+                <div class="form-group">
+                    <label for="minConfidence">Minimum Confidence Threshold</label>
+                    <input type="number" id="minConfidence" class="form-control" value="0.0" min="0" max="1" step="0.1">
+                    <small style="color: #6B7280;">Requirements below this confidence will be filtered out (0.0 = show all)</small>
+                </div>
+
+                <button type="submit" id="analyzeBtn" class="btn btn-primary" style="width: 100%;">
+                    <span>🚀</span>
+                    <span>Analyze RFP</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Upload Section (After Analysis - Collapsed) -->
+        <div id="uploadSuccessWrapper" class="upload-success-wrapper" style="display: none;">
+            <div style="background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%); padding: 2rem; border-radius: 12px; border: 1px solid #D1E7E0; text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">✅</div>
+                <h3 style="color: #059669; margin: 0 0 0.5rem 0;">Analysis Complete!</h3>
+                <p style="color: #065F46; margin: 0 0 2rem 0; font-size: 1.1rem;">
+                    <strong id="extractedReqCount">0</strong> requirements extracted and ready for review
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="/review" target="_blank" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                        <span>📋</span>
+                        <span>View Requirements</span>
+                    </a>
+                    <button type="button" onclick="newAnalysis()" class="btn btn-secondary" style="font-size: 1rem;">
+                        <span>🔄</span>
+                        <span>New Analysis</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SECTION 3: Progress Bar (While Analyzing)
+         ============================================ -->
+    <div id="progressContainer" class="section-container progress-container" style="display: none;">
+        <h3 style="color: var(--color-text-1); margin-bottom: 1.5rem;">🔄 Analyzing Your RFP...</h3>
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill" style="width: 0%">0%</div>
+        </div>
+        <p id="progressText" class="progress-text" style="margin-bottom: 0.75rem;">Starting analysis...</p>
+        <p id="stepText" class="progress-text" style="font-size: 0.9rem; color: #6B7280;"></p>
+    </div>
+
+
+    <!-- ============================================
+         SECTION 4: Requirements Review
+         ============================================ -->
+    <div id="requirementsSection" class="section-container review-container" style="display: none;">
+        <h2 class="section-title">Review Requirements</h2>
+
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="switchTab('requirements')">
+                <span class="tab-icon">◆</span> Requirements
+            </button>
+            <button class="tab-btn" onclick="switchTab('architecture')">
+                <span class="tab-icon">🏗</span> Architecture
+            </button>
+            <button class="tab-btn" onclick="switchTab('solutions')">
+                <span class="tab-icon">🔍</span> Solution Mapping
+            </button>
+            <button class="tab-btn" onclick="switchTab('export')">
+                <span class="tab-icon">◆</span> Export
+            </button>
+        </div>
+
+        <div id="tabRequirements" class="tab-content active">
+            <div class="filter-row">
+                <div class="filter-item">
+                    <label for="filterCategory">Category</label>
+                    <select id="filterCategory" class="form-control" multiple onchange="applyFiltersAndRender()">
+                        <option value="functional">Functional</option>
+                        <option value="non_functional">Non-Functional</option>
+                        <option value="compliance">Compliance</option>
+                        <option value="ambiguity">Ambiguity</option>
+                        <option value="risk">Risk</option>
+                    </select>
+                </div>
+
+                <div class="filter-item">
+                    <label for="filterPriority">Priority</label>
+                    <select id="filterPriority" class="form-control" multiple onchange="applyFiltersAndRender()">
+                        <option value="must">Must Have</option>
+                        <option value="should">Should Have</option>
+                        <option value="could">Could Have</option>
+                        <option value="wont">Won't Have</option>
+                    </select>
+                </div>
+
+                <div class="filter-item">
+                    <label for="filterStatus">Review Status</label>
+                    <select id="filterStatus" class="form-control" multiple onchange="applyFiltersAndRender()">
+                        <option value="pending">Pending</option>
+                        <option value="accepted">Accepted</option>
+                        <option value="modified">Modified</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+
+                <div class="filter-item">
+                    <label for="filterSearch">Search</label>
+                    <input type="text" id="filterSearch" class="form-control" placeholder="Search title or description..." oninput="applyFiltersAndRender()">
+                </div>
+
+                <div class="filter-item">
+                    <label for="filterMinConfidence">Minimum Confidence</label>
+                    <input type="range" id="filterMinConfidence" class="form-control" min="0" max="1" step="0.05" value="0" oninput="applyFiltersAndRender()">
+                    <small id="filterMinConfidenceValue" style="color: #6B7280;">0.00</small>
+                </div>
+            </div>
+
+            <div class="action-buttons" style="justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button onclick="bulkAccept()" class="btn btn-accept">
+                        ✓ Accept All Visible
+                    </button>
+                    <button onclick="bulkReject()" class="btn btn-reject">
+                        ✗ Reject All Visible
+                    </button>
+                    <button onclick="resetFilters()" class="btn btn-secondary">
+                        ↺ Reset Filters
+                    </button>
+                </div>
+                <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                    <span id="filterSummary" style="color: #6B7280;"></span>
+                    <span id="selectedCount" style="color: #6B7280;"></span>
+                </div>
+            </div>
+
+            <div id="requirementsContainer" class="requirements-container">
+                <div class="spinner"></div>
+            </div>
+
+            <div id="htmlPreviewSection" style="margin-top: 3rem; display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1.25rem; font-weight: 600; color: #1a1a1a; margin: 0;">
+                        📊 Categorized Requirements View
+                    </h3>
+                    <button onclick="toggleHtmlPreview()" class="btn btn-primary" style="padding: 0.5rem 1rem;">
+                        <span id="previewToggleIcon">▼</span> <span id="previewToggleText">Hide Preview</span>
+                    </button>
+                </div>
+                <div id="htmlPreviewContainer" style="border: 1px solid #e0e0e0; border-radius: 4px; overflow: auto; background: white; max-height: 800px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SECTION 5: Architecture (Collapsible)
+         ============================================ -->
+    <div id="architecture" class="section-container collapsible-section" style="display: none;">
+        <div class="collapsible-header" onclick="toggleSection('architecture')">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 1rem;">
+                🏗️ System Architecture
+                <span id="archIcon" style="color: #6B7280; font-size: 0.8rem;">▼</span>
+            </h2>
+        </div>
+        <div id="architectureContent" class="collapsible-content" style="display: none;">
+            <button onclick="generateArchitecture()" class="btn btn-primary" style="margin-top: 1rem;">Generate Architecture Diagram</button>
+            <div id="architectureResult" style="margin-top: 2rem;"></div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SECTION 6: Solutions (Collapsible)
+         ============================================ -->
+    <div id="solutions" class="section-container collapsible-section" style="display: none;">
+        <div class="collapsible-header" onclick="toggleSection('solutions')">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 1rem;">
+                🔍 Solution Mapping
+                <span id="solIcon" style="color: #6B7280; font-size: 0.8rem;">▼</span>
+            </h2>
+        </div>
+        <div id="solutionsContent" class="collapsible-content" style="display: none;">
+            <p style="color: #6B7280; margin-bottom: 1rem; margin-top: 1rem;">Map requirements to target solutions:</p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                <label><input type="checkbox" value="SAP S/4HANA" checked> SAP S/4HANA</label>
+                <label><input type="checkbox" value="Oracle ERP Cloud"> Oracle ERP Cloud</label>
+                <label><input type="checkbox" value="Salesforce"> Salesforce</label>
+                <label><input type="checkbox" value="Microsoft Dynamics 365"> Microsoft Dynamics 365</label>
+                <label><input type="checkbox" value="Custom Build"> Custom Build</label>
+            </div>
+            <button onclick="mapSolutions()" class="btn btn-primary">Map to Solutions</button>
+            <div id="solutionResult" style="margin-top: 2rem;"></div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SECTION 7: Export (Collapsible)
+         ============================================ -->
+    <div id="export" class="section-container collapsible-section" style="display: none;">
+        <div class="collapsible-header" onclick="toggleSection('export')">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 1rem;">
+                📤 Export Results
+                <span id="expIcon" style="color: #6B7280; font-size: 0.8rem;">▼</span>
+            </h2>
+        </div>
+        <div id="exportContent" class="collapsible-content" style="display: none; margin-top: 1rem;">
+            <p style="color: #6B7280; margin-bottom: 2rem;">
+                Export your reviewed requirements in multiple formats. Only accepted and modified requirements will be included.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div style="background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%); padding: 2rem; border-radius: 12px; border: 1px solid var(--color-border);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                    <h3 style="color: var(--color-primary); margin-bottom: 0.5rem;">Excel Spreadsheet</h3>
+                    <p style="color: #6B7280; font-size: 0.9rem; margin-bottom: 1.5rem;">Color-coded requirements with summary sheets.</p>
+                    <button onclick="api.exportExcel()" class="btn btn-primary" style="width: 100%;">📊 Download Excel</button>
+                </div>
+                <div style="background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%); padding: 2rem; border-radius: 12px; border: 1px solid var(--color-border);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
+                    <h3 style="color: var(--color-primary); margin-bottom: 0.5rem;">Markdown Report</h3>
+                    <p style="color: #6B7280; font-size: 0.9rem; margin-bottom: 1.5rem;">Structured text report for documentation.</p>
+                    <button onclick="api.exportMarkdown()" class="btn btn-primary" style="width: 100%;">📄 Download Markdown</button>
+                </div>
+                <div style="background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%); padding: 2rem; border-radius: 12px; border: 1px solid var(--color-border);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🔧</div>
+                    <h3 style="color: var(--color-primary); margin-bottom: 0.5rem;">JSON Data</h3>
+                    <p style="color: #6B7280; font-size: 0.9rem; margin-bottom: 1.5rem;">Machine-readable format for integration.</p>
+                    <button onclick="api.exportJSON()" class="btn btn-primary" style="width: 100%;">🔧 Download JSON</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SECTION 8: API Docs (Collapsible)
+         ============================================ -->
+    <div id="apidocs" class="section-container collapsible-section" style="display: none;">
+        <div class="collapsible-header" onclick="toggleSection('apidocs')">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 1rem;">
+                📚 API Documentation
+                <span id="apiIcon" style="color: #6B7280; font-size: 0.8rem;">▼</span>
+            </h2>
+        </div>
+        <div id="apidocsContent" class="collapsible-content" style="display: none;">
+            <p style="color: #6B7280; margin-bottom: 2rem; margin-top: 1rem;">Interactive API documentation powered by Swagger UI.</p>
+            <div style="background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%); padding: 2rem; border-radius: 12px; border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">📚</div>
+                <h3 style="color: var(--color-primary); margin-bottom: 1rem;">Swagger UI</h3>
+                <p style="color: #6B7280; margin-bottom: 2rem;">Test all API endpoints directly from your browser</p>
+                <a href="/docs" target="_blank" class="btn btn-primary" style="display: inline-flex;">
+                    <span>🚀</span>
+                    <span>Open API Documentation</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .review-container {
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin: 0 0 2rem 0;
+        padding: 0;
+    }
+
+    .tab-navigation {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 0;
+    }
+
+    .tab-btn {
+        padding: 0.75rem 1.25rem;
+        background: none;
+        border: none;
+        border-bottom: 3px solid transparent;
+        cursor: pointer;
+        color: #666;
+        font-weight: 500;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .tab-btn:hover {
+        color: #333;
+    }
+
+    .tab-btn.active {
+        color: #1a1a1a;
+        border-bottom-color: #1a1a1a;
+    }
+
+    .tab-icon {
+        font-size: 1rem;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .filter-row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding: 1.5rem;
+        background: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+    }
+
+    .filter-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .filter-item label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #333;
+        text-transform: capitalize;
+    }
+
+    .filter-item .form-control {
+        padding: 0.6rem;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 0.9rem;
+        background: white;
+    }
+
+    .filter-item .form-control:focus {
+        outline: none;
+        border-color: #666;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+    }
+
+    .filter-item select.form-control[multiple] {
+        min-height: 110px;
+    }
+
+    .requirements-editor-table th,
+    .requirements-editor-table td {
+        vertical-align: top;
+        min-width: 120px;
+    }
+
+    .table-select,
+    .table-input {
+        width: 100%;
+        padding: 0.45rem 0.55rem;
+        border: 1px solid #d0d5dd;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        background: #fff;
+    }
+
+    .table-text-cell {
+        max-width: 260px;
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.4;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-accept {
+        background: #28a745;
+        color: white;
+    }
+
+    .btn-accept:hover {
+        background: #218838;
+        transform: translateY(-1px);
+    }
+
+    .btn-reject {
+        background: #dc3545;
+        color: white;
+    }
+
+    .btn-reject:hover {
+        background: #c82333;
+        transform: translateY(-1px);
+    }
+
+    .requirements-container {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .spinner {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #1a73e8;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Section Container Styling */
+    .section-container {
+        margin-bottom: 2rem;
+        animation: fadeIn 0.3s ease;
+    }
+
+    /* Collapsible Sections */
+    .collapsible-section {
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .collapsible-header {
+        padding: 1.5rem 2rem;
+        background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .collapsible-header:hover {
+        background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+    }
+
+    .collapsible-content {
+        padding: 2rem;
+        background: white;
+    }
+
+    /* Upload Form Wrapper */
+    .upload-form-wrapper {
+        animation: fadeIn 0.3s ease;
+    }
+
+    .upload-success-wrapper {
+        animation: slideUp 0.3s ease;
+    }
+
+    /* Secondary Tabs */
+    .secondary-tabs {
+        margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 1rem;
+    }
+
+    .secondary-tabs .tab {
+        border-bottom: 2px solid transparent;
+        color: #6B7280;
+    }
+
+    .secondary-tabs .tab:hover {
+        color: var(--color-primary);
+    }
+
+    .secondary-tabs .tab.active {
+        border-bottom-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    @media (max-width: 1024px) {
+        .filter-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .review-container {
+            padding: 1rem;
+        }
+
+        .filter-row {
+            grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .tab-navigation {
+            gap: 0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 1rem;
+        }
+
+        .tab-btn {
+            padding: 0.6rem 1rem;
+            white-space: nowrap;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/home.js"></script>
+<script src="/static/js/review.js"></script>
+<script>
+    // ============================================
+    // STATE MANAGEMENT
+    // ============================================
+    let appState = {
+        status: 'idle', // idle, uploading, analyzing, complete
+        sessionId: null,
+        requirementsCount: 0
+    };
+
+    // ============================================
+    // SECTION MANAGEMENT
+    // ============================================
+    function toggleSection(sectionId) {
+        const content = document.getElementById(sectionId + 'Content');
+        const icon = document.getElementById(sectionId + 'Icon');
+        
+        if (content.style.display === 'none') {
+            content.style.display = 'block';
+            icon.textContent = '▲';
+        } else {
+            content.style.display = 'none';
+            icon.textContent = '▼';
+        }
+    }
+
+    function scrollToSection(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Auto-expand if collapsed
+            const content = document.getElementById(sectionId + 'Content');
+            if (content && content.style.display === 'none') {
+                toggleSection(sectionId);
+            }
+        }
+    }
+
+    // ============================================
+    // SHOW/HIDE SECTIONS BASED ON STATE
+    // ============================================
+    function showProgressSection() {
+        document.getElementById('progressContainer').style.display = 'block';
+        document.getElementById('uploadFormWrapper').style.display = 'none';
+        document.getElementById('uploadSuccessWrapper').style.display = 'none';
+    }
+
+    function showCompleteState() {
+        document.getElementById('progressContainer').style.display = 'none';
+        document.getElementById('uploadFormWrapper').style.display = 'none';
+        document.getElementById('uploadSuccessWrapper').style.display = 'block';
+        
+        document.getElementById('requirementsSection').style.display = 'block';
+        document.getElementById('architecture').style.display = 'block';
+        document.getElementById('solutions').style.display = 'block';
+        document.getElementById('export').style.display = 'block';
+        document.getElementById('apidocs').style.display = 'block';
+    }
+
+    function showUploadState() {
+        document.getElementById('progressContainer').style.display = 'none';
+        document.getElementById('uploadFormWrapper').style.display = 'block';
+        document.getElementById('uploadSuccessWrapper').style.display = 'none';
+        document.getElementById('requirementsSection').style.display = 'none';
+        document.getElementById('architecture').style.display = 'none';
+        document.getElementById('solutions').style.display = 'none';
+        document.getElementById('export').style.display = 'none';
+        document.getElementById('apidocs').style.display = 'none';
+    }
+
+    function newAnalysis() {
+        showUploadState();
+        document.getElementById('uploadForm').reset();
+        document.getElementById('fileNameContainer').style.display = 'none';
+        appState.status = 'idle';
+    }
+
+    // ============================================
+    // Update progress section display
+    // ============================================
+    window.showProgressSection = showProgressSection;
+
+    // Hook into existing showComplete function - Show success message only
+    const originalShowComplete = window.showComplete;
+    window.showComplete = function(count) {
+        console.log('showComplete called with count:', count);
+        appState.status = 'complete';
+        appState.requirementsCount = count;
+        document.getElementById('extractedReqCount').textContent = count;
+        
+        document.getElementById('progressContainer').style.display = 'none';
+        document.getElementById('uploadFormWrapper').style.display = 'none';
+        document.getElementById('uploadSuccessWrapper').style.display = 'block';
+        
+        document.getElementById('requirementsSection').style.display = 'block';
+        document.getElementById('architecture').style.display = 'block';
+        document.getElementById('solutions').style.display = 'block';
+        document.getElementById('export').style.display = 'block';
+        document.getElementById('apidocs').style.display = 'block';
+        
+        // Show "View Requirements" link in navbar
+        const viewReqLink = document.getElementById('viewRequirementsLink');
+        if (viewReqLink) {
+            viewReqLink.style.display = 'inline-flex';
+        }
+        
+        loadRequirements();
+
+        setTimeout(() => {
+            document.getElementById('requirementsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 300);
+
+        if (originalShowComplete) originalShowComplete.call(this, count);
+    };
+
+    // Hook into existing analysis flow
+    const originalPollStatus = window.pollStatus;
+    window.pollStatus = function(sessionId) {
+        appState.sessionId = sessionId;
+        appState.status = 'analyzing';
+        showProgressSection();
+        if (originalPollStatus) originalPollStatus.call(this, sessionId);
+    };
+
+    // Initialize with upload state
+    window.addEventListener('DOMContentLoaded', () => {
+        showUploadState();
+    });
+</script>
+{% endblock %}

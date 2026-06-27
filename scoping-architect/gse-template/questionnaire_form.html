@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSE - GreenStar Estimation Engine Input</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
+        .section { padding: 30px; display: none; }
+        .section.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .nav-tabs .nav-link { color: #666; }
+        .nav-tabs .nav-link.active { color: #667eea; font-weight: 600; }
+        .required { color: #dc3545; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; }
+        .subsection { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
+        .confidence-badge { font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 600; }
+        .calculated-value { background: #e7f3ff; padding: 10px; border-radius: 4px; font-weight: 600; color: #0056b3; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌐 Global Scoping Questionnaire</h1>
+            <p>SAP Implementation Scoping & Estimation Tool</p>
+        </div>
+
+        <ul class="nav nav-tabs" id="sectionTabs" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-section="1" href="#section1">1. Application</a></li>
+            <li class="nav-item"><a class="nav-link" data-section="2" href="#section2">2. Geographical</a></li>
+            <li class="nav-item"><a class="nav-link" data-section="3" href="#section3">3. Process</a></li>
+            <li class="nav-item"><a class="nav-link" data-section="4" href="#section4">4. Development</a></li>
+            <li class="nav-item"><a class="nav-link" data-section="5" href="#section5">5. Data</a></li>
+            <li class="nav-item"><a class="nav-link" data-section="6" href="#section6">6. Testing</a></li>
+            <li class="nav-item"><a class="nav-link" data-section="7" href="#section7">7. Infrastructure</a></li>
+            <li class="nav-item"><a class="nav-link" data-section="8" href="#section8">8. Change Mgmt</a></li>
+            <li class="nav-item"><a class="nav-link" data-section="9" href="#section9">9. Implementation</a></li>
+        </ul>
+
+        <form id="gscForm">
+            <!-- Section 1: Application Scope -->
+            <div class="section active" id="section1">
+                <h2>1. Application Scope</h2>
+                <div class="mb-3">
+                    <label class="form-label">Standard Applications <span class="required">*</span></label>
+                    <select class="form-select" name="standard_applications" multiple required>
+                        <option value="SAP S/4HANA">SAP S/4HANA</option>
+                        <option value="Workday Financials">Workday Financials</option>
+                        <option value="Oracle ERP">Oracle ERP</option>
+                        <option value="Salesforce Cloud">Salesforce Cloud</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Additional Applications</label>
+                    <textarea class="form-control" name="additional_applications"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Module Scope <span class="required">*</span></label>
+                    <div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="module_scope" value="FI"> <label class="form-check-label">Finance (FI)</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="module_scope" value="CO"> <label class="form-check-label">Controlling (CO)</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="module_scope" value="SD"> <label class="form-check-label">Sales & Distribution (SD)</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="module_scope" value="MM"> <label class="form-check-label">Materials Management (MM)</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" name="module_scope" value="PP"> <label class="form-check-label">Production Planning (PP)</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Geographical Scope -->
+            <div class="section" id="section2">
+                <h2>2. Geographical / Organization Scope</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">No. of Countries <span class="required">*</span></label>
+                        <input type="number" class="form-control" name="no_of_countries" required min="0">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">No. of Company Codes <span class="required">*</span></label>
+                        <input type="number" class="form-control" name="no_of_company_codes" required min="0">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">No. of States (USA)</label>
+                        <input type="number" class="form-control" name="no_of_states_usa" min="0">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">No. of Plants <span class="required">*</span></label>
+                        <input type="number" class="form-control" name="no_of_plants" required min="0">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">No. of Divisions <span class="required">*</span></label>
+                        <input type="number" class="form-control" name="no_of_divisions" required min="0">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Company Revenue <span class="required">*</span></label>
+                        <select class="form-select" name="company_revenue" required>
+                            <option value=""><$1B USD</option>
+                            <option value="$1B-$5B">$1B-$5B USD</option>
+                            <option value="$5B-$10B">$5B-$10B USD</option>
+                            <option value=">$10B">>$10B USD</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Core Users <span class="required">*</span></label>
+                        <input type="number" class="form-control" name="core_users" required min="0">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Self Service Users</label>
+                        <input type="number" class="form-control" name="self_service_users" min="0">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Project Language <span class="required">*</span></label>
+                        <select class="form-select" name="project_language" required>
+                            <option value="English">English</option>
+                            <option value="Non-English">Non-English</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Rollout In Scope <span class="required">*</span></label>
+                        <select class="form-select" name="rollout_in_scope" required>
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Process Scope -->
+            <div class="section" id="section3">
+                <h2>3. Business Process Scope</h2>
+                <div class="mb-3">
+                    <label class="form-label">BPH Model <span class="required">*</span></label>
+                    <select class="form-select" name="bph_model" required>
+                        <option value="">Select</option>
+                        <option value="APQC">APQC</option>
+                        <option value="Application BPH">Application BPH</option>
+                        <option value="IMPACT BPH">IMPACT BPH</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">IBM Impact Solution - Primary <span class="required">*</span></label>
+                    <input type="text" class="form-control" name="impact_solution_primary" required>
+                </div>
+                <div class="subsection">
+                    <h5>L1 Process Scope</h5>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" name="l1_process" value="Record to Report"> <label class="form-check-label">Record to Report</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" name="l1_process" value="Order To Cash"> <label class="form-check-label">Order To Cash</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" name="l1_process" value="Procure To Pay"> <label class="form-check-label">Procure To Pay</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" name="l1_process" value="Plan To Manufacture"> <label class="form-check-label">Plan To Manufacture</label></div>
+                </div>
+            </div>
+
+            <!-- Section 4: Application Development -->
+            <div class="section" id="section4">
+                <h2>4. Application Development Scope</h2>
+                <div class="mb-3">
+                    <label class="form-label">WRICEF In Scope <span class="required">*</span></label>
+                    <select class="form-select" name="wricef_in_scope" id="wricefInScope" required>
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+                <div id="wricefFields" style="display:none;">
+                    <div class="subsection">
+                        <h5>Pilot Scope</h5>
+                        <div class="row">
+                            <div class="col-md-4 mb-3"><label class="form-label">S/4 Reports</label><input type="number" class="form-control wricef-pilot" name="pilot_s4_reports" min="0" value="0"></div>
+                            <div class="col-md-4 mb-3"><label class="form-label">S/4 Interfaces</label><input type="number" class="form-control wricef-pilot" name="pilot_s4_abap_interfaces" min="0" value="0"></div>
+                            <div class="col-md-4 mb-3"><label class="form-label">BTP Interfaces</label><input type="number" class="form-control wricef-pilot" name="pilot_end_to_end_btp_interfaces" min="0" value="0"></div>
+                            <div class="col-md-4 mb-3"><label class="form-label">Conversions</label><input type="number" class="form-control wricef-pilot" name="pilot_s4_conversions" min="0" value="0"></div>
+                            <div class="col-md-4 mb-3"><label class="form-label">Enhancements</label><input type="number" class="form-control wricef-pilot" name="pilot_s4_enhancements" min="0" value="0"></div>
+                            <div class="col-md-4 mb-3"><label class="form-label">Forms</label><input type="number" class="form-control wricef-pilot" name="pilot_s4_forms" min="0" value="0"></div>
+                        </div>
+                        <div class="calculated-value">Pilot Total: <span id="pilotTotal">0</span></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Integration Layer Type <span class="required">*</span></label>
+                    <select class="form-select" name="integration_layer_type" required>
+                        <option value="PI/PO">PI/PO</option>
+                        <option value="BTP">BTP</option>
+                        <option value="CPI">CPI</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Section 5: Data Conversion -->
+            <div class="section" id="section5">
+                <h2>5. Data Conversion Scope</h2>
+                <div class="mb-3">
+                    <label class="form-label">Data Conversion In Scope <span class="required">*</span></label>
+                    <select class="form-select" name="data_conversion_in_scope" id="dataConversion" required>
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+                <div id="dataConversionFields" style="display:none;">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Data Migration Tool <span class="required">*</span></label>
+                            <select class="form-select" name="data_migration_tool">
+                                <option value="DMC">DMC</option>
+                                <option value="SAP Data Services (BODS)">SAP Data Services (BODS)</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">No. of Data Objects <span class="required">*</span></label>
+                            <input type="number" class="form-control" name="no_of_data_objects" min="0" value="0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">No. of Load Cycles <span class="required">*</span></label>
+                            <input type="number" class="form-control" name="no_of_data_load_cycles" min="1" value="4">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">No. of Source Systems <span class="required">*</span></label>
+                            <input type="number" class="form-control" name="no_of_source_systems" min="1" value="1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 6: Testing -->
+            <div class="section" id="section6">
+                <h2>6. Testing Scope</h2>
+                <div class="subsection">
+                    <h5>Automation Testing</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Automation Testing In Scope</label>
+                        <select class="form-select" name="automation_testing_in_scope" id="automationTesting">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div id="automationFields" style="display:none;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3"><label class="form-label">Test Scenarios - SAP GUI</label><input type="number" class="form-control" name="no_of_automation_test_scenario_creation_sap_gui" min="0" value="0"></div>
+                            <div class="col-md-6 mb-3"><label class="form-label">Test Scenarios - Web/Fiori</label><input type="number" class="form-control" name="no_of_automation_test_scenario_creation_web_fiori" min="0" value="0"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="subsection">
+                    <h5>Integration Testing (SIT)</h5>
+                    <div class="mb-3">
+                        <label class="form-label">SIT Testing In Scope</label>
+                        <select class="form-select" name="sit_testing_in_scope" id="sitTesting">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div id="sitFields" style="display:none;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3"><label class="form-label">Test Scenarios - Creation</label><input type="number" class="form-control" name="test_scenarios_creation" min="0" value="0"></div>
+                            <div class="col-md-6 mb-3"><label class="form-label">SIT Cycles (Max 3)</label><input type="number" class="form-control" name="sit_cycles" min="0" max="3" value="0"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 7: Infrastructure -->
+            <div class="section" id="section7">
+                <h2>7. Infrastructure & Authorization Scope</h2>
+                <div class="mb-3">
+                    <label class="form-label">Security In Scope</label>
+                    <select class="form-select" name="security_in_scope" id="securityInScope">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+                <div id="securityFields" style="display:none;">
+                    <div class="row">
+                        <div class="col-md-6 mb-3"><label class="form-label">No. of End Users</label><input type="number" class="form-control" name="no_of_end_users" min="0" value="0"></div>
+                        <div class="col-md-6 mb-3"><label class="form-label">No. of L3 Processes</label><input type="number" class="form-control" name="no_of_l3_processes" min="0" value="0"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 8: Change Management -->
+            <div class="section" id="section8">
+                <h2>8. Change Management & Training Scope</h2>
+                <div class="subsection">
+                    <h5>Organizational Change Management</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Change Management In Scope</label>
+                        <select class="form-select" name="change_management_in_scope" id="ocmInScope">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div id="ocmFields" style="display:none;">
+                        <div class="mb-3">
+                            <label class="form-label">IBM Involvement</label>
+                            <select class="form-select" name="ibm_involvement">
+                                <option value="Only Advisory Scope">Only Advisory Scope</option>
+                                <option value="Full">Full</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="subsection">
+                    <h5>Training</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Training In Scope</label>
+                        <select class="form-select" name="training_in_scope" id="trainingInScope">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div id="trainingFields" style="display:none;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3"><label class="form-label">Training Approach</label>
+                                <select class="form-select" name="training_approach">
+                                    <option value="Train The Trainer [TTT]">Train The Trainer [TTT]</option>
+                                    <option value="Direct Training">Direct Training</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3"><label class="form-label">Target Trainees</label><input type="number" class="form-control" name="target_trainees" min="0" value="0"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 9: Implementation -->
+            <div class="section" id="section9">
+                <h2>9. Implementation Scope</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Project Start Date <span class="required">*</span></label>
+                        <input type="date" class="form-control" name="project_start_date" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Timeline Given by Client <span class="required">*</span></label>
+                        <select class="form-select" name="timeline_given_by_client" required>
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Rollout Type</label>
+                        <select class="form-select" name="rollout_type">
+                            <option value="">Select</option>
+                            <option value="Geographical">Geographical</option>
+                            <option value="Functional">Functional</option>
+                            <option value="Hybrid">Hybrid</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">No. of Rollouts Planned</label>
+                        <input type="number" class="form-control" name="no_of_rollouts_planned" min="0" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-navigation p-3 border-top">
+                <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeSection(-1)">Previous</button>
+                <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeSection(1)">Next</button>
+                <button type="submit" class="btn btn-success" id="submitBtn" style="display:none;">Submit Questionnaire</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentSection = 1;
+        const totalSections = 9;
+
+        // Show/hide conditional fields
+        document.getElementById('wricefInScope').addEventListener('change', function() {
+            document.getElementById('wricefFields').style.display = this.value === 'Yes' ? 'block' : 'none';
+        });
+
+        document.getElementById('dataConversion').addEventListener('change', function() {
+            document.getElementById('dataConversionFields').style.display = this.value === 'Yes' ? 'block' : 'none';
+        });
+
+        document.getElementById('automationTesting').addEventListener('change', function() {
+            document.getElementById('automationFields').style.display = this.value === 'Yes' ? 'block' : 'none';
+        });
+
+        document.getElementById('sitTesting').addEventListener('change', function() {
+            document.getElementById('sitFields').style.display = this.value === 'Yes' ? 'block' : 'none';
+        });
+
+        document.getElementById('securityInScope').addEventListener('change', function() {
+            document.getElementById('securityFields').style.display = this.value === 'Yes' ? 'block' : 'none';
+        });
+
+        document.getElementById('ocmInScope').addEventListener('change', function() {
+            document.getElementById('ocmFields').style.display = this.value === 'Yes' ? 'block' : 'none';
+        });
+
+        document.getElementById('trainingInScope').addEventListener('change', function() {
+            document.getElementById('trainingFields').style.display = this.value === 'Yes' ? 'block' : 'none';
+        });
+
+        // Calculate WRICEF pilot total
+        document.querySelectorAll('.wricef-pilot').forEach(input => {
+            input.addEventListener('input', function() {
+                let total = 0;
+                document.querySelectorAll('.wricef-pilot').forEach(el => {
+                    total += parseInt(el.value) || 0;
+                });
+                document.getElementById('pilotTotal').textContent = total;
+            });
+        });
+
+        // Section navigation
+        function changeSection(direction) {
+            const sections = document.querySelectorAll('.section');
+            const tabs = document.querySelectorAll('.nav-link');
+            
+            sections[currentSection - 1].classList.remove('active');
+            tabs[currentSection - 1].classList.remove('active');
+            
+            currentSection += direction;
+            
+            if (currentSection < 1) currentSection = 1;
+            if (currentSection > totalSections) currentSection = totalSections;
+            
+            sections[currentSection - 1].classList.add('active');
+            tabs[currentSection - 1].classList.add('active');
+            
+            document.getElementById('prevBtn').style.display = currentSection === 1 ? 'none' : 'inline-block';
+            document.getElementById('nextBtn').style.display = currentSection === totalSections ? 'none' : 'inline-block';
+            document.getElementById('submitBtn').style.display = currentSection === totalSections ? 'inline-block' : 'none';
+            
+            window.scrollTo(0, 0);
+        }
+
+        // Tab click navigation
+        document.querySelectorAll('.nav-link').forEach((tab, index) => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                const sections = document.querySelectorAll('.section');
+                const tabs = document.querySelectorAll('.nav-link');
+                
+                sections[currentSection - 1].classList.remove('active');
+                tabs[currentSection - 1].classList.remove('active');
+                
+                currentSection = index + 1;
+                
+                sections[currentSection - 1].classList.add('active');
+                tabs[currentSection - 1].classList.add('active');
+                
+                document.getElementById('prevBtn').style.display = currentSection === 1 ? 'none' : 'inline-block';
+                document.getElementById('nextBtn').style.display = currentSection === totalSections ? 'none' : 'inline-block';
+                document.getElementById('submitBtn').style.display = currentSection === totalSections ? 'inline-block' : 'none';
+            });
+        });
+
+        // Form submission
+        document.getElementById('gscForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {};
+            
+            // Process form data
+            for (let [key, value] of formData.entries()) {
+                if (data[key]) {
+                    if (Array.isArray(data[key])) {
+                        data[key].push(value);
+                    } else {
+                        data[key] = [data[key], value];
+                    }
+                } else {
+                    data[key] = value;
+                }
+            }
+            
+            try {
+                const response = await fetch('/api/gsc/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Questionnaire submitted successfully! ID: ' + result.questionnaire_id);
+                    this.reset();
+                    currentSection = 1;
+                    changeSection(0);
+                } else {
+                    alert('Error submitting questionnaire: ' + result.message);
+                }
+            } catch (error) {
+                alert('Error submitting questionnaire: ' + error.message);
+            }
+        });
+
+        // Initialize
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // AUTO-FILL FROM RFP → GSE BRIDGE
+        // ═══════════════════════════════════════════════════════════════════════
+        
+        function applyPrefillData() {
+            const prefillJson = localStorage.getItem('gsc_prefill_data');
+            if (!prefillJson) return;
+            
+            try {
+                const payload = JSON.parse(prefillJson);
+                const data = payload.data;
+                const confidence = payload.confidence || {};
+                
+                console.log('🚀 Auto-filling GSE form with RFP data...', data);
+                
+                let filledCount = 0;
+                
+                // Helper to set field value and add confidence badge
+                const setField = (name, value) => {
+                    if (value === null || value === undefined || value === '') return;
+                    
+                    const elements = document.querySelectorAll(`[name="${name}"]`);
+                    if (elements.length === 0) return;
+                    
+                    const conf = confidence[name] || 'needs-input';
+                    
+                    elements.forEach(el => {
+                        if (el.type === 'checkbox') {
+                            // Handle checkbox arrays (module_scope, l1_process)
+                            if (Array.isArray(value) && value.includes(el.value)) {
+                                el.checked = true;
+                                filledCount++;
+                            }
+                        } else if (el.type === 'select-multiple') {
+                            // Handle multi-select (standard_applications)
+                            if (Array.isArray(value)) {
+                                Array.from(el.options).forEach(opt => {
+                                    if (value.includes(opt.value)) {
+                                        opt.selected = true;
+                                    }
+                                });
+                                filledCount++;
+                            }
+                        } else if (el.type === 'select-one') {
+                            // Handle dropdowns
+                            el.value = value;
+                            filledCount++;
+                        } else {
+                            // Handle text, number, textarea
+                            el.value = value;
+                            filledCount++;
+                        }
+                        
+                        // Add confidence badge
+                        addConfidenceBadge(el, conf);
+                        
+                        // Trigger change event for conditional fields
+                        el.dispatchEvent(new Event('change', { bubbles: true }));
+                    });
+                };
+                
+                // Section 1: Application Scope
+                setField('standard_applications', data.standard_applications);
+                setField('additional_applications', data.additional_applications);
+                setField('module_scope', data.module_scope);
+                
+                // Section 2: Geographical Scope
+                setField('no_of_countries', data.no_of_countries);
+                setField('no_of_company_codes', data.no_of_company_codes);
+                setField('no_of_states_usa', data.no_of_states_usa);
+                setField('no_of_plants', data.no_of_plants);
+                setField('no_of_divisions', data.no_of_divisions);
+                setField('company_revenue', data.company_revenue);
+                setField('core_users', data.core_users);
+                setField('self_service_users', data.self_service_users);
+                setField('project_language', data.project_language);
+                setField('rollout_in_scope', data.rollout_in_scope);
+                
+                // Section 3: Process Scope
+                setField('bph_model', data.bph_model);
+                setField('impact_solution_primary', data.impact_solution_primary);
+                setField('l1_process', data.l1_process);
+                
+                // Section 4: Development Scope
+                setField('wricef_in_scope', data.wricef_in_scope);
+                setField('pilot_s4_reports', data.pilot_s4_reports);
+                setField('pilot_s4_abap_interfaces', data.pilot_s4_abap_interfaces);
+                setField('pilot_end_to_end_btp_interfaces', data.pilot_end_to_end_btp_interfaces);
+                setField('pilot_s4_conversions', data.pilot_s4_conversions);
+                setField('pilot_s4_enhancements', data.pilot_s4_enhancements);
+                setField('pilot_s4_forms', data.pilot_s4_forms);
+                setField('integration_layer_type', data.integration_layer_type);
+                
+                // Section 5: Data Conversion
+                setField('data_conversion_in_scope', data.data_conversion_in_scope);
+                setField('data_migration_tool', data.data_migration_tool);
+                setField('no_of_data_objects', data.no_of_data_objects);
+                setField('no_of_data_load_cycles', data.no_of_data_load_cycles);
+                setField('no_of_source_systems', data.no_of_source_systems);
+                
+                // Section 6: Testing
+                setField('automation_testing_in_scope', data.automation_testing_in_scope);
+                setField('no_of_automation_test_scenario_creation_sap_gui', data.no_of_automation_test_scenario_creation_sap_gui);
+                setField('no_of_automation_test_scenario_creation_web_fiori', data.no_of_automation_test_scenario_creation_web_fiori);
+                setField('sit_testing_in_scope', data.sit_testing_in_scope);
+                setField('test_scenarios_creation', data.test_scenarios_creation);
+                setField('sit_cycles', data.sit_cycles);
+                
+                // Section 7: Infrastructure
+                setField('security_in_scope', data.security_in_scope);
+                setField('no_of_end_users', data.no_of_end_users);
+                setField('no_of_l3_processes', data.no_of_l3_processes);
+                
+                // Section 8: Change Management
+                setField('change_management_in_scope', data.change_management_in_scope);
+                setField('ibm_involvement', data.ibm_involvement);
+                setField('training_in_scope', data.training_in_scope);
+                setField('training_approach', data.training_approach);
+                setField('target_trainees', data.target_trainees);
+                
+                // Section 9: Implementation
+                setField('project_start_date', data.project_start_date);
+                setField('timeline_given_by_client', data.timeline_given_by_client);
+                setField('rollout_type', data.rollout_type);
+                setField('no_of_rollouts_planned', data.no_of_rollouts_planned);
+                
+                // Clear localStorage after successful load
+                localStorage.removeItem('gsc_prefill_data');
+                
+                // Show success message
+                showPrefillNotification(filledCount);
+                
+                console.log(`✅ Auto-filled ${filledCount} fields from RFP analysis`);
+                
+            } catch (error) {
+                console.error('Error applying prefill data:', error);
+            }
+        }
+        
+        function addConfidenceBadge(element, confidence) {
+            // Find the label for this element
+            const label = element.closest('.mb-3')?.querySelector('label') || 
+                         element.closest('.col-md-6')?.querySelector('label') ||
+                         element.closest('.form-check')?.querySelector('label');
+            
+            if (!label) return;
+            
+            // Remove existing badge if any
+            const existingBadge = label.querySelector('.confidence-badge');
+            if (existingBadge) existingBadge.remove();
+            
+            // Create badge
+            const badge = document.createElement('span');
+            badge.className = 'confidence-badge badge ms-2';
+            badge.textContent = confidence.toUpperCase();
+            
+            if (confidence === 'auto') {
+                badge.style.backgroundColor = '#d1fae5';
+                badge.style.color = '#065f46';
+            } else if (confidence === 'estimated') {
+                badge.style.backgroundColor = '#fef3c7';
+                badge.style.color = '#92400e';
+            } else {
+                badge.style.backgroundColor = '#fee2e2';
+                badge.style.color = '#991b1b';
+            }
+            
+            label.appendChild(badge);
+        }
+        
+        function showPrefillNotification(count) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 9999;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.innerHTML = `
+                <strong>✅ Auto-Fill Complete!</strong><br>
+                ${count} fields populated from RFP analysis
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+        
+        // Apply prefill data on page load
+        window.addEventListener('DOMContentLoaded', applyPrefillData);
+        document.getElementById('prevBtn').style.display = 'none';
+    </script>
+</body>
+</html>

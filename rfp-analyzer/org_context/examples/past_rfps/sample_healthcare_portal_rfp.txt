@@ -1,0 +1,405 @@
+REQUEST FOR PROPOSAL (RFP)
+Patient Portal Development Project
+
+RFP Number: HP-2025-001
+Issue Date: January 15, 2025
+Response Deadline: February 15, 2025, 5:00 PM EST
+Project Start Date: March 1, 2025
+
+================================================================================
+SECTION 1: INTRODUCTION
+================================================================================
+
+1.1 Purpose
+HealthFirst Medical Center is seeking qualified vendors to design, develop, and implement a comprehensive patient portal solution that will enhance patient engagement, improve access to health information, and streamline communication between patients and healthcare providers.
+
+1.2 About HealthFirst Medical Center
+HealthFirst Medical Center is a 500-bed acute care hospital serving a diverse patient population of over 250,000 patients annually. We are committed to providing high-quality, patient-centered care and leveraging technology to improve patient outcomes and satisfaction.
+
+1.3 Project Background
+Our current patient portal has limited functionality and poor user adoption (less than 30%). We need a modern, user-friendly solution that meets current patient expectations and supports our strategic goals for digital health transformation.
+
+================================================================================
+SECTION 2: SCOPE OF WORK
+================================================================================
+
+2.1 Functional Requirements
+
+2.1.1 Patient Access and Authentication
+- The system SHALL provide secure patient authentication using multi-factor authentication
+- The system SHALL support single sign-on (SSO) integration with our existing identity provider
+- The system SHALL allow patients to create accounts using email or mobile phone verification
+- The system SHALL implement password policies compliant with NIST 800-63B guidelines
+- The system SHALL support biometric authentication for mobile devices
+
+2.1.2 Health Information Access
+- The system SHALL provide patients with access to their complete medical records
+- The system SHALL display lab results with normal ranges and trend analysis
+- The system SHALL show medication lists with dosage instructions and refill status
+- The system SHALL provide access to radiology reports and images
+- The system SHALL display immunization history
+- The system SHALL show allergy and problem lists
+- The system SHALL provide visit summaries and discharge instructions
+- The system SHALL support downloading health records in C-CDA format
+
+2.1.3 Appointment Management
+- The system SHALL allow patients to schedule appointments with available providers
+- The system SHALL support appointment rescheduling and cancellation
+- The system SHALL send appointment reminders via email and SMS
+- The system SHALL display upcoming appointments with provider information
+- The system SHALL integrate with our existing scheduling system (Epic)
+- The system SHALL support virtual visit scheduling for telehealth appointments
+
+2.1.4 Secure Messaging
+- The system SHALL provide secure messaging between patients and care teams
+- The system SHALL support message threading and conversation history
+- The system SHALL allow attachment of images and documents
+- The system SHALL notify patients of new messages via email/SMS
+- The system SHALL support automated responses for common inquiries
+- The system SHALL integrate with our EHR messaging system
+
+2.1.5 Prescription Management
+- The system SHALL allow patients to request prescription refills
+- The system SHALL display current and past medications
+- The system SHALL show pharmacy information and allow pharmacy changes
+- The system SHALL integrate with e-prescribing systems
+- The system SHALL provide medication education materials
+
+2.1.6 Bill Pay and Financial Information
+- The system SHALL display current account balances and payment history
+- The system SHALL support online bill payment via credit card and ACH
+- The system SHALL provide itemized billing statements
+- The system SHALL support payment plans and financial assistance applications
+- The system SHALL integrate with our revenue cycle management system
+
+2.1.7 Health and Wellness Tools
+- The system SHOULD provide health risk assessments
+- The system SHOULD support patient-reported outcomes tracking
+- The system SHOULD offer educational content library
+- The system SHOULD integrate with wearable devices and health apps
+- The system SHOULD provide medication adherence tracking
+
+2.1.8 Family Access
+- The system SHALL support proxy access for caregivers and family members
+- The system SHALL allow parents to access minor children's records
+- The system SHALL provide granular permission controls for proxy users
+- The system SHALL maintain audit logs of proxy access
+
+2.2 Non-Functional Requirements
+
+2.2.1 Performance
+- The system SHALL load pages within 2 seconds under normal load
+- The system SHALL support 10,000 concurrent users
+- The system SHALL handle 1 million page views per day
+- The system SHALL have API response times under 200ms for 95% of requests
+
+2.2.2 Availability
+- The system SHALL maintain 99.9% uptime (excluding planned maintenance)
+- Planned maintenance SHALL be limited to 4 hours per month
+- The system SHALL support disaster recovery with RTO of 4 hours and RPO of 1 hour
+
+2.2.3 Security
+- The system SHALL be HIPAA compliant
+- The system SHALL encrypt all data at rest using AES-256
+- The system SHALL encrypt all data in transit using TLS 1.3
+- The system SHALL implement role-based access control
+- The system SHALL maintain comprehensive audit logs for all PHI access
+- The system SHALL undergo annual penetration testing
+- The system SHALL support automatic session timeout after 15 minutes of inactivity
+
+2.2.4 Scalability
+- The system SHALL support horizontal scaling to handle increased load
+- The system SHALL be cloud-native and support auto-scaling
+- The system SHALL handle 50% growth in user base without performance degradation
+
+2.2.5 Usability
+- The system SHALL achieve a System Usability Scale (SUS) score of 80 or higher
+- The system SHALL be accessible and comply with WCAG 2.1 Level AA standards
+- The system SHALL support multiple languages (English and Spanish required)
+- The system SHALL be responsive and work on desktop, tablet, and mobile devices
+
+2.2.6 Integration
+- The system SHALL integrate with Epic EHR via HL7 FHIR R4 APIs
+- The system SHALL support real-time data synchronization
+- The system SHALL integrate with our identity provider (Okta)
+- The system SHALL integrate with our payment processor
+- The system SHALL provide RESTful APIs for future integrations
+
+2.3 Compliance Requirements
+
+2.3.1 HIPAA Compliance
+- The vendor SHALL sign a Business Associate Agreement (BAA)
+- The system SHALL implement all required HIPAA safeguards
+- The vendor SHALL provide evidence of HIPAA compliance program
+- The vendor SHALL conduct annual HIPAA risk assessments
+
+2.3.2 Regulatory Compliance
+- The system SHALL comply with 21st Century Cures Act information blocking provisions
+- The system SHALL support ONC certification requirements
+- The system SHALL comply with state privacy laws
+
+2.3.3 Standards Compliance
+- The system SHALL support HL7 FHIR R4 standard
+- The system SHALL support C-CDA for document exchange
+- The system SHALL support SMART on FHIR for app integration
+
+================================================================================
+SECTION 3: TECHNICAL REQUIREMENTS
+================================================================================
+
+3.1 Architecture
+- The solution SHOULD be cloud-based (AWS or Azure preferred)
+- The solution SHALL use microservices architecture
+- The solution SHALL implement API-first design
+- The solution SHALL support containerization (Docker/Kubernetes)
+
+3.2 Technology Stack
+- Frontend: Modern JavaScript framework (React, Angular, or Vue.js)
+- Backend: RESTful APIs with appropriate technology stack
+- Database: HIPAA-compliant database solution
+- Caching: Redis or similar for performance optimization
+- Message Queue: For asynchronous processing
+
+3.3 Mobile Applications
+- Native iOS app (iOS 14+)
+- Native Android app (Android 10+)
+- Feature parity with web portal
+- Offline capability for viewing downloaded records
+
+3.4 Development Practices
+- Agile/Scrum methodology
+- Continuous Integration/Continuous Deployment (CI/CD)
+- Automated testing (unit, integration, end-to-end)
+- Code review process
+- Version control (Git)
+
+================================================================================
+SECTION 4: PROJECT DELIVERABLES
+================================================================================
+
+4.1 Phase 1: Discovery and Design (Weeks 1-4)
+- Requirements validation workshop
+- Technical architecture document
+- UI/UX design mockups
+- Integration design document
+- Project plan and timeline
+- Risk assessment and mitigation plan
+
+4.2 Phase 2: Development (Weeks 5-16)
+- Web portal development
+- Mobile app development (iOS and Android)
+- EHR integration
+- Payment integration
+- Security implementation
+- Testing and quality assurance
+
+4.3 Phase 3: Testing and Training (Weeks 17-20)
+- User acceptance testing
+- Performance testing
+- Security testing and penetration test
+- Staff training materials
+- Patient education materials
+- Go-live readiness assessment
+
+4.4 Phase 4: Deployment and Go-Live (Weeks 21-22)
+- Production deployment
+- Data migration (if applicable)
+- Go-live support
+- Post-launch monitoring
+
+4.5 Documentation
+- Technical documentation
+- User manuals
+- Administrator guides
+- API documentation
+- Training materials
+- Runbooks for operations
+
+================================================================================
+SECTION 5: VENDOR QUALIFICATIONS
+================================================================================
+
+5.1 Required Qualifications
+- Minimum 5 years experience in healthcare IT
+- Minimum 3 successful patient portal implementations
+- HIPAA compliance expertise
+- Epic integration experience
+- SOC 2 Type II certification
+- References from at least 3 healthcare organizations
+
+5.2 Preferred Qualifications
+- Experience with hospitals of similar size (400-600 beds)
+- ONC Health IT certification
+- Experience with telehealth integration
+- Mobile app development expertise
+- DevOps and cloud infrastructure expertise
+
+================================================================================
+SECTION 6: PROPOSAL REQUIREMENTS
+================================================================================
+
+6.1 Executive Summary
+- Company overview
+- Understanding of project requirements
+- Proposed approach
+- Key differentiators
+
+6.2 Technical Proposal
+- Detailed solution architecture
+- Technology stack and justification
+- Integration approach
+- Security and compliance approach
+- Scalability and performance strategy
+- Mobile app strategy
+
+6.3 Project Plan
+- Detailed project timeline with milestones
+- Resource allocation plan
+- Risk management approach
+- Quality assurance approach
+- Change management strategy
+
+6.4 Team Composition
+- Project manager qualifications
+- Technical lead qualifications
+- Development team structure
+- Resumes of key personnel
+- Subcontractor information (if applicable)
+
+6.5 Experience and References
+- Company background and history
+- Relevant project case studies
+- Client references (minimum 3)
+- Certifications and compliance documentation
+
+6.6 Cost Proposal
+- Detailed cost breakdown by phase
+- Licensing costs (if applicable)
+- Ongoing support and maintenance costs
+- Infrastructure/hosting costs
+- Training costs
+- Payment terms
+
+6.7 Support and Maintenance
+- Support model and SLAs
+- Maintenance and update schedule
+- Escalation procedures
+- Disaster recovery and business continuity
+
+================================================================================
+SECTION 7: EVALUATION CRITERIA
+================================================================================
+
+Proposals will be evaluated based on the following weighted criteria:
+
+7.1 Technical Solution (30%)
+- Architecture and technology approach
+- Integration capabilities
+- Security and compliance
+- Scalability and performance
+- Innovation and future-readiness
+
+7.2 Experience and Qualifications (25%)
+- Relevant project experience
+- Team qualifications
+- Healthcare IT expertise
+- Client references
+- Company stability
+
+7.3 Project Approach (20%)
+- Project methodology
+- Timeline and milestones
+- Risk management
+- Quality assurance
+- Change management
+
+7.4 Cost (15%)
+- Total cost of ownership
+- Value for money
+- Cost transparency
+- Payment terms
+
+7.5 Support and Maintenance (10%)
+- Support model
+- SLA commitments
+- Training approach
+- Documentation quality
+
+================================================================================
+SECTION 8: TIMELINE AND SUBMISSION
+================================================================================
+
+8.1 Key Dates
+- RFP Issue Date: January 15, 2025
+- Questions Due: January 29, 2025
+- Answers Posted: February 5, 2025
+- Proposal Due Date: February 15, 2025, 5:00 PM EST
+- Vendor Presentations: February 22-26, 2025
+- Contract Award: March 1, 2025
+- Project Start: March 15, 2025
+
+8.2 Submission Instructions
+- Submit proposals electronically to: rfp@healthfirst.org
+- Subject line: "RFP HP-2025-001 - Patient Portal"
+- Format: PDF, maximum 50 pages (excluding appendices)
+- Include all required sections
+- Late submissions will not be accepted
+
+8.3 Questions and Clarifications
+- Submit questions via email to: rfp@healthfirst.org
+- Questions must be received by January 29, 2025
+- Answers will be posted to all vendors by February 5, 2025
+
+================================================================================
+SECTION 9: TERMS AND CONDITIONS
+================================================================================
+
+9.1 Proposal Validity
+- Proposals must remain valid for 90 days from submission date
+
+9.2 Confidentiality
+- All information in this RFP is confidential
+- Vendors must sign NDA before receiving additional information
+
+9.3 Right to Reject
+- HealthFirst reserves the right to reject any or all proposals
+- HealthFirst reserves the right to negotiate with selected vendors
+- HealthFirst reserves the right to cancel this RFP at any time
+
+9.4 Costs
+- Vendors are responsible for all costs related to proposal preparation
+- HealthFirst will not reimburse proposal preparation costs
+
+9.5 Contract Terms
+- Selected vendor must agree to HealthFirst's standard contract terms
+- Business Associate Agreement required
+- Insurance requirements: $2M general liability, $5M cyber liability
+
+================================================================================
+SECTION 10: CONTACT INFORMATION
+================================================================================
+
+Primary Contact:
+Sarah Johnson
+Director of IT Projects
+HealthFirst Medical Center
+Email: rfp@healthfirst.org
+Phone: (555) 123-4567
+
+Technical Contact:
+Michael Chen
+Chief Information Officer
+Email: michael.chen@healthfirst.org
+Phone: (555) 123-4568
+
+================================================================================
+END OF RFP
+================================================================================
+
+HealthFirst Medical Center
+123 Medical Plaza Drive
+Healthcare City, HC 12345
+www.healthfirst.org
+
+This RFP is confidential and proprietary to HealthFirst Medical Center.
+Unauthorized distribution is prohibited.

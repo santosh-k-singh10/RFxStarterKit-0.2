@@ -1,0 +1,14 @@
+﻿# Normalize line endings to LF on commit, checkout as native
+* text=auto eol=lf
+
+# Binaries - no conversion
+*.xlsx binary
+*.docx binary
+*.pdf  binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pyc  binary
+*.sqlite binary

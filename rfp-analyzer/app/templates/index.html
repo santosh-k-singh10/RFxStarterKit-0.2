@@ -1,0 +1,578 @@
+{% extends "base.html" %}
+
+{% block title %}RFP Analyzer{% endblock %}
+
+{% block content %}
+<div class="card">
+    <!-- Secondary Navigation (Architecture, Solutions, Export, API Docs) -->
+    <div class="tabs secondary-tabs">
+        <button class="tab" onclick="scrollToSection('architecture')">🏗️ Architecture</button>
+        <button class="tab" onclick="scrollToSection('solutions')">🔍 Solution Mapping</button>
+        <button class="tab" onclick="scrollToSection('export')">📤 Export</button>
+        <button class="tab" onclick="scrollToSection('apidocs')">📚 API Docs</button>
+    </div>
+
+    <!-- ============================================
+         SECTION 1: Quick Guide (Hidden in new layout)
+         ============================================ -->
+    <div class="section-container" style="display: none;">
+        <div style="background: linear-gradient(135deg, #EFF6FF 0%, #F0F9FF 100%); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border-left: 4px solid var(--primary);">
+            <p style="margin: 0; color: #1E40AF;">
+                <strong>💡 Quick Guide:</strong> Upload your RFP document below → Watch the analysis progress → Review requirements as they appear → No need to switch tabs!
+            </p>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SECTION 2: Upload Form (Progressive State)
+         ============================================ -->
+    <div id="uploadSection" class="section-container">
+        <div id="uploadFormWrapper" class="upload-form-wrapper">
+            <h2>📤 Upload RFP Document</h2>
+            <p style="color: #6B7280; margin-bottom: 2rem;">
+                Upload your RFP document (PDF, DOCX, or TXT) to extract and analyze requirements using AI.
+            </p>
+
+            <form id="uploadForm">
+                <div id="uploadArea" class="upload-area">
+                    <div class="upload-icon">📄</div>
+                    <p style="font-weight: 600; margin-bottom: 0.5rem;">Click to upload or drag and drop</p>
+                    <p style="color: #6B7280; font-size: 0.9rem;">PDF, DOCX, or TXT files</p>
+                    <input type="file" id="fileInput" accept=".pdf,.docx,.txt" required style="display: none;">
+                </div>
+
+                <div id="fileNameContainer" style="text-align: center; display: none; margin-top: 1rem;">
+                    <span id="fileName" class="badge badge-accepted" style="font-size: 1rem; padding: 0.5rem 1rem;"></span>
+                </div>
+
+                <div class="form-group" style="margin-top: 2rem;">
+                    <label for="title">Analysis Title</label>
+                    <input type="text" id="title" class="form-control" value="RFP Analysis" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="domain">Domain/Industry (optional)</label>
+                    <input type="text" id="domain" class="form-control" placeholder="e.g., Healthcare, Finance, Government">
+                </div>
+
+                <div class="form-group">
+                    <label for="minConfidence">Minimum Confidence Threshold</label>
+                    <input type="number" id="minConfidence" class="form-control" value="0.0" min="0" max="1" step="0.1">
+                    <small style="color: #6B7280;">Requirements below this confidence will be filtered out (0.0 = show all)</small>
+                </div>
+
+                <button type="submit" id="analyzeBtn" class="btn btn-primary" style="width: 100%;">
+                    <span>🚀</span>
+                    <span>Analyze RFP</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Upload Section (After Analysis - Collapsed) -->
+        <div id="uploadSuccessWrapper" class="upload-success-wrapper" style="display: none;">
+            <div style="background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%); padding: 1.5rem; border-radius: 12px; border: 1px solid #D1E7E0;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3 style="color: #059669; margin: 0 0 0.5rem 0;">✓ RFP Analysis Complete</h3>
+                        <p style="color: #065F46; margin: 0; font-size: 0.95rem;">
+                            <strong id="extractedReqCount">0</strong> requirements extracted and ready for review
+                        </p>
+                    </div>
+                    <button type="button" onclick="newAnalysis()" class="btn btn-secondary" style="white-space: nowrap;">
+                        + New Analysis
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SECTION 3: Progress Bar (While Analyzing)
+         ============================================ -->
+    <div id="progressContainer" class="section-container progress-container" style="display: none;">
+        <h3 style="color: var(--dark); margin-bottom: 1.5rem;">🔄 Analyzing Your RFP...</h3>
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill" style="width: 0%">0%</div>
+        </div>
+        <p id="progressText" class="progress-text" style="margin-bottom: 0.75rem;">Starting analysis...</p>
+        <p id="stepText" class="progress-text" style="font-size: 0.9rem; color: #6B7280;"></p>
+    </div>
+
+    <!-- ============================================
+         SECTION 4: Requirements Review
+         ============================================ -->
+    <div id="requirementsSection" class="section-container" style="display: none;">
+        <h2>📋 Review Requirements</h2>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-group">
+                <label>Category</label>
+                <select id="filterCategory" class="form-control" onchange="loadRequirements()">
+                    <option value="">All Categories</option>
+                    <option value="functional">Functional</option>
+                    <option value="non_functional">Non-Functional</option>
+                    <option value="compliance">Compliance</option>
+                    <option value="ambiguity">Ambiguity</option>
+                    <option value="risk">Risk</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Priority</label>
+                <select id="filterPriority" class="form-control" onchange="loadRequirements()">
+                    <option value="">All Priorities</option>
+                    <option value="must">Must</option>
+                    <option value="should">Should</option>
+                    <option value="could">Could</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Review Status</label>
+                <select id="filterStatus" class="form-control" onchange="loadRequirements()">
+                    <option value="">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="accepted">Accepted</option>
+                    <option value="modified">Modified</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Search</label>
+                <input type="text" id="filterSearch" class="form-control" placeholder="Search..." onkeyup="loadRequirements()">
+            </div>
+        </div>
+
+        <!-- Bulk Actions -->
+        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+            <button onclick="bulkAccept()" class="btn btn-success">✓ Accept Selected</button>
+            <button onclick="bulkReject()" class="btn btn-danger">✗ Reject Selected</button>
+            <span id="selectedCount" style="margin-left: auto; align-self: center; color: #6B7280;"></span>
+        </div>
+
+        <!-- Requirements Table -->
+        <div id="requirementsContainer">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SECTION 5: Architecture (Collapsible)
+         ============================================ -->
+    <div id="architecture" class="section-container collapsible-section" style="display: none;">
+        <div class="collapsible-header" onclick="toggleSection('architecture')">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 1rem;">
+                🏗️ System Architecture
+                <span id="archIcon" style="color: #6B7280; font-size: 0.8rem;">▼</span>
+            </h2>
+        </div>
+        <div id="architectureContent" class="collapsible-content" style="display: none;">
+            <button onclick="generateArchitecture()" class="btn btn-primary" style="margin-top: 1rem;">Generate Architecture Diagram</button>
+            <div id="architectureResult" style="margin-top: 2rem;"></div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SECTION 6: Solutions (Collapsible)
+         ============================================ -->
+    <div id="solutions" class="section-container collapsible-section" style="display: none;">
+        <div class="collapsible-header" onclick="toggleSection('solutions')">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 1rem;">
+                🔍 Solution Mapping
+                <span id="solIcon" style="color: #6B7280; font-size: 0.8rem;">▼</span>
+            </h2>
+        </div>
+        <div id="solutionsContent" class="collapsible-content" style="display: none;">
+            <p style="color: #6B7280; margin-bottom: 1rem; margin-top: 1rem;">Map requirements to target solutions:</p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                <label><input type="checkbox" value="SAP S/4HANA" checked> SAP S/4HANA</label>
+                <label><input type="checkbox" value="Oracle ERP Cloud"> Oracle ERP Cloud</label>
+                <label><input type="checkbox" value="Salesforce"> Salesforce</label>
+                <label><input type="checkbox" value="Microsoft Dynamics 365"> Microsoft Dynamics 365</label>
+                <label><input type="checkbox" value="Custom Build"> Custom Build</label>
+            </div>
+            <button onclick="mapSolutions()" class="btn btn-primary">Map to Solutions</button>
+            <div id="solutionResult" style="margin-top: 2rem;"></div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SECTION 7: Export (Collapsible)
+         ============================================ -->
+    <div id="export" class="section-container collapsible-section" style="display: none;">
+        <div class="collapsible-header" onclick="toggleSection('export')">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 1rem;">
+                📤 Export Results
+                <span id="expIcon" style="color: #6B7280; font-size: 0.8rem;">▼</span>
+            </h2>
+        </div>
+        <div id="exportContent" class="collapsible-content" style="display: none; margin-top: 1rem;">
+            <p style="color: #6B7280; margin-bottom: 2rem;">
+                Export your reviewed requirements in multiple formats. Only accepted and modified requirements will be included.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div style="background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%); padding: 2rem; border-radius: 12px; border: 1px solid var(--divider);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                    <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Excel Spreadsheet</h3>
+                    <p style="color: #6B7280; font-size: 0.9rem; margin-bottom: 1.5rem;">Color-coded requirements with summary sheets.</p>
+                    <button onclick="api.exportExcel()" class="btn btn-primary" style="width: 100%;">📊 Download Excel</button>
+                </div>
+                <div style="background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%); padding: 2rem; border-radius: 12px; border: 1px solid var(--divider);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
+                    <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Markdown Report</h3>
+                    <p style="color: #6B7280; font-size: 0.9rem; margin-bottom: 1.5rem;">Structured text report for documentation.</p>
+                    <button onclick="api.exportMarkdown()" class="btn btn-primary" style="width: 100%;">📄 Download Markdown</button>
+                </div>
+                <div style="background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%); padding: 2rem; border-radius: 12px; border: 1px solid var(--divider);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🔧</div>
+                    <h3 style="color: var(--primary); margin-bottom: 0.5rem;">JSON Data</h3>
+                    <p style="color: #6B7280; font-size: 0.9rem; margin-bottom: 1.5rem;">Machine-readable format for integration.</p>
+                    <button onclick="api.exportJSON()" class="btn btn-primary" style="width: 100%;">🔧 Download JSON</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SECTION 8: API Docs (Collapsible)
+         ============================================ -->
+    <div id="apidocs" class="section-container collapsible-section" style="display: none;">
+        <div class="collapsible-header" onclick="toggleSection('apidocs')">
+            <h2 style="margin: 0; display: flex; align-items: center; gap: 1rem;">
+                📚 API Documentation
+                <span id="apiIcon" style="color: #6B7280; font-size: 0.8rem;">▼</span>
+            </h2>
+        </div>
+        <div id="apidocsContent" class="collapsible-content" style="display: none;">
+            <p style="color: #6B7280; margin-bottom: 2rem; margin-top: 1rem;">Interactive API documentation powered by Swagger UI.</p>
+            <div style="background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%); padding: 2rem; border-radius: 12px; border: 1px solid var(--divider); text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">📚</div>
+                <h3 style="color: var(--primary); margin-bottom: 1rem;">Swagger UI</h3>
+                <p style="color: #6B7280; margin-bottom: 2rem;">Test all API endpoints directly from your browser</p>
+                <a href="/docs" target="_blank" class="btn btn-primary" style="display: inline-flex;">
+                    <span>🚀</span>
+                    <span>Open API Documentation</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Section Container Styling */
+    .section-container {
+        margin-bottom: 0;
+        animation: fadeIn 0.3s ease;
+    }
+
+    /* Collapsible Sections */
+    .collapsible-section {
+        border: none;
+        border-radius: 0;
+        overflow: hidden;
+        border-bottom: 1px solid var(--divider);
+    }
+
+    .collapsible-header {
+        padding: 1.5rem 2rem;
+        background: white;
+        cursor: pointer;
+        transition: var(--transition);
+        border-bottom: 1px solid var(--divider);
+    }
+
+    .collapsible-header:hover {
+        background: #F9FAFB;
+    }
+
+    .collapsible-content {
+        padding: 2rem;
+        background: white;
+    }
+
+    /* Upload Form Wrapper */
+    .upload-form-wrapper {
+        animation: fadeIn 0.3s ease;
+    }
+
+    .upload-success-wrapper {
+        animation: slideUp 0.3s ease;
+    }
+
+    /* Secondary Tabs */
+    .secondary-tabs {
+        margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 1rem;
+    }
+
+    .secondary-tabs .tab {
+        border-bottom: 2px solid transparent;
+        color: #6B7280;
+    }
+
+    .secondary-tabs .tab:hover {
+        color: var(--primary);
+    }
+
+    .secondary-tabs .tab.active {
+        border-bottom-color: var(--primary);
+        color: var(--primary);
+    }
+
+    /* ============================================
+       TOP BAND LAYOUT: Upload form as header
+       ============================================ */
+    #uploadSection {
+        background: white;
+        border-bottom: 1px solid var(--divider);
+        margin-bottom: 0;
+        padding: 1.5rem 2rem;
+    }
+
+    #uploadSection .section-container {
+        margin-bottom: 0;
+    }
+
+    .upload-form-wrapper {
+        display: flex;
+        align-items: flex-end;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .upload-form-wrapper h2 {
+        display: none;
+    }
+
+    .upload-form-wrapper p {
+        display: none;
+    }
+
+    #uploadForm {
+        display: flex;
+        align-items: flex-end;
+        gap: 1rem;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    #uploadArea {
+        border: 2px dashed var(--border);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        background: transparent;
+        position: relative;
+        overflow: visible;
+        min-width: 120px;
+        flex-shrink: 0;
+    }
+
+    #uploadArea::before {
+        display: none;
+    }
+
+    .upload-icon {
+        font-size: 1rem;
+        margin-bottom: 0;
+        animation: none;
+    }
+
+    #uploadArea p {
+        display: none !important;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        min-width: 150px;
+    }
+
+    .form-group label {
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+        font-weight: 500;
+    }
+
+    .form-group small {
+        display: none;
+    }
+
+    #analyzeBtn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+        margin-top: 0.8rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .upload-success-wrapper {
+        animation: slideUp 0.3s ease;
+        background: white;
+        border-bottom: 1px solid var(--divider);
+        padding: 1.5rem 2rem;
+        margin-bottom: 0;
+    }
+
+    /* Progress container styling */
+    #progressContainer {
+        background: white;
+        padding: 2rem;
+        border-bottom: 1px solid var(--divider);
+        margin-bottom: 0;
+    }
+
+    /* Requirements and other sections */
+    #requirementsSection,
+    #architecture,
+    #solutions,
+    #export,
+    #apidocs {
+        background: white;
+        border-radius: 0;
+        padding: 2rem;
+        box-shadow: none;
+        border: none;
+        border-bottom: 1px solid var(--divider);
+        margin-bottom: 0;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/home.js"></script>
+<script src="/static/js/review.js"></script>
+<script>
+    // ============================================
+    // STATE MANAGEMENT
+    // ============================================
+    let appState = {
+        status: 'idle', // idle, uploading, analyzing, complete
+        sessionId: null,
+        requirementsCount: 0
+    };
+
+    // ============================================
+    // SECTION MANAGEMENT
+    // ============================================
+    function toggleSection(sectionId) {
+        const content = document.getElementById(sectionId + 'Content');
+        const icon = document.getElementById(sectionId + 'Icon');
+        
+        if (content.style.display === 'none') {
+            content.style.display = 'block';
+            icon.textContent = '▲';
+        } else {
+            content.style.display = 'none';
+            icon.textContent = '▼';
+        }
+    }
+
+    function scrollToSection(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Auto-expand if collapsed
+            const content = document.getElementById(sectionId + 'Content');
+            if (content && content.style.display === 'none') {
+                toggleSection(sectionId);
+            }
+        }
+    }
+
+    // ============================================
+    // SHOW/HIDE SECTIONS BASED ON STATE
+    // ============================================
+    function showProgressSection() {
+        document.getElementById('progressContainer').style.display = 'block';
+        document.getElementById('uploadFormWrapper').style.display = 'none';
+        document.getElementById('uploadSuccessWrapper').style.display = 'none';
+        document.getElementById('requirementsSection').style.display = 'none';
+    }
+
+    function showCompleteState() {
+        document.getElementById('progressContainer').style.display = 'none';
+        document.getElementById('uploadFormWrapper').style.display = 'none';
+        document.getElementById('uploadSuccessWrapper').style.display = 'block';
+        document.getElementById('requirementsSection').style.display = 'block';
+        document.getElementById('architecture').style.display = 'block';
+        document.getElementById('solutions').style.display = 'block';
+        document.getElementById('export').style.display = 'block';
+        document.getElementById('apidocs').style.display = 'block';
+
+        // Scroll to requirements section
+        setTimeout(() => {
+            document.getElementById('requirementsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 300);
+    }
+
+    function showUploadState() {
+        document.getElementById('progressContainer').style.display = 'none';
+        document.getElementById('uploadFormWrapper').style.display = 'block';
+        document.getElementById('uploadSuccessWrapper').style.display = 'none';
+        document.getElementById('requirementsSection').style.display = 'none';
+        document.getElementById('architecture').style.display = 'none';
+        document.getElementById('solutions').style.display = 'none';
+        document.getElementById('export').style.display = 'none';
+        document.getElementById('apidocs').style.display = 'none';
+    }
+
+    function newAnalysis() {
+        showUploadState();
+        document.getElementById('uploadForm').reset();
+        document.getElementById('fileNameContainer').style.display = 'none';
+        appState.status = 'idle';
+    }
+
+    // ============================================
+    // Update progress section display
+    // ============================================
+    const originalShowProgressSection = window.showProgressSection || (() => {});
+    window.showProgressSection = showProgressSection;
+
+    // Hook into existing showComplete function
+    const originalShowComplete = window.showComplete || (() => {});
+    window.showComplete = function(count) {
+        appState.status = 'complete';
+        appState.requirementsCount = count;
+        document.getElementById('extractedReqCount').textContent = count;
+        showCompleteState();
+        if (originalShowComplete) originalShowComplete(count);
+    };
+
+    // Hook into existing analysis flow
+    const originalPollStatus = window.pollStatus || (() => {});
+    window.pollStatus = function(sessionId) {
+        appState.sessionId = sessionId;
+        appState.status = 'analyzing';
+        showProgressSection();
+        if (originalPollStatus) originalPollStatus(sessionId);
+    };
+</script>
+{% endblock %}

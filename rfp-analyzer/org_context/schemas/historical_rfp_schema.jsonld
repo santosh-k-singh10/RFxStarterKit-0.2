@@ -1,0 +1,219 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "rfp": "https://ibm.com/context-studio/rfp-analyzer/",
+    "hist": "https://ibm.com/context-studio/historical/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "hist:HistoricalRFP",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Historical RFP",
+      "rdfs:comment": "Past RFP with analysis and outcome data",
+      "rdfs:subClassOf": "schema:CreativeWork"
+    },
+    {
+      "@id": "hist:rfpId",
+      "@type": "rdf:Property",
+      "rdfs:label": "RFP ID",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string",
+      "schema:required": true
+    },
+    {
+      "@id": "hist:title",
+      "@type": "rdf:Property",
+      "rdfs:label": "RFP Title",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string",
+      "schema:required": true
+    },
+    {
+      "@id": "hist:clientName",
+      "@type": "rdf:Property",
+      "rdfs:label": "Client Name",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "hist:industry",
+      "@type": "rdf:Property",
+      "rdfs:label": "Industry",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "hist:submissionDate",
+      "@type": "rdf:Property",
+      "rdfs:label": "Submission Date",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:date"
+    },
+    {
+      "@id": "hist:outcome",
+      "@type": "rdf:Property",
+      "rdfs:label": "Outcome",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string",
+      "schema:enumValues": ["won", "lost", "no_bid", "pending"]
+    },
+    {
+      "@id": "hist:projectValue",
+      "@type": "rdf:Property",
+      "rdfs:label": "Project Value",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:decimal"
+    },
+    {
+      "@id": "hist:currency",
+      "@type": "rdf:Property",
+      "rdfs:label": "Currency",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "hist:projectDuration",
+      "@type": "rdf:Property",
+      "rdfs:label": "Project Duration (months)",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:integer"
+    },
+    {
+      "@id": "hist:teamSize",
+      "@type": "rdf:Property",
+      "rdfs:label": "Team Size",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:integer"
+    },
+    {
+      "@id": "hist:content",
+      "@type": "rdf:Property",
+      "rdfs:label": "RFP Content",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string",
+      "schema:description": "Full RFP document content"
+    },
+    {
+      "@id": "hist:summary",
+      "@type": "rdf:Property",
+      "rdfs:label": "Summary",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string"
+    },
+    {
+      "@id": "hist:technologies",
+      "@type": "rdf:Property",
+      "rdfs:label": "Technologies",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "hist:keyRequirements",
+      "@type": "rdf:Property",
+      "rdfs:label": "Key Requirements",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "hist:challenges",
+      "@type": "rdf:Property",
+      "rdfs:label": "Challenges",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "hist:lessonsLearned",
+      "@type": "rdf:Property",
+      "rdfs:label": "Lessons Learned",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "hist:successFactors",
+      "@type": "rdf:Property",
+      "rdfs:label": "Success Factors",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true,
+      "schema:description": "Factors that contributed to winning (if won)"
+    },
+    {
+      "@id": "hist:Analysis",
+      "@type": "rdfs:Class",
+      "rdfs:label": "RFP Analysis",
+      "rdfs:comment": "Analysis results from the RFP analyzer"
+    },
+    {
+      "@id": "hist:analysis",
+      "@type": "rdf:Property",
+      "rdfs:label": "Analysis",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "hist:Analysis"
+    },
+    {
+      "@id": "hist:functionalRequirements",
+      "@type": "rdf:Property",
+      "rdfs:label": "Functional Requirements Count",
+      "rdfs:domain": "hist:Analysis",
+      "rdfs:range": "xsd:integer"
+    },
+    {
+      "@id": "hist:nonFunctionalRequirements",
+      "@type": "rdf:Property",
+      "rdfs:label": "Non-Functional Requirements Count",
+      "rdfs:domain": "hist:Analysis",
+      "rdfs:range": "xsd:integer"
+    },
+    {
+      "@id": "hist:complianceRequirements",
+      "@type": "rdf:Property",
+      "rdfs:label": "Compliance Requirements Count",
+      "rdfs:domain": "hist:Analysis",
+      "rdfs:range": "xsd:integer"
+    },
+    {
+      "@id": "hist:ambiguities",
+      "@type": "rdf:Property",
+      "rdfs:label": "Ambiguities Count",
+      "rdfs:domain": "hist:Analysis",
+      "rdfs:range": "xsd:integer"
+    },
+    {
+      "@id": "hist:risks",
+      "@type": "rdf:Property",
+      "rdfs:label": "Risks Count",
+      "rdfs:domain": "hist:Analysis",
+      "rdfs:range": "xsd:integer"
+    },
+    {
+      "@id": "hist:complexityScore",
+      "@type": "rdf:Property",
+      "rdfs:label": "Complexity Score",
+      "rdfs:domain": "hist:Analysis",
+      "rdfs:range": "xsd:decimal",
+      "schema:minValue": 0.0,
+      "schema:maxValue": 1.0
+    },
+    {
+      "@id": "hist:tags",
+      "@type": "rdf:Property",
+      "rdfs:label": "Tags",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "xsd:string",
+      "schema:multipleValues": true
+    },
+    {
+      "@id": "hist:relatedRFPs",
+      "@type": "rdf:Property",
+      "rdfs:label": "Related RFPs",
+      "rdfs:domain": "hist:HistoricalRFP",
+      "rdfs:range": "hist:HistoricalRFP",
+      "schema:multipleValues": true
+    }
+  ]
+}

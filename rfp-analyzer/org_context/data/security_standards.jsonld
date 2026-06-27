@@ -1,0 +1,149 @@
+{
+  "@context": "https://ibm.com/context-studio/standards/context.jsonld",
+  "@type": "std:StandardDocument",
+  "@id": "std:security-standards",
+  "std:title": "IBM Consulting Security Standards",
+  "std:standardType": "security",
+  "std:version": "3.0",
+  "std:status": "active",
+  "std:lastUpdated": "2026-04-01",
+  "std:classification": "internal",
+  "std:summary": "Mandatory security standards for all systems, applications, and data at IBM Consulting. Compliance with these standards is required for all projects and is subject to regular security audits.",
+  "std:applicableLanguages": [
+    "All"
+  ],
+  "std:applicableTechnologies": [
+    "All"
+  ],
+  "std:sections": [
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Security Framework",
+      "std:sectionOrder": 1,
+      "std:sectionContent": "Compliance Requirements: SOC 2 Type II (Security, availability, confidentiality), ISO 27001 (Information security management), GDPR (Data protection and privacy), HIPAA (Healthcare data protection where applicable), PCI DSS (Payment card data security where applicable). Security Principles: Defense in Depth, Least Privilege, Zero Trust, Security by Design, Continuous Monitoring."
+    },
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Authentication & Authorization",
+      "std:sectionOrder": 2,
+      "std:sectionContent": "Multi-Factor Authentication (MFA) required for all production systems, admin access, and VPN. Methods: TOTP (preferred), SMS (backup), Hardware tokens. Password Policy: Minimum 12 characters, complexity requirements (upper, lower, number, special character), 90-day expiration, cannot reuse last 12 passwords, 5 failed attempts trigger 30-minute lockout, bcrypt storage with cost factor 12+. Single Sign-On (SSO): Okta (primary), Azure AD (backup)."
+    },
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Data Protection",
+      "std:sectionOrder": 3,
+      "std:sectionContent": "Data Classification: Public, Internal, Confidential, Restricted. Encryption: Data at rest using AES-256, data in transit using TLS 1.3+, end-to-end encryption for sensitive data. Key Management: AWS KMS or Azure Key Vault, key rotation every 90 days, no hardcoded keys. Data Retention: Follow legal and compliance requirements, automatic deletion after retention period, secure data disposal."
+    },
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Network Security",
+      "std:sectionOrder": 4,
+      "std:sectionContent": "Firewall Rules: Default deny all, explicit allow rules only, regular rule review. Network Segmentation: Separate production, staging, development networks, DMZ for public-facing services. VPN: Required for remote access, split tunneling disabled, MFA required. DDoS Protection: CloudFlare or AWS Shield, rate limiting on all APIs."
+    },
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Application Security",
+      "std:sectionOrder": 5,
+      "std:sectionContent": "Secure Development: OWASP Top 10 compliance, security code reviews, SAST/DAST scanning. Input Validation: Validate all user inputs, parameterized queries, output encoding. Session Management: Secure session tokens, automatic timeout after 30 minutes, secure cookie flags. API Security: OAuth 2.0 or JWT authentication, rate limiting, API key rotation."
+    },
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Vulnerability Management",
+      "std:sectionOrder": 6,
+      "std:sectionContent": "Scanning: Weekly vulnerability scans, monthly penetration testing. Patching: Critical vulnerabilities within 24 hours, high within 7 days, medium within 30 days. Dependency Management: Automated dependency scanning, no known vulnerabilities in production. Bug Bounty: Active bug bounty program for critical systems."
+    },
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Incident Response",
+      "std:sectionOrder": 7,
+      "std:sectionContent": "Incident Response Plan: Documented procedures, regular drills, 24/7 security team. Detection: SIEM system, automated alerts, log aggregation. Response: Immediate containment, forensic analysis, stakeholder notification. Recovery: Documented recovery procedures, backup restoration, post-incident review."
+    },
+    {
+      "@type": "std:Section",
+      "std:sectionTitle": "Compliance & Auditing",
+      "std:sectionOrder": 8,
+      "std:sectionContent": "Logging: Centralized logging, 90-day retention minimum, tamper-proof logs. Monitoring: Real-time security monitoring, automated alerting, regular log review. Audits: Annual security audits, quarterly compliance reviews, continuous compliance monitoring. Documentation: Security policies documented, regular updates, employee acknowledgment required."
+    }
+  ],
+  "std:rules": [
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "SEC-001",
+      "std:ruleDescription": "Multi-Factor Authentication (MFA) is mandatory for all production system access",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "Enable MFA using TOTP authenticator app (Google Authenticator, Authy, etc.)"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "SEC-002",
+      "std:ruleDescription": "All data at rest must be encrypted using AES-256",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "Enable encryption on databases, S3 buckets, and file systems"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "SEC-003",
+      "std:ruleDescription": "All data in transit must use TLS 1.3 or higher",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "Configure web servers and APIs to require TLS 1.3+"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "SEC-004",
+      "std:ruleDescription": "Passwords must be at least 12 characters with complexity requirements",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "Minimum 12 chars, upper+lower+number+special character"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "SEC-005",
+      "std:ruleDescription": "Critical vulnerabilities must be patched within 24 hours",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "Apply security patches immediately for CVSS score 9.0+"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "SEC-006",
+      "std:ruleDescription": "All API endpoints must implement rate limiting",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "Limit to 100 requests per minute per IP address"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "SEC-007",
+      "std:ruleDescription": "Security logs must be retained for at least 90 days",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "Configure log retention in CloudWatch, Splunk, or ELK"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "SEC-008",
+      "std:ruleDescription": "All user inputs must be validated and sanitized",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "Use parameterized queries, input validation libraries"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "SEC-009",
+      "std:ruleDescription": "Secrets and credentials must never be committed to version control",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "Use environment variables, AWS Secrets Manager, or HashiCorp Vault"
+    },
+    {
+      "@type": "std:Rule",
+      "std:ruleId": "SEC-010",
+      "std:ruleDescription": "Regular security training is required for all developers",
+      "std:ruleSeverity": "must",
+      "std:ruleExample": "Complete annual security awareness training and OWASP training"
+    }
+  ],
+  "std:complianceFrameworks": [
+    "SOC 2 Type II",
+    "ISO 27001",
+    "GDPR",
+    "HIPAA",
+    "PCI DSS",
+    "OWASP Top 10"
+  ],
+  "std:content": "# IBM Consulting Security Standards\n\n## Version: 3.0\n## Last Updated: 2026-04-01\n## Classification: Internal Use Only\n\n---\n\n## Executive Summary\n\nThis document outlines the mandatory security standards for all systems, applications, and data at IBM Consulting. Compliance with these standards is required for all projects and is subject to regular security audits.\n\n## Security Framework\n\n### Compliance Requirements\n- **SOC 2 Type II**: Security, availability, confidentiality\n- **ISO 27001**: Information security management\n- **GDPR**: Data protection and privacy\n- **HIPAA**: Healthcare data protection (where applicable)\n- **PCI DSS**: Payment card data security (where applicable)\n\n### Security Principles\n1. **Defense in Depth**: Multiple layers of security controls\n2. **Least Privilege**: Minimum necessary access rights\n3. **Zero Trust**: Never trust, always verify\n4. **Security by Design**: Build security into systems from the start\n5. **Continuous Monitoring**: Real-time threat detection and response\n\n## Authentication & Authorization\n\n### Multi-Factor Authentication (MFA)\n- **Required for**: All production systems, admin access, VPN\n- **Methods**: TOTP (preferred), SMS (backup), Hardware tokens\n- **Enforcement**: Mandatory for all users, no exceptions\n\n### Password Policy\n```yaml\nRequirements:\n  - Minimum length: 12 characters\n  - Complexity: Upper, lower, number, special character\n  - Expiration: 90 days\n  - History: Cannot reuse last 12 passwords\n  - Lockout: 5 failed attempts, 30-minute lockout\n  - Storage: bcrypt with cost factor 12+\n```\n\n### Single Sign-On (SSO)\n- **Provider**: Okta (primary), Azure AD (backup)\n- **Protocol**: SAML 2.0 or OAuth 2.0\n- **Session**: 8-hour timeout, re-authentication required\n\n## Data Protection\n\n### Data Classification\n1. **Public**: No restrictions\n2. **Internal**: IBM employees only\n3. **Confidential**: Need-to-know basis\n4. **Restricted**: Highest sensitivity, executive approval required\n\n### Encryption Standards\n- **Data at Rest**: AES-256 encryption\n- **Data in Transit**: TLS 1.3 or higher\n- **End-to-End**: For sensitive data (PII, PHI, financial)\n\n### Key Management\n- **Storage**: AWS KMS or Azure Key Vault\n- **Rotation**: Every 90 days\n- **Access**: Strictly controlled, logged\n- **Backup**: Encrypted backups in separate region\n\n## Network Security\n\n### Firewall Rules\n- Default deny all traffic\n- Explicit allow rules only\n- Regular rule review (quarterly)\n- Change management for all modifications\n\n### Network Segmentation\n- Separate production, staging, development networks\n- DMZ for public-facing services\n- Internal network for backend services\n- Management network for admin access\n\n### VPN Requirements\n- Required for all remote access\n- Split tunneling disabled\n- MFA required\n- Session timeout after 8 hours\n\n## Application Security\n\n### Secure Development Lifecycle\n1. **Design**: Threat modeling, security requirements\n2. **Development**: Secure coding practices, code reviews\n3. **Testing**: SAST, DAST, penetration testing\n4. **Deployment**: Security hardening, configuration review\n5. **Operations**: Monitoring, incident response\n\n### OWASP Top 10 Compliance\nAll applications must be protected against:\n1. Injection attacks\n2. Broken authentication\n3. Sensitive data exposure\n4. XML external entities (XXE)\n5. Broken access control\n6. Security misconfiguration\n7. Cross-site scripting (XSS)\n8. Insecure deserialization\n9. Using components with known vulnerabilities\n10. Insufficient logging and monitoring\n\n## Vulnerability Management\n\n### Scanning Schedule\n- **Weekly**: Automated vulnerability scans\n- **Monthly**: Penetration testing\n- **Quarterly**: External security assessment\n- **Annual**: Comprehensive security audit\n\n### Patching Requirements\n- **Critical**: Within 24 hours\n- **High**: Within 7 days\n- **Medium**: Within 30 days\n- **Low**: Within 90 days\n\n## Incident Response\n\n### Incident Response Plan\n1. **Detection**: Automated monitoring and alerting\n2. **Containment**: Immediate isolation of affected systems\n3. **Eradication**: Remove threat, patch vulnerabilities\n4. **Recovery**: Restore systems from clean backups\n5. **Lessons Learned**: Post-incident review and improvements\n\n### Security Incident Classification\n- **P1 (Critical)**: Data breach, system compromise\n- **P2 (High)**: Attempted breach, significant vulnerability\n- **P3 (Medium)**: Policy violation, minor vulnerability\n- **P4 (Low)**: Informational, no immediate risk\n\n## Compliance & Auditing\n\n### Logging Requirements\n- All authentication attempts\n- All authorization decisions\n- All data access (especially sensitive data)\n- All configuration changes\n- All security events\n\n### Log Retention\n- **Security logs**: 90 days minimum\n- **Audit logs**: 7 years (compliance requirement)\n- **Application logs**: 30 days minimum\n\n### Regular Audits\n- **Internal**: Quarterly security reviews\n- **External**: Annual SOC 2 audit\n- **Compliance**: Ongoing compliance monitoring\n\n---\n\n## Enforcement\n\nViolations of these security standards may result in:\n- Immediate system access revocation\n- Disciplinary action\n- Termination of employment\n- Legal action (for serious violations)\n\n## Training\n\nAll employees must complete:\n- Annual security awareness training\n- Role-specific security training\n- OWASP training for developers\n- Incident response training for security team\n\n---\n\n**For questions or clarifications, contact the Security Team at security@ibm.com**"
+}
