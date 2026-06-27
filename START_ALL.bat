@@ -30,7 +30,7 @@ timeout /t 3 /nobreak > nul
 
 REM --- Start RFP Analyzer on port 8080 ---
 echo [START] Launching RFP Analyzer on port 8080...
-start "RFP Analyzer (port 8080)" cmd /k "cd /d %~dp0rfp-analyzer\analyzer && python run_webapp.py --port 8080"
+start "RFP Analyzer (port 8080)" cmd /k "cd /d %~dp0rfp-analyzer && uvicorn web_app:app --host 0.0.0.0 --port 8080 --log-level info"
 
 echo.
 echo ============================================================

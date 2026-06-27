@@ -31,8 +31,8 @@ Start-Sleep -Seconds 3
 
 # --- Start RFP Analyzer on port 8080 ---
 Write-Host "[START] Launching RFP Analyzer on port 8080..." -ForegroundColor Yellow
-$analyzerDir = Join-Path $Root "rfp-analyzer\analyzer"
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$analyzerDir'; python run_webapp.py --port 8080" -WindowStyle Normal
+$analyzerDir = Join-Path $Root "rfp-analyzer"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$analyzerDir'; uvicorn web_app:app --host 0.0.0.0 --port 8080 --log-level info" -WindowStyle Normal
 
 Write-Host ""
 Write-Host "============================================================" -ForegroundColor Cyan

@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Optional, Dict, Any, List
 import json
 from datetime import datetime
+import httpx
 
 import structlog
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException, BackgroundTasks
@@ -396,10 +397,11 @@ async def root():
     """Serve the main web interface."""
     html_path = Path(__file__).parent / "web" / "index.html"
     if html_path.exists():
-        return FileResponse(html_path)
+        return FileResponse(html_path, headers={"Cache-Control": "no-store"})
     
     # Return inline HTML if file doesn't exist
-    return HTMLResponse(content="""
+    return HTMLResponse(
+        content="""
     <!DOCTYPE html>
     <html>
     <head>
@@ -455,7 +457,7 @@ async def root():
                 align-items: center;
                 gap: 12px;
                 flex-wrap: wrap;
-                justify-content: flex-end;
+                justify-content: flex-start;
                 margin-left: auto;
             }
             
@@ -592,7 +594,11 @@ async def root():
                 padding: 24px;
                 overflow-y: auto;
             }
-            
+            .main-content:has(#architecture-tab[style*="block"]) {
+                padding: 0;
+                overflow: hidden;
+            }
+
             .container {
                 max-width: 1400px;
                 margin: 0 auto;
@@ -695,19 +701,24 @@ async def root():
             }
             
             .file-name-badge {
-                display: inline-block;
-                padding: 4px 12px;
+                display: inline-flex;
+                align-items: center;
+                padding: 5px 14px;
                 background: #DCFCE7;
                 color: #15803D;
+                border: 1px solid #86EFAC;
                 border-radius: 12px;
-                font-size: 0.75em;
+                font-size: 0.8em;
                 font-weight: 600;
-                margin-left: 8px;
+                max-width: 260px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             .progress-container {
                 display: none;
-                margin-top: 20px;
-                padding: 20px;
+                margin-top: 12px;
+                padding: 12px 16px;
                 background: #F0FDF4;
                 border-radius: 8px;
                 border-left: 4px solid #10B981;
@@ -735,28 +746,28 @@ async def root():
             .progress-text {
                 text-align: center;
                 color: #065F46;
-                margin-bottom: 8px;
+                margin-bottom: 4px;
                 font-weight: 600;
-                font-size: 14px;
+                font-size: 13px;
             }
             .results {
                 display: none;
-                margin-top: 20px;
-                padding: 20px;
+                margin-top: 12px;
+                padding: 10px 16px;
                 background: #F0FDF4;
                 border-radius: 8px;
                 border-left: 4px solid #10B981;
             }
             .results h2 {
                 color: #059669;
-                margin-bottom: 12px;
-                font-size: 18px;
+                margin-bottom: 4px;
+                font-size: 15px;
                 font-weight: 600;
             }
             .results p {
                 color: #065F46;
-                font-size: 14px;
-                line-height: 1.5;
+                font-size: 13px;
+                line-height: 1.4;
             }
             .download-btn {
                 display: inline-block;
@@ -773,12 +784,13 @@ async def root():
             }
             .error {
                 display: none;
-                margin-top: 20px;
-                padding: 15px;
+                margin-top: 10px;
+                padding: 10px 14px;
                 background: #fee;
                 border: 2px solid #fcc;
                 border-radius: 8px;
                 color: #c33;
+                font-size: 13px;
             }
             
             /* Layout Grid */
@@ -894,14 +906,13 @@ async def root():
                 <form id="uploadForm" class="upload-section">
                     <span class="upload-label">📄 Upload RFP</span>
                     <div class="file-input-wrapper">
-                        <label for="fileInput" class="file-input-btn">
+                        <label for="fileInput" class="file-input-btn" id="fileInputLabel">
                             Choose File(s)
                         </label>
                         <input type="file" id="fileInput" accept=".pdf,.docx,.txt" multiple required>
                         <span id="fileName" class="file-name-badge" style="display: none;"></span>
                     </div>
                     
-                    <input type="text" id="domainInput" class="domain-input" placeholder="Domain (optional)" title="Domain/Industry (optional)">
                     <input type="number" id="minConfidence" class="confidence-input" value="0.0" min="0" max="1" step="0.1" title="Minimum Confidence (0.0 - 1.0)">
                     <input type="hidden" id="title" value="RFP Analysis">
                     <input type="hidden" id="orgContext" value="">
@@ -924,11 +935,11 @@ async def root():
                 <button class="tab-btn active" data-tab="requirements">
                     📋 Requirements
                 </button>
-                <button class="tab-btn" data-tab="architecture">
-                    🏗️ Architecture
+                <button class="tab-btn" data-tab="scoping">
+                    🧩 Scoping Questionnaire
                 </button>
-                <button class="tab-btn" data-tab="solution">
-                    🔧 Solution Mapping
+                <button class="tab-btn" data-tab="architecture">
+                    🏗️ Generate Scope
                 </button>
                 <button class="tab-btn" data-tab="export">
                     📤 Export
@@ -1037,18 +1048,30 @@ async def root():
                     </div>
                 </div>
                 
-                <!-- Architecture Tab Content -->
+                <!-- Scoping Questionnaire Tab Content (iframe to Scoping Architect) -->
+                <div id="scoping-tab" class="tab-content" style="display: none;">
+                    <h2 class="page-title">Scoping Questionnaire</h2>
+                    <p style="color: #666; margin-bottom: 16px;">
+                        Configure your architecture preferences below. Once an RFP analysis is complete, use the
+                        <strong>Generate Scope</strong> tab to generate the architecture scope.
+                    </p>
+                    <div id="scopingArchitectStatus" style="display:none; margin-bottom:12px; padding:10px 14px; border-radius:6px; font-size:0.85em;"></div>
+                    <iframe id="scopingArchitectFrame"
+                            src="http://localhost:8001/"
+                            style="width: 100%; height: 820px; border: 1px solid #e0e0e0; border-radius: 8px; background: #fafafa;"
+                            title="Scoping Architect Preferences Form">
+                    </iframe>
+                </div>
+
+                <!-- Generate Scope Tab Content — RFP to GSE Bridge (embedded) -->
                 <div id="architecture-tab" class="tab-content" style="display: none;">
-                    <h2 class="page-title">Architecture</h2>
-                    <p style="color: #666;">Architecture view will be displayed here after analysis.</p>
+                    <iframe id="bridgeFrame"
+                            src="http://localhost:8001/bridge"
+                            style="width:100%; height:calc(100vh - 130px); min-height:600px; border:none; display:block;"
+                            title="RFP to GSE Bridge">
+                    </iframe>
                 </div>
-                
-                <!-- Solution Mapping Tab Content -->
-                <div id="solution-tab" class="tab-content" style="display: none;">
-                    <h2 class="page-title">Solution Mapping</h2>
-                    <p style="color: #666;">Solution mapping will be displayed here after analysis.</p>
-                </div>
-                
+
                 <!-- Export Tab Content -->
                 <div id="export-tab" class="tab-content" style="display: none;">
                     <h2 class="page-title">Export</h2>
@@ -1181,7 +1204,7 @@ async def root():
                 if (!currentJobId || allRequirements.length === 0) {
                     saveBtn.disabled = true;
                     saveBtn.textContent = '💾 Save Changes';
-                    saveStatus.textContent = 'No analysis loaded';
+                    saveStatus.textContent = '';
                     saveStatus.style.color = '#6B7280';
                     exportStatusMessage.textContent = 'Complete an analysis, review the requirements, and save your changes before exporting.';
                     exportStatusMessage.style.color = '#666';
@@ -1314,7 +1337,7 @@ async def root():
                     { value: 'must', label: 'Must' },
                     { value: 'should', label: 'Should' },
                     { value: 'could', label: 'Could' },
-                    { value: 'wont', label: 'Won’t' }
+                    { value: 'wont', label: "Won't" }
                 ];
 
                 const statusOptions = [
@@ -1375,7 +1398,7 @@ async def root():
 
                 container.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;">
-                        <div id="saveStatus" style="font-size: 0.9rem; font-weight: 600; color: #6B7280;">No analysis loaded</div>
+                        <div id="saveStatus" style="font-size: 0.9rem; font-weight: 600; color: #6B7280;"></div>
                         <button id="saveRequirementsBtn" type="button" class="action-btn" style="background: #2563EB; color: white;" disabled>💾 Save Changes</button>
                     </div>
                     <div style="overflow-x: auto; border: 1px solid #E5E7EB; border-radius: 10px; background: white;">
@@ -1552,17 +1575,23 @@ async def root():
             });
             document.getElementById('resetFiltersBtn').addEventListener('click', resetFilters);
 
-            // File input handler — update badge to show file count when multi-select
+            // File input handler — update badge and title when file(s) selected
             fileInput.addEventListener('change', (e) => {
                 const count = e.target.files.length;
+                const titleInput = document.getElementById('title');
                 if (count === 1) {
-                    fileName.textContent = e.target.files[0].name;
+                    const name = e.target.files[0].name;
+                    fileName.textContent = name;
                     fileName.style.display = 'inline-block';
+                    if (titleInput) titleInput.value = name.replace(/[.][^.]+$/, '') || 'RFP Analysis';
                 } else if (count > 1) {
-                    fileName.textContent = `${count} files selected`;
+                    const text = count + ' files selected';
+                    fileName.textContent = text;
                     fileName.style.display = 'inline-block';
+                    if (titleInput) titleInput.value = 'RFP Analysis (' + count + ' files)';
                 } else {
                     fileName.style.display = 'none';
+                    if (titleInput) titleInput.value = 'RFP Analysis';
                 }
             });
             
@@ -1679,6 +1708,16 @@ async def root():
                             // Store current job ID for later use
                             currentJobId = jobId;
                             loadRequirements(jobId);
+
+                            // Enable "Generate Architecture Scope" and pre-fill project name
+                            const genBtn = document.getElementById('generateScopeBtn');
+                            if (genBtn) {
+                                genBtn.disabled = false;
+                                const projInput = document.getElementById('pref_project_name');
+                                if (projInput && !projInput.value) {
+                                    projInput.value = document.getElementById('title').value || 'RFP Analysis';
+                                }
+                            }
                         } else if (status.status === 'failed') {
                             clearInterval(interval);
                             errorDiv.textContent = `Analysis failed: ${status.error}`;
@@ -1696,10 +1735,14 @@ async def root():
                     }
                 }, 1000);
             }
+
+            // ── Generate Scope tab: bridge iframe — no JS needed ─────────────
         </script>
     </body>
     </html>
-    """)
+    """,
+        headers={"Cache-Control": "no-store, no-cache, must-revalidate"},
+    )
 
 
 class RequirementsUpdateRequest(BaseModel):
@@ -1916,6 +1959,175 @@ async def list_jobs():
             }
             for job_id, job in analysis_jobs.items()
         ]
+    }
+
+
+# ── Phase 1.5 + Phase 2: Scoping Architect Proxy Routes ─────────────────────
+
+SCOPING_ARCHITECT_URL = os.getenv("SCOPING_ARCHITECT_URL", "http://localhost:8001")
+_SCOPING_TIMEOUT = 300.0  # architecture generation can take a while
+
+
+@app.get("/api/scoping/health")
+async def scoping_health():
+    """
+    Check whether the Scoping Architect service is reachable and healthy.
+    Returns 200 with {"status": "ok"} when healthy, 503 otherwise.
+    """
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            r = await client.get(f"{SCOPING_ARCHITECT_URL}/api/health")
+            if r.status_code == 200:
+                return r.json()
+            return {"status": "error", "detail": f"Scoping Architect returned HTTP {r.status_code}"}
+    except httpx.ConnectError:
+        raise HTTPException(status_code=503, detail="Scoping Architect service is not reachable")
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=str(e))
+
+
+@app.post("/api/scoping/analyze")
+async def scoping_analyze(body: dict):
+    """
+    Proxy: full Phase 1.5 + Phase 2 pipeline.
+    Forwards POST /api/analyze to the Scoping Architect service.
+
+    Request body:
+        project_name: str
+        requirements: str   (Phase 1 markdown output)
+        preferences: dict   (from the architecture preferences form)
+    """
+    try:
+        async with httpx.AsyncClient(timeout=_SCOPING_TIMEOUT) as client:
+            r = await client.post(
+                f"{SCOPING_ARCHITECT_URL}/api/analyze",
+                json=body,
+                headers={"Content-Type": "application/json"},
+            )
+            if r.status_code == 200:
+                return r.json()
+            # Surface error detail from downstream service
+            try:
+                detail = r.json().get("detail", r.text)
+            except Exception:
+                detail = r.text
+            raise HTTPException(status_code=r.status_code, detail=detail)
+    except HTTPException:
+        raise
+    except httpx.ConnectError:
+        raise HTTPException(status_code=503, detail="Scoping Architect service is not running. Start it with 'python run.py' inside scoping-architect/")
+    except httpx.TimeoutException:
+        raise HTTPException(status_code=504, detail="Scoping Architect timed out. The architecture generation may still be running.")
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Scoping Architect proxy error: {e}")
+
+
+@app.post("/api/scoping/analyze/enriched")
+async def scoping_analyze_enriched(body: dict):
+    """
+    Proxy: enriched JSON path (Phase 1.5 + Phase 2).
+    Forwards directly to /api/analyze/enriched on the Scoping Architect.
+    Accepts the enriched modules JSON — no markdown conversion needed.
+    """
+    try:
+        async with httpx.AsyncClient(timeout=_SCOPING_TIMEOUT) as client:
+            r = await client.post(
+                f"{SCOPING_ARCHITECT_URL}/api/analyze/enriched",
+                json=body,
+                headers={"Content-Type": "application/json"},
+            )
+            if r.status_code == 200:
+                return r.json()
+            try:
+                detail = r.json().get("detail", r.text)
+            except Exception:
+                detail = r.text
+            raise HTTPException(status_code=r.status_code, detail=detail)
+    except HTTPException:
+        raise
+    except httpx.ConnectError:
+        raise HTTPException(status_code=503, detail="Scoping Architect is not running. Start it with 'python run.py' inside scoping-architect/")
+    except httpx.TimeoutException:
+        raise HTTPException(status_code=504, detail="Scoping Architect timed out during architecture generation.")
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Scoping Architect proxy error: {e}")
+
+
+@app.post("/api/scoping/preferences")
+async def scoping_preferences(body: dict):
+    """Proxy: validate and structure architecture preferences."""
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            r = await client.post(
+                f"{SCOPING_ARCHITECT_URL}/api/preferences",
+                json=body,
+                headers={"Content-Type": "application/json"},
+            )
+            if r.status_code == 200:
+                return r.json()
+            try:
+                detail = r.json().get("detail", r.text)
+            except Exception:
+                detail = r.text
+            raise HTTPException(status_code=r.status_code, detail=detail)
+    except HTTPException:
+        raise
+    except httpx.ConnectError:
+        raise HTTPException(status_code=503, detail="Scoping Architect service is not reachable")
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+
+@app.post("/api/scoping/export/markdown")
+async def scoping_export_markdown(body: dict):
+    """Proxy: export architecture output as Markdown from Scoping Architect."""
+    try:
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            r = await client.post(
+                f"{SCOPING_ARCHITECT_URL}/api/export/markdown",
+                json=body,
+                headers={"Content-Type": "application/json"},
+            )
+            if r.status_code == 200:
+                from fastapi.responses import PlainTextResponse
+                return PlainTextResponse(content=r.text, media_type="text/markdown")
+            try:
+                detail = r.json().get("detail", r.text)
+            except Exception:
+                detail = r.text
+            raise HTTPException(status_code=r.status_code, detail=detail)
+    except HTTPException:
+        raise
+    except httpx.ConnectError:
+        raise HTTPException(status_code=503, detail="Scoping Architect service is not reachable")
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+
+@app.get("/api/scoping/bridge/{job_id}")
+async def scoping_bridge_data(job_id: str):
+    """
+    Return RFP analysis requirements in a format ready for the GSE Bridge.
+    Used by the Scoping Architect bridge page to pre-populate GSE fields.
+    """
+    if job_id not in analysis_jobs:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    job = analysis_jobs[job_id]
+    if job.get("status") != "completed":
+        raise HTTPException(status_code=400, detail="Analysis not completed yet")
+
+    requirements = job.get("requirements_state", [])
+    return {
+        "job_id": job_id,
+        "title": job.get("title", "RFP Analysis"),
+        "requirements": requirements,
+        "metadata": {
+            "total_requirements": len(requirements),
+            "completed_at": job["completed_at"].isoformat() if job.get("completed_at") else None,
+            "file_count": job.get("file_paths") and len(job["file_paths"]) or 0,
+            "file_names": [Path(p).name for p in (job.get("file_paths") or [])],
+        },
     }
 
 
