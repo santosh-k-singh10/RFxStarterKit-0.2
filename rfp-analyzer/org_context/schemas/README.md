@@ -112,7 +112,7 @@ After importing schemas:
 For detailed instructions, see:
 - **Migration Guide:** `../CONTEXT_STUDIO_MIGRATION_GUIDE.md`
 - **Quick Start:** `../CONTEXT_STUDIO_QUICK_START.md`
-- **Schema Plan:** `../CONTEXT_STUDIO_SCHEMA_PLAN.md`
+- **Schema Plan:** See the JSON-LD schema files in this directory for the full schema definitions.
 
 ## Schema Validation
 

@@ -82,22 +82,38 @@ Edit `.env` and add your key:
 ANTHROPIC_API_KEY=sk-ant-...
 ```
 
-## Usage
+## Entry Points
 
-### Basic Usage
+| File | Purpose | How to run |
+|------|---------|------------|
+| **`web_app.py`** | ✅ **Production web UI** — upload RFP documents and review results in the browser | `uvicorn web_app:app --reload --port 8080` |
+| `main.py` | CLI companion — batch / scripted analysis runs | `python main.py analyze rfp.pdf` |
+
+**The single production entry point is `web_app.py`.**
 
 ```bash
-python rfp_analyzer.py <path_to_rfp.docx> [output_path.md]
+# Start the web interface
+uvicorn web_app:app --reload --port 8080
+# Then open: http://localhost:8080
 ```
 
-### Example
+## Usage
+
+### Web Interface (recommended)
 
 ```bash
-# Create a mock RFP for testing
-python create_mock_rfp.py
+uvicorn web_app:app --reload --port 8080
+```
 
-# Analyze the RFP
-python rfp_analyzer.py sample_rfp.docx analysis_output.md
+Open http://localhost:8080, upload your RFP document, and review the results.
+
+### CLI (batch / scripted runs)
+
+```bash
+python main.py analyze path/to/rfp.pdf
+python main.py analyze path/to/rfp.pdf --output-dir ./results --title "Project Alpha"
+python main.py analyze path/to/rfp.pdf --no-excel --no-markdown
+python main.py analyze path/to/rfp.pdf --thread-id my-run-1   # resume interrupted run
 ```
 
 ### Using Organizational Context

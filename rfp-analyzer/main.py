@@ -1,7 +1,11 @@
 """
 main.py
 -------
-CLI entry point for the RFP Analyzer.
+CLI entry point for the RFP Analyzer (batch / scripted runs only).
+
+This is the command-line companion to web_app.py — it is NOT the production
+web server.  For the web UI, start web_app.py instead:
+    uvicorn web_app:app --reload --port 8080
 
 Usage
 -----

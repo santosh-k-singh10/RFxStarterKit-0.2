@@ -101,7 +101,7 @@ mkdir -p data
 
 #### Step 1.2: Copy Schema Definitions
 
-The schema definitions are provided in [`CONTEXT_STUDIO_SCHEMA_PLAN.md`](CONTEXT_STUDIO_SCHEMA_PLAN.md). You'll need to create these 5 schema files:
+The schema files are in the `schemas/` directory. You'll need to import these 5 schema files:
 
 1. **organization_schema.jsonld** - Organization configuration schema
 2. **domain_knowledge_schema.jsonld** - Domain knowledge schema

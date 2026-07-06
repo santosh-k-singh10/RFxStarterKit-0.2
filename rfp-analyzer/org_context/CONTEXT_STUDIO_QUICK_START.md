@@ -44,7 +44,7 @@ export CONTEXT_STUDIO_WORKSPACE="your-workspace-id"
 
 1. Switch to Code mode
 2. Create directory: `rfp-analyzer/org_context/schemas/`
-3. Copy schema definitions from [`CONTEXT_STUDIO_SCHEMA_PLAN.md`](CONTEXT_STUDIO_SCHEMA_PLAN.md)
+3. Copy schema definitions from the JSON-LD files in `schemas/`
 4. Create 5 `.jsonld` files with the schema definitions
 
 ### Option B: Manual Creation
@@ -301,7 +301,7 @@ rfp-analyzer/org_context/
 │       └── *.jsonld
 │
 ├── convert_to_jsonld.py             # Conversion script
-├── CONTEXT_STUDIO_SCHEMA_PLAN.md    # Detailed schema definitions
+├── schemas/                          # JSON-LD schema files
 ├── CONTEXT_STUDIO_MIGRATION_GUIDE.md # Complete migration guide
 └── CONTEXT_STUDIO_QUICK_START.md    # This file
 ```
@@ -323,7 +323,7 @@ rfp-analyzer/org_context/
 ## Support Resources
 
 - **Detailed Guide**: [`CONTEXT_STUDIO_MIGRATION_GUIDE.md`](CONTEXT_STUDIO_MIGRATION_GUIDE.md)
-- **Schema Definitions**: [`CONTEXT_STUDIO_SCHEMA_PLAN.md`](CONTEXT_STUDIO_SCHEMA_PLAN.md)
+- **Schema Definitions**: See `schemas/` directory for all JSON-LD schema files
 - **Context Studio Docs**: https://ibm.com/docs/context-studio
 - **IBM ICA Support**: https://ibm.com/support/ica
 

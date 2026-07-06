@@ -1,0 +1,80 @@
+# ============================================================================
+# RFxStarterKit - Consolidated Dependencies
+# ============================================================================
+# Install all dependencies: pip install -r requirements.txt
+# ============================================================================
+
+# ── Core Dependencies (from common/requirements-base.txt) ──────────────────
+# Shared base (mirrors common/requirements-base.txt exactly)
+anthropic>=0.40.0
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+pydantic>=2.0.0
+python-dotenv>=1.0.0
+httpx>=0.27.0
+
+# ── Testing (Development) ───────────────────────────────────────────────────
+pytest>=8.0.0
+pytest-asyncio>=0.24.0
+
+# ── RFP Analyzer extras ──────────────────────────────────────────────────────
+langchain>=0.1.0
+langgraph>=0.0.20
+langchain-anthropic>=0.1.0
+langchain-openai>=0.1.0
+openai>=1.0.0
+python-docx>=1.0.0
+typer>=0.9.0
+rich>=13.0.0
+structlog>=23.0.0
+openpyxl>=3.1.0
+pyyaml>=6.0.0
+python-multipart>=0.0.9
+jinja2>=3.1.0
+aiofiles>=23.2.0
+
+# ── Development Dependencies (Optional) ─────────────────────────────────────
+# Uncomment to install development tools
+# black>=23.0.0
+# flake8>=6.0.0
+# mypy>=1.0.0
+# isort>=5.12.0
+# pre-commit>=3.0.0
+
+# ============================================================================
+# Installation Instructions
+# ============================================================================
+#
+# 1. Create virtual environment:
+#    python -m venv venv
+#
+# 2. Activate virtual environment:
+#    Windows: venv\Scripts\activate
+#    Linux/Mac: source venv/bin/activate
+#
+# 3. Install dependencies:
+#    pip install -r requirements.txt
+#
+# 4. Configure environment:
+#    cp .env.example .env
+#    # Edit .env with your API keys
+#
+# 5. Run the application:
+#    See QUICK_START.md for detailed instructions
+#
+# ============================================================================
+# Module-Specific Dependencies
+# ============================================================================
+#
+# If you need to install module-specific dependencies separately:
+#
+# Common base:
+#   pip install -r common/requirements-base.txt
+#
+# RFP Analyzer:
+#   pip install -r rfp-analyzer/requirements.txt
+#
+# Scoping Architect:
+#   pip install -r scoping-architect/requirements.txt
+#
+# ============================================================================

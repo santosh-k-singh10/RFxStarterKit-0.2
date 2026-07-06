@@ -1,19 +1,36 @@
+# RFP Analyzer — service dependencies
+# Install: pip install -r ../common/requirements-base.txt -r requirements.txt
+#
+# Base dependencies (anthropic, fastapi, uvicorn, pydantic, python-dotenv,
+# httpx, pytest, pytest-asyncio) are declared in ../common/requirements-base.txt.
+# This file lists only RFP-Analyzer-specific extras.
+
+# LangGraph / LangChain orchestration
 langchain>=0.1.0
 langgraph>=0.0.20
 langchain-anthropic>=0.1.0
 langchain-openai>=0.1.0
+
+# OpenAI-compatible client (IBM Services Essentials endpoint)
+openai>=1.0.0
+
+# Document extraction
 python-docx>=1.0.0
-pydantic>=2.0.0
-python-dotenv>=1.0.0
+
+# CLI
 typer>=0.9.0
 rich>=13.0.0
+
+# Structured logging
 structlog>=23.0.0
+
+# Excel export
 openpyxl>=3.1.0
+
+# YAML config (org_context)
 pyyaml>=6.0.0
-fastapi>=0.111.0
-uvicorn[standard]>=0.29.0
+
+# Web app extras
 python-multipart>=0.0.9
 jinja2>=3.1.0
 aiofiles>=23.2.0
-anthropic>=0.21.0
-httpx>=0.27.0

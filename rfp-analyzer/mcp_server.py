@@ -25,9 +25,6 @@ from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 import uvicorn
 
-# Add parent directory to path to import rfp-analyzer modules
-sys.path.insert(0, str(Path(__file__).parent))
-
 # Setup logging
 logging.basicConfig(
     level=logging.INFO,

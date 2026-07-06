@@ -1,0 +1,133 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rfx-starter-kit"
+version = "0.1.0"
+description = "AI-powered RFP analysis and scoping toolkit"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "RFxStarterKit Contributors"},
+]
+keywords = ["rfp", "analysis", "ai", "scoping", "requirements"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "anthropic>=0.40.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "httpx>=0.27.0",
+    "langchain>=0.1.0",
+    "langgraph>=0.0.20",
+    "langchain-anthropic>=0.1.0",
+    "langchain-openai>=0.1.0",
+    "python-docx>=1.0.0",
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+    "structlog>=23.0.0",
+    "openpyxl>=3.1.0",
+    "pyyaml>=6.0.0",
+    "python-multipart>=0.0.9",
+    "jinja2>=3.1.0",
+    "aiofiles>=23.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "isort>=5.12.0",
+    "pre-commit>=3.0.0",
+]
+
+# Install the three service packages in editable mode so cross-package
+# imports work without sys.path manipulation:
+#   pip install -e ./rfp-analyzer
+#   pip install -e ./document-consolidator/phase0_router
+#   pip install -e ./scoping-architect
+#   pip install -e ".[dev]"
+
+[project.urls]
+Homepage = "https://github.com/santosh-k-singh10/RFxStarterKit-0.1"
+Documentation = "https://github.com/santosh-k-singh10/RFxStarterKit-0.1#readme"
+Repository = "https://github.com/santosh-k-singh10/RFxStarterKit-0.1.git"
+Issues = "https://github.com/santosh-k-singh10/RFxStarterKit-0.1/issues"
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | venv
+  | env
+  | __pycache__
+  | backup_.*
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+skip_gitignore = true
+known_first_party = ["rfp_analyzer", "scoping_architect", "document_consolidator"]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+exclude = [
+    'venv',
+    'env',
+    '.venv',
+    'backup_.*',
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --strict-markers"
+
+[tool.coverage.run]
+source = ["."]
+omit = [
+    "*/tests/*",
+    "*/venv/*",
+    "*/env/*",
+    "*/.venv/*",
+    "*/backup_*/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]

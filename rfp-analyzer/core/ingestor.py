@@ -29,13 +29,19 @@ log = structlog.get_logger()
 # Element types from unstructured that indicate a new section heading
 HEADING_TYPES = {"Title", "Header", "SectionHeader"}
 
-# Minimum characters for a chunk to be worth processing
+# Minimum characters for a *combined section* chunk to be worth processing.
 # Optimized to 1600 based on empirical testing for best quality and performance
 # - Extracts most requirements (26 vs 23-25 for other sizes)
 # - Good processing speed (40.28s vs 33.38s for 800, but better context)
 # - Ideal for large RFPs with complex requirements
 # See CHUNK_SIZE_OPTIMIZATION_GUIDE.md for details
 MIN_CHUNK_CHARS = 1600
+
+# Minimum characters for a *single PDF page* in the pypdf fallback path.
+# Pages of small / concise PDFs can legitimately have only a few hundred
+# characters, so we use a much lower bar here — just enough to skip truly
+# blank or whitespace-only pages.
+MIN_PAGE_CHARS = 50
 
 
 def ingest_document(file_path: str) -> list[DocumentChunk]:
@@ -203,7 +209,10 @@ def _ingest_pdf_fallback(file_path: str) -> list[DocumentChunk]:
     
     for page_num, page in enumerate(reader.pages, start=1):
         text = page.extract_text()
-        if not text or len(text.strip()) < MIN_CHUNK_CHARS:
+        # Use MIN_PAGE_CHARS (not MIN_CHUNK_CHARS) — individual pages of small
+        # or concise PDFs are legitimately short; MIN_CHUNK_CHARS (1600) is
+        # intended for combined section chunks and would discard real content.
+        if not text or len(text.strip()) < MIN_PAGE_CHARS:
             print(f"   [Page {page_num}]: Skipping (too short)")
             continue
         
@@ -215,7 +224,7 @@ def _ingest_pdf_fallback(file_path: str) -> list[DocumentChunk]:
         paragraphs = [p.strip() for p in text.split('\n\n') if p.strip()]
         
         if paragraphs:
-            _flush_chunk(chunks, current_section, paragraphs, page_num, page_num)
+            _flush_chunk_pdf(chunks, current_section, paragraphs, page_num, page_num)
     
     print(f"\n[PDF FALLBACK] Created {len(chunks)} chunks from PDF")
     print(f"{'='*60}\n")
@@ -303,24 +312,32 @@ def _flush_chunk(
 ) -> None:
     """
     Combine accumulated text lines into a DocumentChunk and append.
-    
-    Parameters
-    ----------
-    chunks : list[DocumentChunk]
-        List to append the new chunk to
-    section : str
-        Section heading
-    texts : list[str]
-        Text lines to combine
-    page_start : int
-        Starting page number
-    page_end : int, optional
-        Ending page number (if different from start)
+    Applies MIN_CHUNK_CHARS to skip sections with too little combined content.
     """
     combined = " ".join(texts).strip()
     if len(combined) >= MIN_CHUNK_CHARS:
-        # Use page_start as the primary page reference
-        # This represents where the section/chunk begins
+        chunks.append(DocumentChunk(
+            section=section,
+            text=combined,
+            page=page_start,
+            char_count=len(combined),
+        ))
+
+
+def _flush_chunk_pdf(
+    chunks: list[DocumentChunk],
+    section: str,
+    texts: list[str],
+    page_start: int,
+    page_end: int | None = None,
+) -> None:
+    """
+    Like _flush_chunk but used by the pypdf fallback path.
+    Does NOT apply MIN_CHUNK_CHARS — individual pages of small PDFs are
+    legitimately short and must not be discarded.
+    """
+    combined = " ".join(texts).strip()
+    if combined:
         chunks.append(DocumentChunk(
             section=section,
             text=combined,

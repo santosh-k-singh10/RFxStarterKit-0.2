@@ -268,7 +268,7 @@ Context Studio reads these fields and **automatically maps** all properties to t
 ## 📚 Additional Resources
 
 - **REMOTE_IMPORT_GUIDE.md** - Detailed remote import instructions
-- **SCHEMA_FILES_SUMMARY.md** - Overview of all schemas
+- **schemas/README.md** - Overview of all JSON-LD schema files
 - **CONTEXT_STUDIO_MIGRATION_GUIDE.md** - Complete migration process
 - **CONTEXT_STUDIO_QUICK_START.md** - 30-minute quick start
 

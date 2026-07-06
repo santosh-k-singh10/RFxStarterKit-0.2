@@ -1,0 +1,70 @@
+Sample RFP Document for Testing
+================================
+
+Project: Healthcare Management System
+
+1. FUNCTIONAL REQUIREMENTS
+
+FR-001: User Authentication
+The system MUST provide secure user authentication using multi-factor authentication.
+Priority: MUST HAVE
+
+FR-002: Patient Records Management
+The system MUST allow healthcare providers to create, read, update, and delete patient records.
+Priority: MUST HAVE
+
+FR-003: Appointment Scheduling
+The system SHOULD provide an appointment scheduling interface for patients and staff.
+Priority: SHOULD HAVE
+
+FR-004: Prescription Management
+The system MUST support electronic prescription creation and management.
+Priority: MUST HAVE
+
+2. NON-FUNCTIONAL REQUIREMENTS
+
+NFR-001: Performance
+The system MUST respond to user requests within 2 seconds under normal load.
+Priority: MUST HAVE
+
+NFR-002: Security
+The system MUST comply with HIPAA regulations for patient data protection.
+Priority: MUST HAVE
+
+NFR-003: Availability
+The system SHOULD maintain 99.9% uptime during business hours.
+Priority: SHOULD HAVE
+
+NFR-004: Scalability
+The system MUST support up to 10,000 concurrent users.
+Priority: MUST HAVE
+
+3. COMPLIANCE REQUIREMENTS
+
+COMP-001: HIPAA Compliance
+All patient data must be encrypted at rest and in transit.
+
+COMP-002: GDPR Compliance
+System must provide data export and deletion capabilities for patients.
+
+4. TECHNICAL REQUIREMENTS
+
+TECH-001: Platform
+The system should be web-based and accessible via modern browsers.
+
+TECH-002: Database
+The system must use a HIPAA-compliant database solution.
+
+TECH-003: Integration
+The system should integrate with existing EHR systems via HL7 FHIR.
+
+5. TIMELINE
+
+Project Duration: 12 months
+Phase 1 (Requirements & Design): 2 months
+Phase 2 (Development): 6 months
+Phase 3 (Testing & Deployment): 4 months
+
+6. BUDGET
+
+Total Budget: $500,000 - $750,000

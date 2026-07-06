@@ -8,9 +8,6 @@ import asyncio
 import sys
 from pathlib import Path
 
-# Add parent directory to path to allow imports
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
 from mcp_servers.knowledge_base_server.server import create_mcp_server, MCP_AVAILABLE
 import structlog
 

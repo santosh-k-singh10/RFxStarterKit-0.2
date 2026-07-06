@@ -185,6 +185,8 @@ def _parse_json_response(raw: str, attempt: int = 1) -> list[dict[str, Any]]:
     """
     Strip markdown fences and parse JSON.
     Handles both arrays [] and single objects {} (wraps object in list).
+    Also handles trailing text after a valid JSON value (e.g. [] followed by
+    a markdown explanation block).
     """
     # DEBUG: Log before processing
     log.debug(
@@ -193,9 +195,10 @@ def _parse_json_response(raw: str, attempt: int = 1) -> list[dict[str, Any]]:
         starts_with_fence=raw.startswith("```"),
         first_char=raw[0] if raw else None,
     )
-    
-    # Strip ```json ... ``` or ``` ... ```
+
     original_raw = raw
+
+    # Strip ```json ... ``` or ``` ... ``` fences when the response opens with one
     if raw.startswith("```"):
         lines = raw.split("\n")
         # Remove first line (```json or ```) and last line (```)
@@ -203,7 +206,7 @@ def _parse_json_response(raw: str, attempt: int = 1) -> list[dict[str, Any]]:
         if inner_lines and inner_lines[-1].strip() == "```":
             inner_lines = inner_lines[:-1]
         raw = "\n".join(inner_lines).strip()
-        
+
         log.debug(
             "markdown_fence_stripped",
             attempt=attempt,
@@ -218,8 +221,12 @@ def _parse_json_response(raw: str, attempt: int = 1) -> list[dict[str, Any]]:
             attempt=attempt,
             json_preview=raw[:300] + "..." if len(raw) > 300 else raw,
         )
-        
-        parsed = json.loads(raw)
+
+        # Use raw_decode so that any trailing text (markdown explanation, closing
+        # fences, etc.) after a valid JSON value is silently ignored instead of
+        # raising "Extra data".
+        decoder = json.JSONDecoder()
+        parsed, _ = decoder.raw_decode(raw)
 
         if isinstance(parsed, dict):
             log.debug("json_parsed_as_dict", attempt=attempt, wrapping_in_list=True)
@@ -230,7 +237,7 @@ def _parse_json_response(raw: str, attempt: int = 1) -> list[dict[str, Any]]:
 
         log.warning("json_parsed_unexpected_type", attempt=attempt, type=type(parsed).__name__)
         return []
-        
+
     except json.JSONDecodeError as e:
         # DEBUG: Log detailed error information
         log.error(

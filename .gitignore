@@ -1,4 +1,8 @@
-﻿# ── Python ────────────────────────────────────────────────────────────────────
+﻿# ============================================================================
+# RFxStarterKit .gitignore
+# ============================================================================
+
+# ── Python ──────────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *.pyo
@@ -15,22 +19,25 @@ build/
 htmlcov/
 .coverage
 coverage.xml
+*.cover
+.hypothesis/
 
-# ── Virtual environments ───────────────────────────────────────────────────────
+# ── Virtual environments ────────────────────────────────────────────────────
 .venv/
 venv/
 env/
 ENV/
 .env.backup
 
-# ── Secrets / credentials (never commit) ──────────────────────────────────────
+# ── Secrets / credentials (never commit) ────────────────────────────────────
 .env
 .env.*
 !.env.example
 !.env.template
 !common/.env.template
 
-# ── Runtime outputs ───────────────────────────────────────────────────────────
+# ── Runtime outputs ─────────────────────────────────────────────────────────
+outputs/
 rfp-analyzer/outputs/web/
 rfp-analyzer/outputs/*.xlsx
 rfp-analyzer/outputs/*.html
@@ -40,30 +47,90 @@ rfp-analyzer/app/outputs/
 rfp-analyzer/uploads/
 scoping-architect/outputs/
 
-# ── Logs ──────────────────────────────────────────────────────────────────────
+# ── Logs ────────────────────────────────────────────────────────────────────
 *.log
+logs/
 rfp-analyzer/app/logs/
+rfp-analyzer/logs/*.log
+scoping-architect/logs/*.log
 !rfp-analyzer/logs/.gitkeep
+!scoping-architect/logs/.gitkeep
 
-# ── Databases / checkpoints ───────────────────────────────────────────────────
+# ── Databases / checkpoints ─────────────────────────────────────────────────
 *.sqlite
 *.sqlite3
 *.db
+*.db-journal
 
-# ── Large binary / data files ─────────────────────────────────────────────────
+# ── Large binary / data files ───────────────────────────────────────────────
 *.xlsx
 *.xls
 !rfp-analyzer/SAP_Analysis_Test.xlsx
 *.pdf
 !sample-rfps/
+*.docx
+!sample-rfps/
 
-# ── OS / editor ───────────────────────────────────────────────────────────────
+# ── Temporary files ─────────────────────────────────────────────────────────
+*.tmp
+*.temp
+temp/
+tmp/
+~$*.xlsx
+~$*.xls
+~$*.docx
+
+# ── OS / editor ─────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
 *.swp
 *.swo
+*~
 
-# ── Scoping-architect nested git ──────────────────────────────────────────────
+# ── Backup files ────────────────────────────────────────────────────────────
+*.backup
+*.bak
+backup_*/
+
+# ── Node modules (if any) ───────────────────────────────────────────────────
+node_modules/
+package-lock.json
+npm-debug.log
+yarn-error.log
+
+# ── Docker ──────────────────────────────────────────────────────────────────
+.dockerignore
+docker-compose.override.yml
+
+# ── Scoping-architect nested git ────────────────────────────────────────────
 scoping-architect/.git/
+
+# ── Testing artifacts ───────────────────────────────────────────────────────
+.tox/
+.nox/
+.coverage.*
+nosetests.xml
+test-results/
+*.cover
+
+# ── Documentation builds ────────────────────────────────────────────────────
+docs/_build/
+site/
+
+# ── IDE specific ────────────────────────────────────────────────────────────
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# ── Jupyter Notebooks ───────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── Keep empty directories ──────────────────────────────────────────────────
+!.gitkeep
+
+# ============================================================================
