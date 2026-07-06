@@ -169,7 +169,6 @@ async def run_analysis(
     title: str,
     org_context_url: Optional[str] = None,
     min_confidence: float = 0.0,
-    is_sap_opp: bool = False
 ):
     """
     Run RFP analysis in background.
@@ -185,7 +184,6 @@ async def run_analysis(
         title: Analysis title
         org_context_url: Optional organizational context URL
         min_confidence: Minimum confidence threshold
-        is_sap_opp: Whether this is an SAP opportunity (enables SAP module mapping)
     """
     try:
         print(f"[ANALYSIS] Job {job_id} started for '{title}' ({len(file_paths)} file(s))")
@@ -356,18 +354,6 @@ async def run_analysis(
         analysis_jobs[job_id]["status_detail"] = "Deduplicating and organizing extracted requirements"
         
         state.final_requirements = synthesize(state.all_raw_requirements())
-        
-        # Step 7.5: SAP Module Mapping (if SAP opportunity)
-        if is_sap_opp:
-            analysis_jobs[job_id]["current_step"] = "Mapping to SAP modules"
-            analysis_jobs[job_id]["progress"] = 97
-            
-            try:
-                from agents.sap_mapping_agent import map_to_sap_modules
-                state.final_requirements = map_to_sap_modules(state.final_requirements)
-                log.info("sap_mapping_completed", count=len(state.final_requirements))
-            except Exception as e:
-                log.warning("sap_mapping_failed", error=str(e))
         
         # Step 8: Prepare editable review state
         print(f"[ANALYSIS] Job {job_id}: preparing review workspace")
@@ -919,7 +905,6 @@ async def root():
                     <input type="number" id="minConfidence" class="confidence-input" value="0.0" min="0" max="1" step="0.1" title="Minimum Confidence (0.0 - 1.0)">
                     <input type="hidden" id="title" value="RFP Analysis">
                     <input type="hidden" id="orgContext" value="">
-                    <input type="hidden" id="isSapOpp" value="false">
                     
                     <button type="submit" id="analyzeBtn" class="analyze-btn">
                         🔍 Analyze
@@ -1588,7 +1573,6 @@ async def root():
                 formData.append('title', document.getElementById('title').value);
                 formData.append('org_context_url', document.getElementById('orgContext').value || '');
                 formData.append('min_confidence', document.getElementById('minConfidence').value);
-                formData.append('is_sap_opp', document.getElementById('isSapOpp').value === 'true');
                 
                 analyzeBtn.disabled = true;
                 analyzeBtn.textContent = '⏳ Analyzing...';
@@ -1753,7 +1737,6 @@ async def analyze_rfp(
     title: str = Form("RFP Analysis"),
     org_context_url: Optional[str] = Form(None),
     min_confidence: float = Form(0.0),
-    is_sap_opp: bool = Form(False)
 ):
     """
     Upload and analyze one or more RFP documents.
@@ -1767,7 +1750,6 @@ async def analyze_rfp(
         title: Analysis title
         org_context_url: Optional organizational context URL
         min_confidence: Minimum confidence threshold
-        is_sap_opp: Enable SAP module mapping pass
 
     Returns:
         Job ID for tracking analysis progress
@@ -1826,7 +1808,6 @@ async def analyze_rfp(
         title,
         org_context_url,
         min_confidence,
-        is_sap_opp
     )
 
     log.info(
@@ -1834,7 +1815,6 @@ async def analyze_rfp(
         job_id=job_id,
         file_count=len(saved_paths),
         filenames=[p.name for p in saved_paths],
-        is_sap_opp=is_sap_opp,
         phase0=PHASE0_AVAILABLE and len(saved_paths) > 1,
     )
     print(f"[API] Returning pending response for job {job_id}")
