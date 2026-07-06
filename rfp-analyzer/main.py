@@ -31,7 +31,7 @@ from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 
-load_dotenv()
+load_dotenv(Path(__file__).parent.parent / "common" / ".env")
 
 # Setup logging before anything else
 from logging_config import setup_logging

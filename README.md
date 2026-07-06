@@ -1,17 +1,19 @@
 # RFxStarterKit
 
 > ⚠️ **Pilot branch — `pilot-no-scoping-architect`**
-> This branch is a scoping-architect-free variant of RFxStarterKit v0.1.0. The `scoping-architect` module (port 8001, architecture generation, GSE bridge) has been fully removed. Only the **RFP Analyzer** service is present. See `CHANGELOG.md` for details. The full release with scoping-architect lives on `master`.
+> This branch is a scoping-architect-free variant of RFxStarterKit v0.2.0. The `scoping-architect` module (port 8001, architecture generation) has been fully removed. Only the **RFP Analyzer** service is present. See `CHANGELOG.md` for details. The full release with scoping-architect lives on `master`.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![CI Pipeline](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF)](https://github.com/santosh-k-singh10/RFxStarterKit-0.1/actions)
+[![CI Pipeline](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF)](https://github.com/santosh-k-singh10/RFxStarterKit-0.2/actions)
 [![Docker](https://img.shields.io/badge/docker-ready-2496ED)](https://www.docker.com/)
 
 > **AI-powered RFP analysis toolkit (pilot — scoping-architect removed)**
 
 Transform RFP documents into actionable requirements using multi-agent AI systems.
+
+> 🔒 **IBM Internal Tool.** This kit is built for use with **IBM Services Essentials** (an internal, OpenAI-compatible LLM gateway). It is not intended for use with a personal/external OpenAI account, and is shared for internal pilot testing only — please don't redistribute outside IBM.
 
 ---
 
@@ -26,7 +28,6 @@ RFxStarterKit is a comprehensive toolkit for analyzing Request for Proposals (RF
 - 🔍 **Intelligent Extraction** - Automatic requirement extraction with confidence scoring
 - ⚠️ **Conflict Detection** - Identify contradictions across multiple documents
 - 📊 **Multiple Export Formats** - Excel, JSON, Markdown, and interactive HTML
-- 🏗️ **Solution Scoping** - Generate architecture and component breakdowns
 - 🔗 **Source Traceability** - Every requirement links back to source documents
 - 🎨 **SAP Module Mapping** - Optional SAP-specific analysis for SAP opportunities
 
@@ -48,13 +49,6 @@ RFxStarterKit is a comprehensive toolkit for analyzing Request for Proposals (RF
 - **Source Traceability** - Maintain document provenance
 - **Confidence Scoring** - Quality metrics for extracted information
 
-### Scoping Architect
-- **Architecture Recommendations** - Suggest solution patterns
-- **Component Identification** - Break down into buildable components
-- **Effort Estimation** - Story point ranges for components
-- **Risk Analysis** - Technical and implementation risks
-- **Integration Planning** - Identify integration requirements
-
 ---
 
 ## 🚀 Quick Start
@@ -63,41 +57,40 @@ RFxStarterKit is a comprehensive toolkit for analyzing Request for Proposals (RF
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/santosh-k-singh10/RFxStarterKit-0.1.git
-cd RFxStarterKit-0.1
+git clone https://github.com/santosh-k-singh10/RFxStarterKit-0.2.git
+cd RFxStarterKit-0.2
 
 # 2. Configure environment
-cp .env.example .env
-# Edit .env with your API keys
+cp common/.env.template common/.env
+# Edit common/.env with your API keys
 
 # 3. Start with Docker
 docker-compose up --build
 
-# 4. Access services
+# 4. Access the service
 # RFP Analyzer: http://localhost:8080
-# Scoping Architect: http://localhost:8001
 ```
 
 ### Option 2: Local Installation
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/santosh-k-singh10/RFxStarterKit-0.1.git
-cd RFxStarterKit-0.1
+git clone https://github.com/santosh-k-singh10/RFxStarterKit-0.2.git
+cd RFxStarterKit-0.2
 
 # 2. Install dependencies
 pip install -r requirements.txt
 
 # 3. Configure environment
-cp .env.example .env
-# Edit .env with your API keys
+cp common/.env.template common/.env
+# Edit common/.env with your API keys
 
 # 4. Start the application
-# Windows:
-START_ALL.bat
+# Windows (PowerShell):
+.\START_ALL.ps1
 
-# Linux/Mac:
-./START_ALL.sh
+# Windows (Command Prompt):
+START_ALL.bat
 ```
 
 ### Option 3: Quick Test
@@ -113,10 +106,12 @@ python web_app.py
 ## 📋 Prerequisites
 
 - **Python 3.8+**
-- **OpenAI API Key** (required for RFP analysis)
-- **Anthropic API Key** (optional, for Phase 0 multi-document processing)
+- **IBM Services Essentials API key** (required) — this is what `OPENAI_API_KEY` refers to throughout this repo and `common/.env.template`. It is **not** a personal/external OpenAI key. Request access via your team's onboarding process.
+- **Anthropic API Key** (optional, only needed if you want to bypass Services Essentials and call Anthropic directly for Phase 0 multi-document processing)
 - **4GB RAM minimum** (8GB recommended)
 - **Docker** (optional, for containerized deployment)
+
+> ⚠️ If you paste in a real OpenAI-issued key (`sk-...`) instead of a Services Essentials token, requests will fail with an auth error against `servicesessentials.ibm.com` — the variable name is historical, not a hint about which provider to use.
 
 ---
 
@@ -126,7 +121,7 @@ python web_app.py
 |----------|-------------|
 | [Quick Start](docs/QUICK_START.md) | Installation, running, and troubleshooting |
 | [Architecture](docs/ARCHITECTURE.md) | System design, data-flow diagrams, repo structure |
-| [API Reference](docs/API_REFERENCE.md) | REST endpoints for RFP Analyzer, Phase 0, and Scoping Architect |
+| [API Reference](docs/API_REFERENCE.md) | REST endpoints for RFP Analyzer and Phase 0 |
 | [Docker Guide](docs/DOCKER_GUIDE.md) | Docker and Docker Compose deployment |
 | [ADR log](docs/adr/) | Architecture Decision Records — the *why* behind key choices |
 | [Contributing](CONTRIBUTING.md) | Contribution guidelines |
@@ -211,12 +206,6 @@ excel_path = result["excel_path"]
                   │
                   ▼
          ┌────────────────────┐
-         │ Scoping Architect  │
-         │  (Architecture)    │
-         └────────────────────┘
-                  │
-                  ▼
-         ┌────────────────────┐
          │  Export Results    │
          │ (Excel/JSON/HTML)  │
          └────────────────────┘
@@ -257,18 +246,19 @@ excel_path = result["excel_path"]
 
 ### Environment Variables
 
-```bash
-# LLM Provider (openai, anthropic, google)
-LLM_PROVIDER=openai
+There is **one** `.env` file at `common/.env`. Both services read from it — you do not need separate `.env` files per module.
 
-# API Keys
-OPENAI_API_KEY=your_key_here
-ANTHROPIC_API_KEY=your_key_here
+```bash
+# LLM Provider — IBM Services Essentials (OpenAI-compatible)
+OPENAI_API_KEY=your_services_essentials_key_here
+OPENAI_API_BASE=https://servicesessentials.ibm.com/apis/v3
+MODEL_ID=global/anthropic.claude-sonnet-4-5-20250929-v1:0
+
+# Optional: bypass Services Essentials and call Anthropic directly (Phase 0 only)
+ANTHROPIC_API_KEY=
 
 # Application Settings
 LOG_LEVEL=INFO
-OUTPUT_DIR=./outputs
-MIN_CONFIDENCE=0.0
 
 # Phase 0 Settings
 PHASE0_CONFIDENCE_THRESHOLD=0.70
@@ -279,7 +269,7 @@ ENABLE_SAP_MAPPING=true
 ENABLE_RISK_ASSESSMENT=true
 ```
 
-See [.env.example](.env.example) for complete configuration options.
+See [`common/.env.template`](common/.env.template) for the complete, commented list of options, including optional Context Studio, observability (Arize Phoenix), and MCP gateway settings.
 
 ---
 
@@ -364,8 +354,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **OpenAI GPT-4** - Language model for analysis
-- **Anthropic Claude** - Language model for classification
+- **Anthropic Claude** - Language model powering all agents (via IBM Services Essentials)
 - **LangChain** - LLM orchestration framework
 - **FastAPI** - Modern web framework
 - **All Contributors** - Thank you for your contributions!
@@ -375,16 +364,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - **Documentation**: [docs/](docs/)
-- **Issues**: [GitHub Issues](https://github.com/santosh-k-singh10/RFxStarterKit-0.1/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/santosh-k-singh10/RFxStarterKit-0.1/discussions)
+- **Issues**: [GitHub Issues](https://github.com/santosh-k-singh10/RFxStarterKit-0.2/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/santosh-k-singh10/RFxStarterKit-0.2/discussions)
 
 ---
 
 ## 📊 Project Stats
 
-- **Version**: 0.1.0
-- **Status**: Production Ready ✅
-- **Last Updated**: 2026-07-03
+- **Version**: 0.2.0
+- **Status**: Internal Pilot
+- **Last Updated**: 2026-07-06
 - **Python**: 3.8+
 - **License**: MIT
 
@@ -392,7 +381,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**[Documentation](docs/)** • **[Quick Start](QUICK_START.md)** • **[Contributing](CONTRIBUTING.md)** • **[Changelog](CHANGELOG.md)**
+**[Documentation](docs/)** • **[Quick Start](docs/QUICK_START.md)** • **[Contributing](CONTRIBUTING.md)** • **[Changelog](CHANGELOG.md)**
 
 Made with ❤️ by the RFxStarterKit team
 

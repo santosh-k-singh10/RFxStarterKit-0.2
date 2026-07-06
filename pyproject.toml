@@ -66,10 +66,10 @@ dev = [
 #   pip install -e ".[dev]"
 
 [project.urls]
-Homepage = "https://github.com/santosh-k-singh10/RFxStarterKit-0.1"
-Documentation = "https://github.com/santosh-k-singh10/RFxStarterKit-0.1#readme"
-Repository = "https://github.com/santosh-k-singh10/RFxStarterKit-0.1.git"
-Issues = "https://github.com/santosh-k-singh10/RFxStarterKit-0.1/issues"
+Homepage = "https://github.com/santosh-k-singh10/RFxStarterKit-0.2"
+Documentation = "https://github.com/santosh-k-singh10/RFxStarterKit-0.2#readme"
+Repository = "https://github.com/santosh-k-singh10/RFxStarterKit-0.2.git"
+Issues = "https://github.com/santosh-k-singh10/RFxStarterKit-0.2/issues"
 
 [tool.black]
 line-length = 100

@@ -32,7 +32,6 @@ ENV/
 # -- Secrets / credentials (never commit) ------------------------------------
 .env
 .env.*
-!.env.example
 !.env.template
 !common/.env.template
 
@@ -44,6 +43,7 @@ rfp-analyzer/outputs/*.html
 rfp-analyzer/outputs/*.json
 rfp-analyzer/outputs/*.md
 rfp-analyzer/app/outputs/
+rfp-analyzer/app/uploads/
 rfp-analyzer/uploads/
 
 # -- Logs --------------------------------------------------------------------
@@ -76,6 +76,11 @@ tmp/
 ~$*.xlsx
 ~$*.xls
 ~$*.docx
+
+# -- Debug / working notes (never commit) ------------------------------------
+debug_json_error_attempt_1.txt
+**/debug_json_error_attempt_*.txt
+github-checkin-plan.md
 
 # -- OS / editor -------------------------------------------------------------
 .DS_Store

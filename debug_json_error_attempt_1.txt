@@ -1,6 +1,0 @@
-=== MALFORMED JSON ===
-Error: Expecting ',' delimiter: line 1 column 17 (char 16)
-Line: 1, Column: 17, Position: 16
-
-=== FULL RAW RESPONSE ===
-[{"id": "FR-001"

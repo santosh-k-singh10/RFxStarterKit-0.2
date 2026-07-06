@@ -33,8 +33,8 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 # Import the existing call_claude function
 from agents.base import call_claude
 
-# Load environment variables
-load_dotenv()
+# Load environment variables from consolidated common/.env
+load_dotenv(Path(__file__).parent.parent.parent / "common" / ".env")
 
 # Setup logging
 from logging_config import setup_logging

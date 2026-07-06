@@ -26,11 +26,12 @@ from typing import TYPE_CHECKING, Any, Optional
 from openai import OpenAI
 import structlog
 from dotenv import load_dotenv
+from pathlib import Path
 
 if TYPE_CHECKING:
     from org_context.context_schema import OrganizationContext
 
-load_dotenv()
+load_dotenv(Path(__file__).parent.parent.parent / "common" / ".env")
 
 log = structlog.get_logger()
 

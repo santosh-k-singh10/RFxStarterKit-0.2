@@ -18,9 +18,12 @@ See main.py for the CLI companion (batch / scripted runs).
 
 from __future__ import annotations
 
+import asyncio
+import concurrent.futures
 import os
 import tempfile
 import uuid
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Optional, Dict, Any, List
 import json
@@ -52,11 +55,34 @@ PHASE0_AVAILABLE = is_phase0_available()
 
 log = structlog.get_logger(__name__)
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Pre-load FAISS + SentenceTransformer at server startup so the first
+    real /api/analyze request is never slow due to a cold model load.
+    Runs in a thread pool to avoid blocking the event loop.
+    """
+    def _load():
+        try:
+            from core.embedder import DocumentIndex
+            from core.schemas import DocumentChunk
+            dummy = [DocumentChunk(section="warmup", text="warmup", page=1, char_count=6)]
+            DocumentIndex(dummy)
+            print("[STARTUP] Embedder pre-warmed (FAISS + SentenceTransformer ready)")
+        except Exception as e:
+            print(f"[STARTUP] Embedder warmup skipped: {e}")
+
+    loop = asyncio.get_event_loop()
+    loop.run_in_executor(concurrent.futures.ThreadPoolExecutor(max_workers=1), _load)
+    yield
+
+
 # Initialize FastAPI app
 app = FastAPI(
     title="RFP Analyzer",
     description="AI-powered RFP analysis with multi-agent system",
-    version="2.0.0"
+    version="2.0.0",
+    lifespan=lifespan,
 )
 
 # Enable CORS
@@ -70,31 +96,6 @@ app.add_middleware(
 
 # In-memory storage for analysis jobs
 analysis_jobs: Dict[str, Dict[str, Any]] = {}
-
-
-@app.on_event("startup")
-async def _warmup():
-    """
-    Pre-load FAISS + SentenceTransformer at server startup so the first
-    real /api/analyze request is never slow due to a cold model load.
-    Runs in a thread pool to avoid blocking the event loop.
-    """
-    import asyncio
-    import concurrent.futures
-
-    def _load():
-        try:
-            from core.embedder import DocumentIndex
-            from core.schemas import DocumentChunk
-            # Build a tiny dummy index — enough to force model download/cache
-            dummy = [DocumentChunk(section="warmup", text="warmup", page=1, char_count=6)]
-            DocumentIndex(dummy)
-            print("[STARTUP] Embedder pre-warmed (FAISS + SentenceTransformer ready)")
-        except Exception as e:
-            print(f"[STARTUP] Embedder warmup skipped: {e}")
-
-    loop = asyncio.get_event_loop()
-    loop.run_in_executor(concurrent.futures.ThreadPoolExecutor(max_workers=1), _load)
 
 
 class AnalysisRequest(BaseModel):
