@@ -45,20 +45,6 @@ pip install -r <module>/requirements.txt
 
 ## Module-Specific Configurations
 
-### Scoping Architect Module
-**Location:** `scoping-architect/.env`
-
-**Required Variables:**
-- `OPENAI_API_BASE`
-- `OPENAI_API_KEY`
-- `MODEL_ID`
-- `MCP_BASE_URL`
-- `MCP_SERVER_ID`
-- `MCP_ACCESS_TOKEN`
-
-**Additional Dependencies:**
-None - uses only base dependencies
-
 ### RFP Analyzer Module (Root)
 **Location:** `rfp-analyzer/.env`
 

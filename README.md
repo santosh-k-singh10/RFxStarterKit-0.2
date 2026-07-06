@@ -1,4 +1,7 @@
-﻿# RFxStarterKit
+# RFxStarterKit
+
+> ⚠️ **Pilot branch — `pilot-no-scoping-architect`**
+> This branch is a scoping-architect-free variant of RFxStarterKit v0.1.0. The `scoping-architect` module (port 8001, architecture generation, GSE bridge) has been fully removed. Only the **RFP Analyzer** service is present. See `CHANGELOG.md` for details. The full release with scoping-architect lives on `master`.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -6,9 +9,9 @@
 [![CI Pipeline](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF)](https://github.com/santosh-k-singh10/RFxStarterKit-0.1/actions)
 [![Docker](https://img.shields.io/badge/docker-ready-2496ED)](https://www.docker.com/)
 
-> **AI-powered RFP analysis and solution scoping toolkit**
+> **AI-powered RFP analysis toolkit (pilot — scoping-architect removed)**
 
-Transform RFP documents into actionable requirements and architectural designs using multi-agent AI systems.
+Transform RFP documents into actionable requirements using multi-agent AI systems.
 
 ---
 

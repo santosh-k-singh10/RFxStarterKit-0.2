@@ -30,35 +30,6 @@ services:
       retries: 3
       start_period: 40s
 
-  scoping-architect:
-    build:
-      context: .
-      dockerfile: Dockerfile.scoping-architect
-    container_name: rfx-scoping-architect
-    ports:
-      - "8001:8001"
-    environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
-      - LOG_LEVEL=${LOG_LEVEL:-INFO}
-      - ENABLE_SAP_MAPPING=${ENABLE_SAP_MAPPING:-true}
-      - ENABLE_RISK_ASSESSMENT=${ENABLE_RISK_ASSESSMENT:-true}
-    volumes:
-      - ./outputs:/app/outputs
-      - ./logs:/app/logs
-    restart: unless-stopped
-    networks:
-      - rfx-network
-    depends_on:
-      - rfp-analyzer
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8001/api/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-
 networks:
   rfx-network:
     driver: bridge

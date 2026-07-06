@@ -143,11 +143,6 @@ RFxStarterKit-0.1/
 │   ├── org_context/             ← organisational context management
 │   └── mcp_server.py            ← MCP tool wrapper for WxO integration
 │
-├── scoping-architect/
-│   ├── app.py                   ← FastAPI app (port 8001)
-│   ├── router.py                ← route handlers
-│   └── scoping_designer/        ← architecture generation logic
-│
 ├── document-consolidator/
 │   └── phase0_router/           ← Phase 0 multi-document router
 │       └── phase0/

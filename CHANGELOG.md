@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.0-pilot] - branch: pilot-no-scoping-architect
+
+### Removed
+- **scoping-architect** module fully removed (folder, Dockerfile, docker-compose service, all proxy routes in rfp-analyzer, all UI tabs, all docs and config references).
+- `Dockerfile.scoping-architect` deleted.
+- `CLEANUP_SCRIPT.bat` deleted (was scoping-architect-only).
+- Five `docs/archive/` files referencing the removed module deleted.
+- `import httpx` removed from `rfp-analyzer/web_app.py` (was only used by scoping proxy routes).
+- `🧩 Scoping Questionnaire` and `🏗️ Generate Scope` tabs removed from both UI surfaces (`web_app.py` and `rfp_analyzer_direct.html`).
+
+### Notes
+- This is a pilot variant of v0.1.0 — the `master` branch retains the full scoping-architect integration.
+- Only the **RFP Analyzer** service (port 8080) and **document-consolidator / Phase 0** remain.
+
 ## [Unreleased]
 
 ### Planned
@@ -103,7 +117,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API reference
 
 ### Infrastructure
-- Modular architecture (rfp-analyzer, scoping-architect, document-consolidator)
+- Modular architecture (rfp-analyzer, document-consolidator)
 - Shared common dependencies
 - Unified configuration management
 - Logging and observability

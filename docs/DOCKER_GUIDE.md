@@ -33,7 +33,6 @@ docker-compose up -d --build
 ### 3. Access Services
 
 - **RFP Analyzer**: http://localhost:8080
-- **Scoping Architect**: http://localhost:8001
 
 ### 4. Stop Services
 
@@ -59,12 +58,6 @@ docker-compose down -v
 │  └────────────────────────────────┘    │
 │                                         │
 │  ┌────────────────────────────────┐    │
-│  │   Scoping Architect            │    │
-│  │   Port: 8001                   │    │
-│  │   Health: /api/health          │    │
-│  └────────────────────────────────┘    │
-│                                         │
-│  ┌────────────────────────────────┐    │
 │  │   Shared Volumes               │    │
 │  │   - outputs/                   │    │
 │  │   - logs/                      │    │
@@ -82,7 +75,6 @@ docker-compose build
 
 # Build specific service
 docker-compose build rfp-analyzer
-docker-compose build scoping-architect
 
 # Build without cache
 docker-compose build --no-cache
@@ -135,11 +127,9 @@ docker-compose ps
 
 # View service logs
 docker-compose logs rfp-analyzer
-docker-compose logs scoping-architect
 
 # Execute command in container
 docker-compose exec rfp-analyzer bash
-docker-compose exec scoping-architect python --version
 ```
 
 ## Environment Variables
@@ -184,9 +174,6 @@ Both services include health checks:
 ```bash
 # Check RFP Analyzer health
 curl http://localhost:8080/health
-
-# Check Scoping Architect health
-curl http://localhost:8001/api/health
 
 # View health status
 docker-compose ps

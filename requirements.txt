@@ -74,7 +74,4 @@ aiofiles>=23.2.0
 # RFP Analyzer:
 #   pip install -r rfp-analyzer/requirements.txt
 #
-# Scoping Architect:
-#   pip install -r scoping-architect/requirements.txt
-#
 # ============================================================================

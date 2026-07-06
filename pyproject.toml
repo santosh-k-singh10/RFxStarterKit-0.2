@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rfx-starter-kit"
-version = "0.1.0"
+version = "0.1.0-pilot"
 description = "AI-powered RFP analysis and scoping toolkit"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -63,7 +63,6 @@ dev = [
 # imports work without sys.path manipulation:
 #   pip install -e ./rfp-analyzer
 #   pip install -e ./document-consolidator/phase0_router
-#   pip install -e ./scoping-architect
 #   pip install -e ".[dev]"
 
 [project.urls]
@@ -91,7 +90,7 @@ exclude = '''
 profile = "black"
 line_length = 100
 skip_gitignore = true
-known_first_party = ["rfp_analyzer", "scoping_architect", "document_consolidator"]
+known_first_party = ["rfp_analyzer", "document_consolidator"]
 
 [tool.mypy]
 python_version = "3.8"

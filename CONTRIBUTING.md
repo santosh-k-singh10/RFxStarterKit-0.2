@@ -111,8 +111,6 @@ Follow conventional commits format:
 ```
 feat(rfp-analyzer): add support for PDF password protection
 
-fix(scoping-architect): resolve timeout issue in large documents
-
 docs(readme): update installation instructions for Windows
 ```
 

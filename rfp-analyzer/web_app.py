@@ -25,8 +25,6 @@ from pathlib import Path
 from typing import Optional, Dict, Any, List
 import json
 from datetime import datetime
-import httpx
-
 import structlog
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException, BackgroundTasks
 from fastapi.responses import HTMLResponse, FileResponse
@@ -603,11 +601,6 @@ async def root():
                 padding: 24px;
                 overflow-y: auto;
             }
-            .main-content:has(#architecture-tab[style*="block"]) {
-                padding: 0;
-                overflow: hidden;
-            }
-
             .container {
                 max-width: 1400px;
                 margin: 0 auto;
@@ -944,12 +937,6 @@ async def root():
                 <button class="tab-btn active" data-tab="requirements">
                     📋 Requirements
                 </button>
-                <button class="tab-btn" data-tab="scoping">
-                    🧩 Scoping Questionnaire
-                </button>
-                <button class="tab-btn" data-tab="architecture">
-                    🏗️ Generate Scope
-                </button>
                 <button class="tab-btn" data-tab="export">
                     📤 Export
                 </button>
@@ -1057,30 +1044,6 @@ async def root():
                     </div>
                 </div>
                 
-                <!-- Scoping Questionnaire Tab Content (iframe to Scoping Architect) -->
-                <div id="scoping-tab" class="tab-content" style="display: none;">
-                    <h2 class="page-title">Scoping Questionnaire</h2>
-                    <p style="color: #666; margin-bottom: 16px;">
-                        Configure your architecture preferences below. Once an RFP analysis is complete, use the
-                        <strong>Generate Scope</strong> tab to generate the architecture scope.
-                    </p>
-                    <div id="scopingArchitectStatus" style="display:none; margin-bottom:12px; padding:10px 14px; border-radius:6px; font-size:0.85em;"></div>
-                    <iframe id="scopingArchitectFrame"
-                            src="http://localhost:8001/"
-                            style="width: 100%; height: 820px; border: 1px solid #e0e0e0; border-radius: 8px; background: #fafafa;"
-                            title="Scoping Architect Preferences Form">
-                    </iframe>
-                </div>
-
-                <!-- Generate Scope Tab Content — RFP to GSE Bridge (embedded) -->
-                <div id="architecture-tab" class="tab-content" style="display: none;">
-                    <iframe id="bridgeFrame"
-                            src="http://localhost:8001/bridge"
-                            style="width:100%; height:calc(100vh - 130px); min-height:600px; border:none; display:block;"
-                            title="RFP to GSE Bridge">
-                    </iframe>
-                </div>
-
                 <!-- Export Tab Content -->
                 <div id="export-tab" class="tab-content" style="display: none;">
                     <h2 class="page-title">Export</h2>
@@ -1718,15 +1681,6 @@ async def root():
                             currentJobId = jobId;
                             loadRequirements(jobId);
 
-                            // Enable "Generate Architecture Scope" and pre-fill project name
-                            const genBtn = document.getElementById('generateScopeBtn');
-                            if (genBtn) {
-                                genBtn.disabled = false;
-                                const projInput = document.getElementById('pref_project_name');
-                                if (projInput && !projInput.value) {
-                                    projInput.value = document.getElementById('title').value || 'RFP Analysis';
-                                }
-                            }
                         } else if (status.status === 'failed') {
                             clearInterval(interval);
                             errorDiv.textContent = `Analysis failed: ${status.error}`;
@@ -1968,175 +1922,6 @@ async def list_jobs():
             }
             for job_id, job in analysis_jobs.items()
         ]
-    }
-
-
-# ── Phase 1.5 + Phase 2: Scoping Architect Proxy Routes ─────────────────────
-
-SCOPING_ARCHITECT_URL = os.getenv("SCOPING_ARCHITECT_URL", "http://localhost:8001")
-_SCOPING_TIMEOUT = 300.0  # architecture generation can take a while
-
-
-@app.get("/api/scoping/health")
-async def scoping_health():
-    """
-    Check whether the Scoping Architect service is reachable and healthy.
-    Returns 200 with {"status": "ok"} when healthy, 503 otherwise.
-    """
-    try:
-        async with httpx.AsyncClient(timeout=5.0) as client:
-            r = await client.get(f"{SCOPING_ARCHITECT_URL}/api/health")
-            if r.status_code == 200:
-                return r.json()
-            return {"status": "error", "detail": f"Scoping Architect returned HTTP {r.status_code}"}
-    except httpx.ConnectError:
-        raise HTTPException(status_code=503, detail="Scoping Architect service is not reachable")
-    except Exception as e:
-        raise HTTPException(status_code=503, detail=str(e))
-
-
-@app.post("/api/scoping/analyze")
-async def scoping_analyze(body: dict):
-    """
-    Proxy: full Phase 1.5 + Phase 2 pipeline.
-    Forwards POST /api/analyze to the Scoping Architect service.
-
-    Request body:
-        project_name: str
-        requirements: str   (Phase 1 markdown output)
-        preferences: dict   (from the architecture preferences form)
-    """
-    try:
-        async with httpx.AsyncClient(timeout=_SCOPING_TIMEOUT) as client:
-            r = await client.post(
-                f"{SCOPING_ARCHITECT_URL}/api/analyze",
-                json=body,
-                headers={"Content-Type": "application/json"},
-            )
-            if r.status_code == 200:
-                return r.json()
-            # Surface error detail from downstream service
-            try:
-                detail = r.json().get("detail", r.text)
-            except Exception:
-                detail = r.text
-            raise HTTPException(status_code=r.status_code, detail=detail)
-    except HTTPException:
-        raise
-    except httpx.ConnectError:
-        raise HTTPException(status_code=503, detail="Scoping Architect service is not running. Start it with 'python run.py' inside scoping-architect/")
-    except httpx.TimeoutException:
-        raise HTTPException(status_code=504, detail="Scoping Architect timed out. The architecture generation may still be running.")
-    except Exception as e:
-        raise HTTPException(status_code=502, detail=f"Scoping Architect proxy error: {e}")
-
-
-@app.post("/api/scoping/analyze/enriched")
-async def scoping_analyze_enriched(body: dict):
-    """
-    Proxy: enriched JSON path (Phase 1.5 + Phase 2).
-    Forwards directly to /api/analyze/enriched on the Scoping Architect.
-    Accepts the enriched modules JSON — no markdown conversion needed.
-    """
-    try:
-        async with httpx.AsyncClient(timeout=_SCOPING_TIMEOUT) as client:
-            r = await client.post(
-                f"{SCOPING_ARCHITECT_URL}/api/analyze/enriched",
-                json=body,
-                headers={"Content-Type": "application/json"},
-            )
-            if r.status_code == 200:
-                return r.json()
-            try:
-                detail = r.json().get("detail", r.text)
-            except Exception:
-                detail = r.text
-            raise HTTPException(status_code=r.status_code, detail=detail)
-    except HTTPException:
-        raise
-    except httpx.ConnectError:
-        raise HTTPException(status_code=503, detail="Scoping Architect is not running. Start it with 'python run.py' inside scoping-architect/")
-    except httpx.TimeoutException:
-        raise HTTPException(status_code=504, detail="Scoping Architect timed out during architecture generation.")
-    except Exception as e:
-        raise HTTPException(status_code=502, detail=f"Scoping Architect proxy error: {e}")
-
-
-@app.post("/api/scoping/preferences")
-async def scoping_preferences(body: dict):
-    """Proxy: validate and structure architecture preferences."""
-    try:
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            r = await client.post(
-                f"{SCOPING_ARCHITECT_URL}/api/preferences",
-                json=body,
-                headers={"Content-Type": "application/json"},
-            )
-            if r.status_code == 200:
-                return r.json()
-            try:
-                detail = r.json().get("detail", r.text)
-            except Exception:
-                detail = r.text
-            raise HTTPException(status_code=r.status_code, detail=detail)
-    except HTTPException:
-        raise
-    except httpx.ConnectError:
-        raise HTTPException(status_code=503, detail="Scoping Architect service is not reachable")
-    except Exception as e:
-        raise HTTPException(status_code=502, detail=str(e))
-
-
-@app.post("/api/scoping/export/markdown")
-async def scoping_export_markdown(body: dict):
-    """Proxy: export architecture output as Markdown from Scoping Architect."""
-    try:
-        async with httpx.AsyncClient(timeout=60.0) as client:
-            r = await client.post(
-                f"{SCOPING_ARCHITECT_URL}/api/export/markdown",
-                json=body,
-                headers={"Content-Type": "application/json"},
-            )
-            if r.status_code == 200:
-                from fastapi.responses import PlainTextResponse
-                return PlainTextResponse(content=r.text, media_type="text/markdown")
-            try:
-                detail = r.json().get("detail", r.text)
-            except Exception:
-                detail = r.text
-            raise HTTPException(status_code=r.status_code, detail=detail)
-    except HTTPException:
-        raise
-    except httpx.ConnectError:
-        raise HTTPException(status_code=503, detail="Scoping Architect service is not reachable")
-    except Exception as e:
-        raise HTTPException(status_code=502, detail=str(e))
-
-
-@app.get("/api/scoping/bridge/{job_id}")
-async def scoping_bridge_data(job_id: str):
-    """
-    Return RFP analysis requirements in a format ready for the GSE Bridge.
-    Used by the Scoping Architect bridge page to pre-populate GSE fields.
-    """
-    if job_id not in analysis_jobs:
-        raise HTTPException(status_code=404, detail="Job not found")
-
-    job = analysis_jobs[job_id]
-    if job.get("status") != "completed":
-        raise HTTPException(status_code=400, detail="Analysis not completed yet")
-
-    requirements = job.get("requirements_state", [])
-    return {
-        "job_id": job_id,
-        "title": job.get("title", "RFP Analysis"),
-        "requirements": requirements,
-        "metadata": {
-            "total_requirements": len(requirements),
-            "completed_at": job["completed_at"].isoformat() if job.get("completed_at") else None,
-            "file_count": job.get("file_paths") and len(job["file_paths"]) or 0,
-            "file_names": [Path(p).name for p in (job.get("file_paths") or [])],
-        },
     }
 
 

@@ -28,7 +28,6 @@ docker-compose up --build
 
 Services available at:
 - **RFP Analyzer** → http://localhost:8080
-- **Scoping Architect** → http://localhost:8001
 
 See [DOCKER_GUIDE.md](DOCKER_GUIDE.md) for compose options, volume mounts, and resource limits.
 
@@ -45,7 +44,6 @@ imports resolve without any `sys.path` hacks:
 # Install service packages as editable (one-time, from repo root)
 pip install -e ./rfp-analyzer
 pip install -e ./document-consolidator/phase0_router   # optional: Phase 0
-pip install -e ./scoping-architect                     # optional: Scoping
 
 # Install shared tooling + dev deps
 pip install -r requirements.txt
@@ -65,7 +63,7 @@ cp .env.example .env
 #   ANTHROPIC_API_KEY=sk-ant-...   (optional, for Phase 0)
 ```
 
-The `.env` at the repo root is shared by all services. Per-service overrides go in `rfp-analyzer/.env` or `scoping-architect/.env`.
+The `.env` at the repo root is shared by all services. Per-service overrides go in `rfp-analyzer/.env`.
 
 ### 3. Start RFP Analyzer
 
@@ -75,37 +73,6 @@ uvicorn web_app:app --reload --port 8080
 ```
 
 Open http://localhost:8080 → upload an RFP → review results.
-
-### 4. Start Scoping Architect (optional)
-
-In a second terminal:
-
-```bash
-cd scoping-architect
-uvicorn app:create_app --factory --reload --port 8001
-```
-
-Open http://localhost:8001 → load RFP analysis JSON → generate architecture scope.
-
----
-
-## Running both services together
-
-| Terminal | Command |
-|----------|---------|
-| 1 | `cd rfp-analyzer && uvicorn web_app:app --reload --port 8080` |
-| 2 | `cd scoping-architect && uvicorn app:create_app --factory --reload --port 8001` |
-
-With both running, the **🏗️ Scoping Questionnaire** and **🔍 Generate Scope** tabs inside the RFP Analyzer UI connect to the Scoping Architect automatically.
-
-### Integration endpoints (RFP Analyzer → Scoping Architect)
-
-```
-GET  /api/scoping/health          check scoping-architect availability
-POST /api/scoping/analyze         generate architecture scope
-POST /api/scoping/preferences     validate preferences
-GET  /api/scoping/bridge/{job_id} get bridge data
-```
 
 ---
 

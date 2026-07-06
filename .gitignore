@@ -1,8 +1,8 @@
-﻿# ============================================================================
+# ============================================================================
 # RFxStarterKit .gitignore
 # ============================================================================
 
-# ── Python ──────────────────────────────────────────────────────────────────
+# -- Python ------------------------------------------------------------------
 __pycache__/
 *.py[cod]
 *.pyo
@@ -22,21 +22,21 @@ coverage.xml
 *.cover
 .hypothesis/
 
-# ── Virtual environments ────────────────────────────────────────────────────
+# -- Virtual environments ----------------------------------------------------
 .venv/
 venv/
 env/
 ENV/
 .env.backup
 
-# ── Secrets / credentials (never commit) ────────────────────────────────────
+# -- Secrets / credentials (never commit) ------------------------------------
 .env
 .env.*
 !.env.example
 !.env.template
 !common/.env.template
 
-# ── Runtime outputs ─────────────────────────────────────────────────────────
+# -- Runtime outputs ---------------------------------------------------------
 outputs/
 rfp-analyzer/outputs/web/
 rfp-analyzer/outputs/*.xlsx
@@ -45,24 +45,21 @@ rfp-analyzer/outputs/*.json
 rfp-analyzer/outputs/*.md
 rfp-analyzer/app/outputs/
 rfp-analyzer/uploads/
-scoping-architect/outputs/
 
-# ── Logs ────────────────────────────────────────────────────────────────────
+# -- Logs --------------------------------------------------------------------
 *.log
 logs/
 rfp-analyzer/app/logs/
 rfp-analyzer/logs/*.log
-scoping-architect/logs/*.log
 !rfp-analyzer/logs/.gitkeep
-!scoping-architect/logs/.gitkeep
 
-# ── Databases / checkpoints ─────────────────────────────────────────────────
+# -- Databases / checkpoints -------------------------------------------------
 *.sqlite
 *.sqlite3
 *.db
 *.db-journal
 
-# ── Large binary / data files ───────────────────────────────────────────────
+# -- Large binary / data files -----------------------------------------------
 *.xlsx
 *.xls
 !rfp-analyzer/SAP_Analysis_Test.xlsx
@@ -71,7 +68,7 @@ scoping-architect/logs/*.log
 *.docx
 !sample-rfps/
 
-# ── Temporary files ─────────────────────────────────────────────────────────
+# -- Temporary files ---------------------------------------------------------
 *.tmp
 *.temp
 temp/
@@ -80,7 +77,7 @@ tmp/
 ~$*.xls
 ~$*.docx
 
-# ── OS / editor ─────────────────────────────────────────────────────────────
+# -- OS / editor -------------------------------------------------------------
 .DS_Store
 Thumbs.db
 .idea/
@@ -89,25 +86,23 @@ Thumbs.db
 *.swo
 *~
 
-# ── Backup files ────────────────────────────────────────────────────────────
+# -- Backup files ------------------------------------------------------------
 *.backup
 *.bak
 backup_*/
 
-# ── Node modules (if any) ───────────────────────────────────────────────────
+# -- Node modules (if any) ---------------------------------------------------
 node_modules/
 package-lock.json
 npm-debug.log
 yarn-error.log
 
-# ── Docker ──────────────────────────────────────────────────────────────────
+# -- Docker ------------------------------------------------------------------
 .dockerignore
 docker-compose.override.yml
 
-# ── Scoping-architect nested git ────────────────────────────────────────────
-scoping-architect/.git/
 
-# ── Testing artifacts ───────────────────────────────────────────────────────
+# -- Testing artifacts -------------------------------------------------------
 .tox/
 .nox/
 .coverage.*
@@ -115,22 +110,22 @@ nosetests.xml
 test-results/
 *.cover
 
-# ── Documentation builds ────────────────────────────────────────────────────
+# -- Documentation builds ----------------------------------------------------
 docs/_build/
 site/
 
-# ── IDE specific ────────────────────────────────────────────────────────────
+# -- IDE specific ------------------------------------------------------------
 .project
 .pydevproject
 .settings/
 *.sublime-project
 *.sublime-workspace
 
-# ── Jupyter Notebooks ───────────────────────────────────────────────────────
+# -- Jupyter Notebooks -------------------------------------------------------
 .ipynb_checkpoints/
 *.ipynb
 
-# ── Keep empty directories ──────────────────────────────────────────────────
+# -- Keep empty directories --------------------------------------------------
 !.gitkeep
 
 # ============================================================================

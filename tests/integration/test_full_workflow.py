@@ -42,22 +42,6 @@ class TestFullWorkflow:
         
         pytest.skip("Requires implementation with Phase 0 router")
 
-    def test_rfp_to_scoping_workflow(
-        self,
-        sample_requirements_text: str,
-        temp_output_dir: Path
-    ):
-        """Test workflow from RFP analysis to scoping architect."""
-        # This is a placeholder test
-        # In a real implementation, this would:
-        # 1. Analyze RFP and extract requirements
-        # 2. Pass requirements to scoping architect
-        # 3. Generate architecture and components
-        # 4. Verify end-to-end flow
-        
-        pytest.skip("Requires implementation with scoping architect")
-
-
 @pytest.mark.integration
 class TestAPIEndpoints:
     """Test API endpoints integration."""

@@ -118,11 +118,9 @@ Returns the file with appropriate `Content-Type` and `Content-Disposition: attac
 
 ## Phase 0 (standalone)
 
-Phase 0 can also run independently on port **8001**:
-
 ```bash
 cd document-consolidator/phase0_router
-uvicorn phase0.api:app --reload --port 8001
+uvicorn phase0.api:app --reload
 ```
 
 ### `POST /phase0/analyze`
@@ -148,19 +146,6 @@ Upload multiple documents for classification and conflict detection.
   "warnings": []
 }
 ```
-
----
-
-## Scoping Architect
-
-Default port **8001**.
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/` | Web UI |
-| `GET` | `/bridge` | RFP-to-GSE bridge |
-| `POST` | `/api/analyze` | Generate architecture scope from requirements JSON |
-| `GET` | `/docs` | OpenAPI / Swagger UI |
 
 ---
 
