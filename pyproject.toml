@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rfx-starter-kit"
-version = "0.1.0-pilot"
+version = "0.2.0-pilot"
 description = "AI-powered RFP analysis and scoping toolkit"
 readme = "README.md"
 requires-python = ">=3.8"

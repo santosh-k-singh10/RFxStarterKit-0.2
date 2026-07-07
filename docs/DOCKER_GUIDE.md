@@ -7,17 +7,15 @@ This guide explains how to deploy RFxStarterKit using Docker and Docker Compose.
 - Docker Engine 20.10+
 - Docker Compose 2.0+
 - At least 4GB RAM available for containers
-- API keys (OPENAI_API_KEY, ANTHROPIC_API_KEY)
+- IBM Services Essentials API key (`OPENAI_API_KEY`)
 
 ## Quick Start
 
 ### 1. Configure Environment
 
-Create a `.env` file in the project root:
-
 ```bash
-cp .env.example .env
-# Edit .env with your API keys
+cp common/.env.template common/.env
+# Edit common/.env — set OPENAI_API_KEY to your IBM Services Essentials token
 ```
 
 ### 2. Build and Start Services
@@ -169,13 +167,11 @@ volumes:
 
 ## Health Checks
 
-Both services include health checks:
-
 ```bash
-# Check RFP Analyzer health
-curl http://localhost:8080/health
+# Check RFP Analyzer is up (root route returns the web UI)
+curl -I http://localhost:8080/
 
-# View health status
+# View container health status
 docker-compose ps
 ```
 

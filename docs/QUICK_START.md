@@ -9,7 +9,7 @@ Get RFxStarterKit running in under 5 minutes.
 | Requirement | Notes |
 |-------------|-------|
 | Python 3.9+ | |
-| `OPENAI_API_KEY` | Required for RFP analysis |
+| `OPENAI_API_KEY` | IBM Services Essentials token — required for RFP analysis |
 | `ANTHROPIC_API_KEY` | Optional — enables Phase 0 multi-document processing |
 | Docker + Docker Compose | Optional — for containerised deployment |
 
@@ -18,10 +18,10 @@ Get RFxStarterKit running in under 5 minutes.
 ## Option 1 — Docker (recommended for production)
 
 ```bash
-git clone https://github.com/santosh-k-singh10/RFxStarterKit-0.1.git
-cd RFxStarterKit-0.1
+git clone https://github.com/santosh-k-singh10/RFxStarterKit-0.2.git
+cd RFxStarterKit-0.2
 
-cp .env.example .env          # then edit .env with your API keys
+cp common/.env.template common/.env   # then edit common/.env with your API keys
 
 docker-compose up --build
 ```
@@ -57,13 +57,13 @@ pip install -r requirements.txt
 ### 2. Configure environment
 
 ```bash
-cp .env.example .env
+cp common/.env.template common/.env
 # Set at minimum:
-#   OPENAI_API_KEY=sk-...
+#   OPENAI_API_KEY=<your IBM Services Essentials token>
 #   ANTHROPIC_API_KEY=sk-ant-...   (optional, for Phase 0)
 ```
 
-The `.env` at the repo root is shared by all services. Per-service overrides go in `rfp-analyzer/.env`.
+The single `.env` at `common/.env` is shared by all services.
 
 ### 3. Start RFP Analyzer
 

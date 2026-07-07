@@ -8,8 +8,8 @@ Thank you for your interest in contributing to RFxStarterKit! This document prov
 ```bash
 # Fork the repository on GitHub
 # Then clone your fork
-git clone https://github.com/YOUR-USERNAME/RFxStarterKit-0.1.git
-cd RFxStarterKit-0.1
+git clone https://github.com/YOUR-USERNAME/RFxStarterKit-0.2.git
+cd RFxStarterKit-0.2
 ```
 
 ### 2. Set Up Development Environment
@@ -23,20 +23,18 @@ venv\Scripts\activate
 # Linux/Mac:
 source venv/bin/activate
 
-# Install dependencies
+# Install all dependencies (runtime + dev tools)
 pip install -r requirements.txt
-
-# Install development dependencies
-pip install pytest pytest-cov black flake8 mypy
+pip install -e ".[dev]"
 ```
 
 ### 3. Configure Environment
 ```bash
-# Copy environment template
-cp .env.example .env
+# Copy the master environment template
+cp common/.env.template common/.env
 
-# Edit .env with your API keys
-# At minimum, add your OPENAI_API_KEY
+# Edit common/.env — at minimum set OPENAI_API_KEY to your
+# IBM Services Essentials token (not a personal OpenAI key)
 ```
 
 ### 4. Create Feature Branch
@@ -120,7 +118,7 @@ docs(readme): update installation instructions for Windows
 ```bash
 # Fetch latest changes
 git fetch upstream
-git rebase upstream/main
+git rebase upstream/master
 ```
 
 ### 2. Run Tests and Checks
@@ -218,9 +216,10 @@ Any other context or screenshots.
 ## 📚 Resources
 
 - **Documentation**: See `docs/` directory
-- **Quick Start**: See `QUICK_START.md`
-- **Architecture**: See `docs/ARCHITECTURE.md`
+- **Quick Start**: See [`docs/QUICK_START.md`](docs/QUICK_START.md)
+- **Architecture**: See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - **API Reference**: Run the application and visit `/docs`
+- **Environment config**: See [`common/.env.template`](common/.env.template)
 
 ## 🤝 Code of Conduct
 

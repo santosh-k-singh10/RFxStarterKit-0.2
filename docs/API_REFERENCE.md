@@ -18,8 +18,6 @@ Upload one or more documents and start an analysis job.
 | `title` | `string` | | Analysis title (default: `"RFP Analysis"`) |
 | `org_context_url` | `string` | | URL to organisational context YAML/JSON |
 | `min_confidence` | `float` | | Filter threshold 0.0–1.0 (default: `0.0`) |
-| `use_phase0` | `bool` | | Enable Phase 0 multi-document routing (default: `true`) |
-| `is_sap_opp` | `bool` | | Enable SAP module mapping in HTML export (default: `false`) |
 
 **Response `202`:**
 ```json
@@ -103,16 +101,13 @@ Returns the file with appropriate `Content-Type` and `Content-Disposition: attac
 
 ## Health
 
-### `GET /health`
+### `GET /`
 
-```json
-{
-  "status": "healthy",
-  "version": "3.0.0",
-  "phase0_available": true,
-  "active_jobs": 2
-}
-```
+Returns `200 OK` (HTML web interface). Used for container healthchecks.
+
+### `GET /api/jobs`
+
+Returns the list of all in-memory job IDs and their current status. Useful for liveness checks.
 
 ---
 

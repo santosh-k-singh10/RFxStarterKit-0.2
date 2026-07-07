@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0-pilot] - branch: pilot-no-scoping-architect
+
+### Changed
+- **env**: consolidated all `.env` files into `common/.env` as single source of truth; removed root `.env.example` and `rfp-analyzer/.env.example`; updated all `load_dotenv()` call sites to point at `common/.env`
+- **deps**: rewrote root `requirements.txt` as `-r` composition file; removed `pytest`/`pytest-asyncio` from `common/requirements-base.txt` (already in `pyproject.toml [dev]`); added missing `pypdf` to `rfp-analyzer/requirements.txt`
+- **docker**: fixed `docker-compose.yml` — removed unbuildable `scoping-architect` service, fixed healthcheck endpoint (`/` not `/health`), stripped dead env vars, removed orphan named volumes
+- **web_app**: replaced deprecated `@app.on_event('startup')` with FastAPI `lifespan` context manager
+- **docs**: updated `README.md`, `CONTRIBUTING.md`, `QUICK_START.md`, `ARCHITECTURE.md`, `API_REFERENCE.md`, `DOCKER_GUIDE.md`, `rfp-analyzer/README.md` — corrected repo URLs, env paths, API key guidance
+- **scripts**: added `START_ALL.sh` (Linux/Mac); fixed env path in all launchers
+- **pyproject.toml**: updated all URLs and version to `0.2.0`
+
+### Removed
+- `debug_json_error_attempt_1.txt` (×2), `github-checkin-plan.md`, `backup_20260703_195456/` (54 files)
+- `rfp-analyzer/agents/sap_mapping_agent.py`, `rfp-analyzer/sap_analyzer_app.py`, `rfp-analyzer/sap_analyzer_cli.py`
+- `rfp-analyzer/SAP_ANALYZER_README.md`
+- `is_sap_opp` parameter removed from `web_app.py` API, functions, and UI
+- Stale `.env.example` exception removed from `.gitignore`; `rfp-analyzer/app/uploads/` added
+
+### Notes
+- This is a pilot variant of v0.2.0 — the `master` branch retains the full scoping-architect integration.
+- Only the **RFP Analyzer** service (port 8080) and **document-consolidator / Phase 0** remain.
+
 ## [0.1.0-pilot] - branch: pilot-no-scoping-architect
 
 ### Removed
@@ -148,13 +170,13 @@ This is the first public release of RFxStarterKit, an AI-powered toolkit for RFP
 
 **Getting Started:**
 1. Clone the repository
-2. Copy `.env.example` to `.env` and configure API keys
+2. Copy `common/.env.template` to `common/.env` and set `OPENAI_API_KEY` to your IBM Services Essentials token
 3. Install dependencies: `pip install -r requirements.txt`
-4. Run the application: See `QUICK_START.md`
+4. Run the application: See `docs/QUICK_START.md`
 
 **Requirements:**
 - Python 3.8 or higher
-- OpenAI API key (required)
+- IBM Services Essentials API key (required — used as `OPENAI_API_KEY`)
 - Anthropic API key (optional, for Phase 0)
 
 **Known Limitations:**
@@ -173,6 +195,7 @@ For detailed documentation, see the `docs/` directory and `README.md`.
 
 ---
 
-[Unreleased]: https://github.com/santosh-k-singh10/RFxStarterKit-0.1/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/santosh-k-singh10/RFxStarterKit-0.1/releases/tag/v0.1.0
-[0.0.1]: https://github.com/santosh-k-singh10/RFxStarterKit-0.1/releases/tag/v0.0.1
+[Unreleased]: https://github.com/santosh-k-singh10/RFxStarterKit-0.2/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/santosh-k-singh10/RFxStarterKit-0.2/releases/tag/v0.2.0
+[0.1.0]: https://github.com/santosh-k-singh10/RFxStarterKit-0.2/releases/tag/v0.1.0
+[0.0.1]: https://github.com/santosh-k-singh10/RFxStarterKit-0.2/releases/tag/v0.0.1

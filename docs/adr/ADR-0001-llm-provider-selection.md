@@ -19,9 +19,9 @@ Key constraints:
 
 ## Decision
 
-**Primary:** OpenAI GPT-4 class models via the `langchain-openai` adapter, configured through a `OPENAI_API_KEY` / `OPENAI_API_BASE` pair so the same code works against OpenAI, Azure OpenAI, or IBM-hosted OpenAI-compatible endpoints.
+**Primary:** Anthropic Claude (Sonnet) via **IBM Services Essentials** — an internal OpenAI-compatible gateway. Configured via `OPENAI_API_KEY` (IBM SE token) + `OPENAI_API_BASE` + `MODEL_ID`, so the same code works against any OpenAI-compatible endpoint (Azure, direct Anthropic, Anyscale) with no code changes.
 
-**Secondary (Phase 0):** Anthropic Claude 3.5 Sonnet for multi-document classification and conflict detection, where its extended context window (200k tokens) is a material advantage over GPT-4o's 128k.
+**Secondary (Phase 0):** Anthropic Claude via direct `ANTHROPIC_API_KEY` for multi-document classification and conflict detection, where its extended context window (200k tokens) is a material advantage.
 
 ---
 
