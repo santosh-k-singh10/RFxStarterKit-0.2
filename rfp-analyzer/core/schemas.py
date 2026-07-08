@@ -83,9 +83,6 @@ class Requirement(BaseModel):
     raw_excerpt: str = ""
     # The exact text from the RFP that produced this requirement
 
-    sap_modules: list[str] = Field(default_factory=list)
-    # List of relevant SAP modules for this requirement (populated by SAP mapping agent)
-
     # ── Review workflow fields ──────────────────────────────────────────────
     review_status: ReviewStatus = ReviewStatus.PENDING
     # Workflow status for requirement review process

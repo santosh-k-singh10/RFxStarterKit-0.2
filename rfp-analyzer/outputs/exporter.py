@@ -72,7 +72,6 @@ REQUIREMENTS_COLUMNS = [
     ("Ambiguous?",            12),
     ("Clarification Question",50),
     ("Related IDs",           20),
-    ("SAP Modules",           25),
 ]
 
 
@@ -123,11 +122,6 @@ def _write_requirements_sheet(wb: Workbook, requirements: list[Requirement]) -> 
     for row_idx, req in enumerate(requirements, start=2):
         fill = CATEGORY_FILL.get(req.category)
 
-        # Get SAP modules if available
-        sap_modules_str = ""
-        if hasattr(req, 'sap_modules') and req.sap_modules:
-            sap_modules_str = ", ".join(req.sap_modules)
-        
         values = [
             req.id,
             req.category.value.replace("_", " ").title(),
@@ -140,7 +134,6 @@ def _write_requirements_sheet(wb: Workbook, requirements: list[Requirement]) -> 
             "Yes" if req.ambiguity_flag else "No",
             req.clarification_question or "",
             ", ".join(req.related_ids),
-            sap_modules_str,
         ]
 
         for col_idx, value in enumerate(values, start=1):
@@ -274,11 +267,6 @@ def export_markdown(
             lines.append(f"- **Priority:** {req.priority.value.upper()}")
             lines.append(f"- **Confidence:** {conf_pct}")
             lines.append(f"- **Section:** {req.source_section} (p.{req.page_ref})")
-            
-            # Add SAP modules if available
-            if hasattr(req, 'sap_modules') and req.sap_modules:
-                sap_modules_str = ", ".join(req.sap_modules)
-                lines.append(f"- **SAP Modules:** {sap_modules_str}")
             
             lines.append(f"\n{req.description}\n")
             if req.clarification_question:
