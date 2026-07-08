@@ -234,14 +234,23 @@ def _ingest_pdf_fallback(file_path: str) -> list[DocumentChunk]:
 
 
 def _ingest_docx_fallback(file_path: str) -> list[DocumentChunk]:
-    """Fallback DOCX parser using python-docx directly."""
+    """Fallback DOCX parser using python-docx directly.
+
+    python-docx has no page-number API, so we estimate the page by counting
+    paragraphs — roughly PARAS_PER_PAGE non-empty paragraphs ≈ one page.
+    This is an approximation but is far better than hardcoding page=1.
+    """
     print("[DOCX FALLBACK] Using python-docx")
     from docx import Document  # type: ignore
+
+    PARAS_PER_PAGE = 40   # rough estimate: ~40 non-empty paragraphs per page
 
     doc = Document(file_path)
     chunks: list[DocumentChunk] = []
     current_section = "Preamble"
     current_texts: list[str] = []
+    para_count = 0
+    section_page_start = 1
 
     for para in doc.paragraphs:
         text  = para.text.strip()
@@ -249,6 +258,9 @@ def _ingest_docx_fallback(file_path: str) -> list[DocumentChunk]:
 
         if not text:
             continue
+
+        para_count += 1
+        estimated_page = max(1, (para_count - 1) // PARAS_PER_PAGE + 1)
 
         is_heading = (
             style.startswith("Heading") or
@@ -258,14 +270,15 @@ def _ingest_docx_fallback(file_path: str) -> list[DocumentChunk]:
 
         if is_heading:
             if current_texts:
-                _flush_chunk(chunks, current_section, current_texts, 1, 1)
+                _flush_chunk(chunks, current_section, current_texts, section_page_start, estimated_page)
                 current_texts = []
             current_section = _clean_heading(text)
+            section_page_start = estimated_page
         else:
             current_texts.append(text)
 
     if current_texts:
-        _flush_chunk(chunks, current_section, current_texts, 1, 1)
+        _flush_chunk(chunks, current_section, current_texts, section_page_start, estimated_page if para_count else 1)
 
     print(f"[DOCX FALLBACK] Created {len(chunks)} chunks")
     print(f"{'='*60}\n")

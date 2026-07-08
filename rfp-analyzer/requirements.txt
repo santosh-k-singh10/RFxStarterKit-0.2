@@ -17,6 +17,7 @@ openai>=1.0.0
 # Document extraction
 pypdf>=4.2.0
 python-docx>=1.0.0
+unstructured[pdf,docx]>=0.10.0
 
 # CLI
 typer>=0.9.0
